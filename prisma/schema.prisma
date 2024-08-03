@@ -15,8 +15,10 @@ model User {
   name      String?
   avatar String?
   providers     Provider[]
+  sessions     Session[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  @@map("users")
 }
 
 model Provider {
@@ -29,4 +31,18 @@ model Provider {
   payload Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  @@map("providers")
+}
+
+model Session {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user    User    @relation(fields: [userId], references: [id])
+  token String @unique
+  ip String
+  agent String
+  coordinate Unsupported("Point")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("sessions")
 }

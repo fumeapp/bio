@@ -1,9 +1,7 @@
 export default defineEventHandler(async (event) => {
-  return {
-    data: await prisma.user.findMany({
+  return metapi.i().r(await prisma.user.findMany({
       include: {
         providers: true,
       }
-    }),
-  };
-});
+    }))
+})

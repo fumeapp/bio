@@ -10,9 +10,9 @@ onMounted(get)
   <UContainer>
     <UCard class="mt-10">
       <template #header>
-        <div class="flex justify-between">
-          {{ users?.data }}
-        </div>
+        <pre>
+          {{ users }}
+        </pre>
       </template>
     </UCard>
   </UContainer>
