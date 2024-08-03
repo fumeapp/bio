@@ -1,10 +1,7 @@
-export default defineEventHandler(async (event) => {
-
-  return metapi.init().error(event, 'Error test')
-
+export default defineEventHandler(async () => {
   return metapi.init().render(await prisma.user.findMany({
-      include: {
-        providers: true,
-      }
-    }))
+    include: {
+      providers: true,
+    },
+  }))
 })

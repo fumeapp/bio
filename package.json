@@ -7,10 +7,14 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:action": "pnpm run lint -f @jamesacarr/github-actions"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.24.1",
+    "@iconify-json/logos": "^1.1.43",
     "@nuxt/devtools": "latest",
     "@nuxt/eslint": "^0.4.0",
     "@prisma/client": "^5.17.0",

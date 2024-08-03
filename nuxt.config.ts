@@ -3,6 +3,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   extends: ["@nuxt/ui-pro"],
   modules: ["@nuxt/ui", "@prisma/nuxt", "@nuxt/eslint"],
+  eslint: {
+    config: {
+      standalone: false,
+    },
+  },
   prisma: {
     installCLI: false,
     installClient: false,

@@ -1,4 +1,5 @@
 import { Issuer } from 'openid-client'
+import type { OauthProvider } from '~/server/utils/oauth'
 
 export default defineEventHandler(async (event) => {
   const provider = oauthProviders(useRuntimeConfig(event)).find((p: OauthProvider) => p.label === event.context.params?.provider)
