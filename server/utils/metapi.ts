@@ -1,27 +1,52 @@
-export interface Metapi {
-    _meta: {
+import type { H3Event } from 'h3'
+
+export interface MetapiResponse {
+    meta: {
         benchmark: string
+        success: boolean
+        errors: string[]
     }
     data: any
 }
 
 let start:number|undefined = undefined
 
-const r = (data: any) => {
-    let end = performance.now()
+const bench = (): string => {
+    const end = performance.now()
+    return  start ? `${(end - start).toFixed(3)}ms` : 'n/a'
+}
+
+const render = (data: any): MetapiResponse => {
     return {
-        _meta: { benchmark: start ? `${(end - start).toFixed(3)}ms` : 'n/a', },
+        meta: { 
+            benchmark: bench(), 
+            success: true,
+            errors: [],
+        },
         data: data,
     }
 }
 
-const i = () => {
+const error = (event: H3Event, message: string, code: number = 400): MetapiResponse => {
+    setResponseStatus(event, code)
+    return {
+        meta: {
+            benchmark: bench(),
+            success: false,
+            errors: [message],
+        },
+        data: [],
+    }
+}
+
+const init = () => {
     start = performance.now()
-    return { r }
+    return { render, error, }
 }
 
 
 export const metapi = {
-    i,
-    r,
+    init,
+    render,
+    error,
 }
