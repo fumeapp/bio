@@ -1,8 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  extends: ["@nuxt/ui-pro"],
-  modules: ["@nuxt/ui", "@prisma/nuxt", "@nuxt/eslint"],
+  extends: ['@nuxt/ui-pro'],
+  modules: ['@nuxt/ui', '@prisma/nuxt', '@nuxt/eslint', '@nuxt/content'],
   eslint: {
     config: {
       standalone: false,
@@ -26,7 +26,9 @@ export default defineNuxtConfig({
     private: {
       googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
       githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
-    }
-  }
-
+    },
+  },
+  future: {
+    compatibilityVersion: 4,
+  },
 })
