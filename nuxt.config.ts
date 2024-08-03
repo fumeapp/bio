@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     installClient: false,
     generateClient: false,
     installStudio: true,
+    autoSetupPrisma: true,
   },
   compatibilityDate: '2024-08-01',
 })

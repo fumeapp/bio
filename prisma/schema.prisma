@@ -1,6 +1,5 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,16 +13,20 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   name      String?
-  posts     Post[]
+  avatar String?
+  providers     Provider[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+model Provider {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user    User    @relation(fields: [userId], references: [id])
+
+  avatar String?
+  name String?
+  payload Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

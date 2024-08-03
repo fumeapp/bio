@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-const get = async () => {
-  const { users } = await $fetch('/api/user')
-  console.log(users)
-}
-
+import type { User } from '@prisma/client'
+const users = ref<{ data: User[] }>()
+const get = async () => 
+  users.value = await $fetch<{data: User[]}>('/api/user')
 onMounted(get)
 </script>
 
@@ -12,10 +11,9 @@ onMounted(get)
     <UCard class="mt-10">
       <template #header>
         <div class="flex justify-between">
-          hi there
+          {{ users?.data }}
         </div>
       </template>
-      <UButton icon="i-heroicons-book-open" to="https://ui.nuxt.com" target="_blank">Open Nuxt UI Documentation</UButton>
     </UCard>
   </UContainer>
 </template>
