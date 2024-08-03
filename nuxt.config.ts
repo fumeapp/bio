@@ -11,4 +11,13 @@ export default defineNuxtConfig({
     autoSetupPrisma: true,
   },
   compatibilityDate: '2024-08-01',
+  runtimeConfig: {
+    public: {
+      googleClientId: process.env.GOOGLE_CLIENT_ID,
+    },
+    private: {
+      googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }
+  }
+
 })

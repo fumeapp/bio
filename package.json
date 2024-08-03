@@ -16,7 +16,8 @@
     "@prisma/client": "^5.17.0",
     "@prisma/nuxt": "^0.0.34",
     "nuxt": "^3.12.4",
-    "prisma": "^5.17.0"
+    "prisma": "^5.17.0",
+    "simple-oauth2": "^5.1.0"
   },
   "dependencies": {
     "@nuxt/ui-pro": "^1.4.0"
