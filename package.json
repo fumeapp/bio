@@ -1,0 +1,24 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^2.24.1",
+    "@nuxt/devtools": "latest",
+    "@nuxt/eslint": "^0.4.0",
+    "@prisma/client": "^5.17.0",
+    "@prisma/nuxt": "^0.0.34",
+    "nuxt": "^3.12.4",
+    "prisma": "^5.17.0"
+  },
+  "dependencies": {
+    "@nuxt/ui-pro": "^1.4.0"
+  }
+}
