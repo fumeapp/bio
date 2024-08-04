@@ -15,7 +15,7 @@ model User {
   name      String?
   avatar String?
   providers     Provider[]
-  sessions     Session[]
+  sessions     Token[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("users")
@@ -25,24 +25,25 @@ model Provider {
   id        Int      @id @default(autoincrement())
   userId    Int
   user    User    @relation(fields: [userId], references: [id])
-
-  avatar String?
   name String?
+  avatar String?
   payload Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("providers")
+  @@unique([userId, name])
 }
 
-model Session {
+model Token {
   id        Int      @id @default(autoincrement())
   userId    Int
   user    User    @relation(fields: [userId], references: [id])
   token String @unique
   ip String
   agent String
-  coordinate Unsupported("Point")
+  // coordinate Unsupported("Point")
+  coordinate String @default("30.2423 : -97.7672")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  @@map("sessions")
+  @@map("tokens")
 }

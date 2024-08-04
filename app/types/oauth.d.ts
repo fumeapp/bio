@@ -1,4 +1,4 @@
-interface OauthProvider {
+export interface OauthProvider {
   name: string
   id: string
   secret: string
@@ -7,7 +7,13 @@ interface OauthProvider {
   callback: string
 }
 
-interface GoogleUserInfo {
+export interface UserInfo {
+  name: string
+  avatar: string
+  email: string
+}
+
+export interface GoogleUserInfo {
   sub: string
   name: string
   given_name: string
@@ -16,8 +22,7 @@ interface GoogleUserInfo {
   email: string
   email_verified: boolean
 }
-
-interface GithubUserInfo {
+export interface GithubUserInfo {
   login: string
   id: number
   node_id: string
@@ -53,5 +58,10 @@ interface GithubUserInfo {
   updated_at: string
 }
 
-interface UserInfo = GoogleUserInfo | GithubUserInfo
-
+export interface UserPayload {
+  info: UserInfo
+  payload: {
+    oauth: GoogleUserInfo | GithubUserInfo
+    tokenSet: import('openid-client').TokenSet
+  }
+}

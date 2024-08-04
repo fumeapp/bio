@@ -19,9 +19,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       url: process.env.URL ?? 'http://localhost:3000',
+      prefix: process.env.PREFIX ?? 'bio',
       googleClientId: process.env.GOOGLE_CLIENT_ID,
       githubClientId: process.env.GITHUB_CLIENT_ID,
-      prefix: process.env.PREFIX ?? 'bio',
     },
     private: {
       googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,

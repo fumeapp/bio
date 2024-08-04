@@ -2,6 +2,7 @@ import { Issuer } from 'openid-client'
 import type { H3Event } from 'h3'
 import type { RuntimeConfig } from 'nuxt/schema'
 import type { BaseClient, IssuerMetadata } from 'openid-client'
+import type { GithubUserInfo, GoogleUserInfo, OauthProvider, UserInfo, UserPayload } from '~/types/oauth'
 
 export const oauthProviders = (cfg: RuntimeConfig): OauthProvider[] => {
   return [
@@ -16,7 +17,7 @@ export const oauthProviders = (cfg: RuntimeConfig): OauthProvider[] => {
         jwks_uri: 'https://www.googleapis.com/oauth2/v3/certs',
         userinfo_endpoint: 'https://openidconnect.googleapis.com/v1/userinfo',
       },
-      scope: 'https://www.googleapis.com/auth/userinfo.email',
+      scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
       callback: `${cfg.public.url}/api/callback/google`,
     },
     {
@@ -51,10 +52,25 @@ export const oauthClient = (provider: OauthProvider): BaseClient => {
   })
 }
 
-export const getUser = async (provider: OauthProvider, req: H3Event['node']['req']): Promise<UserInfo> => {
+export const getUser = async (provider: OauthProvider, req: H3Event['node']['req']): Promise<UserPayload> => {
+  const user = { payload: { oauth: {}, tokenSet: {} }, info: {} } as UserPayload
   const client = oauthClient(provider)
   const params = client.callbackParams(req)
-  const tokenSet = provider.name === 'githuib' ? await client.oauthCallback(provider.callback, params) : await client.callback(provider.callback, params)
-  const user = await client.userinfo(tokenSet.access_token as string)
-  return user as UserInfo
+  user.payload.tokenSet = provider.name === 'github'
+    ? await client.oauthCallback(provider.callback, params)
+    : await client.callback(provider.callback, params)
+
+  if (provider.name === 'github') {
+    user.payload.oauth = await client.userinfo(user.payload.tokenSet.access_token as string) as GithubUserInfo
+    user.info.email = user.payload.oauth.email
+    user.info.name = user.payload.oauth.login
+    user.info.avatar = user.payload.oauth.avatar_url
+  }
+  else {
+    user.payload.oauth = await client.userinfo(user.payload.tokenSet.access_token as string) as GoogleUserInfo
+    user.info.email = user.payload.oauth.email
+    user.info.name = `${user.payload.oauth.given_name} ${user.payload.oauth.family_name}`
+    user.info.avatar = user.payload.oauth.picture
+  }
+  return user
 }

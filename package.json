@@ -1,7 +1,7 @@
 {
-  "name": "nuxt-app",
-  "private": true,
+  "name": "bio",
   "type": "module",
+  "private": true,
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -11,6 +11,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint:action": "pnpm run lint -f @jamesacarr/github-actions"
+  },
+  "dependencies": {
+    "@nuxt/ui-pro": "^1.4.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.24.1",
@@ -24,8 +27,5 @@
     "nuxt": "^3.12.4",
     "openid-client": "^5.6.5",
     "prisma": "^5.17.0"
-  },
-  "dependencies": {
-    "@nuxt/ui-pro": "^1.4.0"
   }
 }
