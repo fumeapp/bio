@@ -49,13 +49,19 @@ const error = (event: H3Event, message: string, code: number = 400): MetapiRespo
   }
 }
 
+const renderNullError = (event: H3Event, data: any): MetapiResponse => {
+  if (data === null) return error(event, 'Not Found', 404)
+  return render(data)
+}
+
 const init = () => {
   start = performance.now()
-  return { render, success, error }
+  return { render, success, error, renderNullError }
 }
 
 export const metapi = {
   init,
   render,
   error,
+  renderNullError,
 }

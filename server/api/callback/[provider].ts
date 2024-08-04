@@ -15,6 +15,9 @@ export default defineEventHandler(async (event) => {
     },
   })
 
+  console.log(userPayload.info.avatar)
+  console.log(userPayload.info.avatar.length)
+
   if (!user)
     user = await prisma.user.create({
       data: {

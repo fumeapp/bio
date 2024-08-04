@@ -1,21 +1,29 @@
 import type { Token, User } from '@prisma/client'
 import type { RuntimeConfig } from 'nuxt/schema'
 
-let session: Token | undefined
+let token: Token & { user: User } | null = null
 
-export const authSetUser = async (token: string): Promise<User> => {
-  session = await prisma.token.findUnique({
+export const authSetUser = async (hash: string): Promise<User> => {
+  token = await prisma.token.findUnique({
     where: {
-      token,
+      token: hash,
     },
     include: {
       user: true,
     },
   })
-  return session?.user as User
+  return token?.user as User
 }
 
 export const authVerifyToken = (cfg: RuntimeConfig, token?: string): boolean =>
   !!token && token.length === (65 + cfg.public.prefix.length)
 
-export const authUser = (): User | undefined => session?.user
+export const isAuthed = (): boolean => !!token
+
+export const authUser = (): User => token?.user as User
+
+export const authToken = (): string => token.token
+
+export const authClearUser = (): void => {
+  token = null
+}
