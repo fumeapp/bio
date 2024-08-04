@@ -25,24 +25,16 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
   */
 })
-
-/*
-import type { User } from '@prisma/client'
-const users = ref<{ data: User[] }>()
-const get = async () =>
-  users.value = await $fetch<{ data: User[] }>('/api/user')
-onMounted(get)
-*/
 </script>
 
 <template>
   <div>
     <NuxtLoadingIndicator />
-
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
 
     <UNotifications />
+    <modal-login />
   </div>
 </template>

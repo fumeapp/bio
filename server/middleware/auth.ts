@@ -4,7 +4,6 @@ export default defineEventHandler(async (event) => {
     '/api/me',
     '/api/token',
   ]
-  console.log('gated', gatedRoutes.includes(getRequestURL(event).pathname))
   const cookies = parseCookies(event)
   if (authVerifyToken(useRuntimeConfig(event), cookies.token) === true)
     await authSetUser(cookies.token)

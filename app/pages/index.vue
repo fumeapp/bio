@@ -15,7 +15,6 @@ useSeoMeta({
 <template>
   <div class="h-screen flex items-center justify-center overlay">
     <div class="gradient" />
-    <login />
   </div>
 </template>
 
