@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { Token } from '@prisma/client'
+import type { MetApiResponse } from '~/types/metapi'
 
 const { data: page } = await useAsyncData('index', () => queryContent('/tokens').findOne())
+
 if (!page.value)
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 
@@ -11,12 +13,10 @@ useSeoMeta({
   description: page.value.description,
   ogDescription: page.value.description,
 })
-
 const tokens = ref<Token[]>([])
-
 const get = async () => {
-  const { data } = await $fetch('/api/token')
-  tokens.value = data.tokens
+  const { data } = await useApi().fetch<MetApiResponse<Token[]>>('/api/token')
+  tokens.value = data
 }
 
 onMounted(get)

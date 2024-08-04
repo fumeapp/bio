@@ -4,8 +4,8 @@ export default defineEventHandler(async (event) => {
 
   // GET /
   if (!id && method === 'GET')
-    return metapi.init().render({
-      tokens: await prisma.$extends({
+    return metapi.init().render(
+      await prisma.$extends({
         result: {
           token: {
             isCurrent: {
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
           userId: auth.user().id,
         },
       }),
-    })
+    )
 
   // GET /:id
   if (id && method === 'GET')

@@ -1,4 +1,6 @@
 import type { H3Event } from 'h3'
+import type { MetapiResponse } from '~/types/metapi'
+
 let start: number | undefined
 
 const bench = (): string => {
