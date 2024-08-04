@@ -64,15 +64,13 @@ export default defineEventHandler(async (event) => {
       userId: user.id,
       token: `${cfg.public.prefix}_${crypto.createHash('sha256').update(crypto.randomBytes(20).toString('hex')).digest('hex')}`,
       ip: event.node.req.headers['x-forwarded-for'] as string,
-      agent: event.node.req.headers['user-agent'],
+      agent: event.node.req.headers['user-agent'] as string,
       coordinate: coordinate === 'undefined undefined' ? '30.2423 -97.7672' : coordinate,
     },
   })
 
   setCookie(event, 'token', session.token, { path: '/', httpOnly: true, sameSite: 'strict', maxAge: 60 * 60 * 24 * 365 })
 
-  return metapi.init().render({
-    user,
-    token: session.token,
-  })
+  event.node.res.setHeader('Content-Type', 'text/html')
+  event.node.res.end(`<html><head><script> window.opener.postMessage(${JSON.stringify({ user, token: session.token })}, '*'); window.close(); </script></head></html>`)
 })

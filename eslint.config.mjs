@@ -24,5 +24,5 @@ export default withNuxt(
       'ts/no-unsafe-function-type': 'off',
       'unused-imports/no-unused-vars': 'warn', // tmp - need to eventually remove the unused imports/vars
     },
-  }
+  },
 )

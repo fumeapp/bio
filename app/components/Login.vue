@@ -1,6 +1,8 @@
 <script setup lang="ts">
-const loading = ref(false)
+import type { User } from '@prisma/client'
 
+const emit = defineEmits(['login'])
+const loading = ref(false)
 interface Provider {
   name: string
   label: string
@@ -10,7 +12,7 @@ interface Provider {
   loading: boolean
 }
 
-const providers: Provider[] = reactive([
+const providers = reactive<Provider[]>([
   {
     name: 'google',
     label: 'Google',
@@ -25,11 +27,13 @@ const providers: Provider[] = reactive([
     color: 'white',
     icon: 'i-mdi-github',
     click: () => login('github'),
+    loading: false,
   },
 ])
 
 function login(name: string): void {
   const provider = providers.find(p => p.name === name)
+  if (!provider) return
   provider.loading = true
   const width = 640
   const height = 660
@@ -44,15 +48,28 @@ function login(name: string): void {
     }
   }, 200)
 }
+
+async function handleMessage(evt: { data: { user: User, token: string } }) {
+  useApi().setUser(evt.data.user)
+  emit('login')
+}
+
+function messageHandler(add: boolean): void {
+  if (add)
+    return window.addEventListener('message', handleMessage)
+  return window.removeEventListener('message', handleMessage)
+}
+
+if (import.meta.client) {
+  onMounted(() => messageHandler(true))
+  onBeforeUnmount(() => messageHandler(false))
+}
 </script>
 
 <template>
-  <UCard class="max-w-sm w-full backdrop-blur">
-    <u-auth-form
-      title="Authenticate"
-      :providers="providers"
-      :loading="loading"
-      :fields="[{ name: 'email', type: 'email', label: 'Email', placeholder: 'Enter your email' }]"
-    />
-  </UCard>
+  <u-auth-form
+    :providers="providers"
+    :loading="loading"
+    :fields="[{ name: 'email', type: 'email', label: 'Email', placeholder: 'Enter your email' }]"
+  />
 </template>

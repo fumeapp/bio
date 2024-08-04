@@ -1,14 +1,4 @@
 import type { H3Event } from 'h3'
-
-export interface MetapiResponse {
-  meta: {
-    benchmark: string
-    success: boolean
-    detail?: string
-  }
-  data: any
-}
-
 let start: number | undefined
 
 const bench = (): string => {

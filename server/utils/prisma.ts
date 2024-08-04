@@ -7,7 +7,7 @@ const prismaClientSingleton = () => {
 
 declare const globalThis: {
   prismaGlobal: ReturnType<typeof prismaClientSingleton>
-} & typeof global
+}
 
 const prisma = globalThis.prismaGlobal ?? prismaClientSingleton().$extends({
   name: 'tokenParser',

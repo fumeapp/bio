@@ -1,6 +1,6 @@
 export interface OauthProvider {
-  name: string
   id: string
+  name: string
   secret: string
   issuer: import('openid-client').IssuerMetadata
   scope: string
