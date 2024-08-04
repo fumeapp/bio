@@ -6,7 +6,7 @@ let token: Token & { user: User } | null = null
 const set = async (hash: string): Promise<User> => {
   token = await prisma.token.findUnique({
     where: {
-      token: hash,
+      hash,
     },
     include: {
       user: true,
@@ -22,7 +22,7 @@ const isAuth = (): boolean => !!token
 
 const user = (): User => token?.user as User
 
-const hash = (): string => token.hash
+const hash = (): string | null | undefined => token?.hash
 
 const clear = (): void => {
   token = null

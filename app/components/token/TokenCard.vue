@@ -22,7 +22,7 @@ if (import.meta.client)
 </script>
 
 <template>
-  <u-card class="bg-primary-600">
+  <u-card>
     <template #header>
       <div class="flex items-center justify-center relative">
         <u-button v-if="!token.isCurrent" icon="i-mdi-trash" color="red" size="xs" class="absolute top-0 right-0" variant="soft" @click="remove()" />
@@ -54,7 +54,7 @@ if (import.meta.client)
         <div> Verified through Github </div>
       </div>
       <div class="flex items-center space-x-2">
-        <u-icon name="i-mdi-map-marker" />
+        <u-icon name="i-mdi-google-maps" />
         <div> {{ token.location.city }}, {{ token.location.region }} {{ token.location.country }} </div>
       </div>
       <div class="flex items-center space-x-2">

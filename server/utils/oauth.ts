@@ -63,7 +63,7 @@ export const getUser = async (provider: OauthProvider, req: H3Event['node']['req
   if (provider.name === 'github') {
     user.payload.oauth = await client.userinfo(user.payload.tokenSet.access_token as string) as GithubUserInfo
     user.info.email = user.payload.oauth.email
-    user.info.name = user.payload.oauth.login
+    user.info.name = user.payload.oauth.name
     user.info.avatar = user.payload.oauth.avatar_url
   }
   else {

@@ -9,14 +9,14 @@ export default defineEventHandler(async (event) => {
         result: {
           token: {
             isCurrent: {
-              needs: { token: true },
-              compute({ token }) { return token === parseCookies(event).token },
+              needs: { hash: true },
+              compute({ hash }) { return hash === parseCookies(event).token },
             },
           },
         },
       }).token.findMany({
         where: {
-          userId: authUser().id,
+          userId: auth.user().id,
         },
       }),
     })
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
     return metapi.init().renderNullError(event, await prisma.token.findUnique({
       where: {
         id: Number.parseInt(id),
-        userId: authUser().id,
+        userId: auth.user().id,
       },
     }))
 
@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
     await prisma.token.delete({
       where: {
         id: Number.parseInt(id),
-        userId: authUser().id,
+        userId: auth.user().id,
       },
     })
     return metapi.init().success('token deleted')

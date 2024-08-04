@@ -6,7 +6,6 @@ if (!page.value)
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 
 useSeoMeta({
-  titleTemplate: '',
   title: page.value.title,
   ogTitle: page.value.title,
   description: page.value.description,
@@ -24,7 +23,7 @@ onMounted(get)
 </script>
 
 <template>
-  <div class="m-12">
+  <div>
     <token-list :tokens="tokens" @reload="get" />
   </div>
 </template>

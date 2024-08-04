@@ -83,5 +83,5 @@ export default defineEventHandler(async (event) => {
   setCookie(event, 'token', token.hash, cookieOptions)
 
   event.node.res.setHeader('Content-Type', 'text/html')
-  event.node.res.end(`<html><head><script> window.opener.postMessage(${JSON.stringify({ user, token: session.token })}, '*'); window.close(); </script></head></html>`)
+  event.node.res.end(`<html><head><script> window.opener.postMessage(${JSON.stringify({ user, token: token.hash })}, '*'); window.close(); </script></head></html>`)
 })

@@ -27,7 +27,7 @@ const links = [
       <div class="flex items-center space-x-2">
         <header-auth />
         <client-only>
-          <u-color-mode-toggle />
+          <u-color-mode-button />
           <template #fallback>
             <u-skeleton class="w-10 h-6 rounded-full" />
           </template>
