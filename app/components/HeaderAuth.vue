@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const { user } = useApi()
 const { authModal } = useAuth()
-console.log(user.value?.avatar)
 const items = [
   [{
     label: '',
@@ -9,13 +8,6 @@ const items = [
     disabled: true,
   }],
   [{
-    label: 'Profile',
-    avatar: {
-      src: user.value?.avatar,
-    },
-    shortcuts: ['P'],
-    to: '/profile',
-  }, {
     label: 'Tokens',
     icon: 'i-mdi-key',
     shortcuts: ['T'],

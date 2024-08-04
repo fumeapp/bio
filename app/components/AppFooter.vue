@@ -12,9 +12,9 @@
       <UColorModeButton size="sm" />
 
       <UButton
-        to="https://github.com/nuxt-ui-pro/saas"
+        to="https://github.com/fumeapp/bio"
         target="_blank"
-        icon="i-simple-icons-github"
+        icon="i-mdi-github"
         aria-label="GitHub"
         color="gray"
         variant="ghost"

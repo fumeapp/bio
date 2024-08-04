@@ -58,6 +58,14 @@ export interface GithubUserInfo {
   updated_at: string
 }
 
+export interface TokenLocation {
+  city: string
+  region: string
+  country: string
+  timezone: string
+  countryName: string
+}
+
 export interface UserPayload {
   info: UserInfo
   payload: {

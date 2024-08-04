@@ -39,8 +39,10 @@ model Token {
   userId    Int
   user    User    @relation(fields: [userId], references: [id])
   token String @unique
+  source String 
   ip String
   agent String
+  location Json
   // coordinate Unsupported("Point")
   coordinate String @default("30.2423 : -97.7672")
   createdAt DateTime @default(now())

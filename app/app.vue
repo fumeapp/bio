@@ -34,7 +34,15 @@ useSeoMeta({
       <NuxtPage />
     </NuxtLayout>
 
-    <UNotifications />
     <modal-login />
+    <confirm />
+    <u-notifications>
+      <template #title="{ title }">
+        <span v-html="title" />
+      </template>
+      <template #description="{ description }">
+        <span v-html="description" />
+      </template>
+    </u-notifications>
   </div>
 </template>

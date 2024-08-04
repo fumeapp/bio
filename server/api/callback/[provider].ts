@@ -1,5 +1,6 @@
 import crypto from 'node:crypto'
 import type { Prisma, User } from '@prisma/client'
+import type { TokenLocation } from '~/types/oauth'
 
 export default defineEventHandler(async (event) => {
   const cfg = useRuntimeConfig(event)
@@ -59,12 +60,24 @@ export default defineEventHandler(async (event) => {
 
   const coordinate = `${event.node.req.headers['Cloudfront-Viewer-Latitude']} ${event.node.req.headers['Cloudfront-Viewer-Longitude']}`
 
+  const location: TokenLocation = {
+    city: event.node.req.headers['Cloudfront-Viewer-City'] as string || 'Austin',
+    region: event.node.req.headers['Cloudfront-Viewer-Region-Name'] as string || 'TX',
+    country: event.node.req.headers['Cloudfront-Viewer-Country'] as string || 'US',
+    timezone: event.node.req.headers['Cloudfront-Viewer-Timezone'] as string || 'America/Chicago',
+    countryName: event.node.req.headers['Cloudfront-Viewer-CountryName'] as string || 'United States',
+  }
+
+  console.log(location)
+
   const session = await prisma.token.create({
     data: {
       userId: user.id,
       token: `${cfg.public.prefix}_${crypto.createHash('sha256').update(crypto.randomBytes(20).toString('hex')).digest('hex')}`,
+      source: `oauth:${provider.name}`,
       ip: event.node.req.headers['x-forwarded-for'] as string,
       agent: event.node.req.headers['user-agent'] as string,
+      location: location as unknown as Prisma.JsonObject,
       coordinate: coordinate === 'undefined undefined' ? '30.2423 -97.7672' : coordinate,
     },
   })
