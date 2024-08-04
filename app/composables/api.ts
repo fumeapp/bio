@@ -1,19 +1,23 @@
 import type { User } from '@prisma/client'
+import type { CookieOptions } from '#app'
 
+const cookieOptions: CookieOptions & { readonly?: false } = { path: '/', httpOnly: true, sameSite: 'strict', maxAge: 60 * 60 * 24 * 365 }
 const user = ref<User | undefined>(undefined)
-const userToken = ref<string | undefined>(undefined)
+const userToken = ref<string | undefined | null>(undefined)
 
 export const useApi = () => {
   const setUser = (usr: User, token: string) => {
     user.value = usr
-    const tkn = useCookie('token', { path: '/', httpOnly: true, sameSite: 'strict', maxAge: 60 * 60 * 24 * 365 })
-    tkn.value = token
+    const tokenCookie = useCookie('token', cookieOptions)
+    tokenCookie.value = token
     userToken.value = token
   }
   const checkUser = async () => {
     try {
       const { data } = await $fetch('/api/me')
       user.value = data
+      const tkn = useCookie('token', cookieOptions)
+      userToken.value = tkn.value
     }
     catch (e) {}
   }
