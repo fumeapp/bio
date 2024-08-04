@@ -2,17 +2,11 @@
 import type { Token } from '@prisma/client'
 import { formatDistance } from 'date-fns'
 
-const props = defineProps<{ token: Token & { client: UAParser.IResult } }>()
+const props = defineProps<{ token: Token & { client: UAParser.IResult, isCurrent: boolean } }>()
 
 const emit = defineEmits(['reload'])
 
-const { success, userToken } = useApi()
-
-const currentToken = computed(() => {
-  console.log(userToken.value, props.token.token)
-  return userToken.value === props.token.token
-})
-
+const { success } = useApi()
 const { confirm } = useConfirm()
 const remove = () => confirm('Delete Token', 'Are you sure you want to delete this token?', 'Delete', async () => {
   const { meta } = await $fetch(`/api/token/${props.token.id}`, {
@@ -22,13 +16,16 @@ const remove = () => confirm('Delete Token', 'Are you sure you want to delete th
   success(meta.detail)
   await useApi().checkUser()
 })
+
+if (import.meta.client)
+  console.log(document.cookie)
 </script>
 
 <template>
   <u-card class="bg-primary-600">
     <template #header>
       <div class="flex items-center justify-center relative">
-        <u-button v-if="!currentToken" icon="i-mdi-trash" color="red" size="xs" class="absolute top-0 right-0" variant="soft" @click="remove()" />
+        <u-button v-if="!token.isCurrent" icon="i-mdi-trash" color="red" size="xs" class="absolute top-0 right-0" variant="soft" @click="remove()" />
         <div v-if="token.client.os.name === 'Mac OS'" class="device device-mac" />
         <div v-else-if="token.client.os.name === 'Windows'" class="device device-windows" />
         <div v-else-if="token.client.os.name === 'Ubuntu'" class="device device-linux" />
@@ -42,7 +39,7 @@ const remove = () => confirm('Delete Token', 'Are you sure you want to delete th
     <div class="flex flex-col space-y-2 text-gray-700 dark:text-gray-400 text-sm">
       <div class="flex items-center justify-between">
         <div class="text-lg">{{ token.client.os.name }} v{{ token.client.os.version }}</div>
-        <u-icon v-if="currentToken" name="i-mdi-check-decagram" class="w-6 h-6 text-emerald-500 dark:text-emerald-400" />
+        <u-icon v-if="token.isCurrent" name="i-mdi-check-decagram" class="w-6 h-6 text-emerald-500 dark:text-emerald-400" />
       </div>
       <div class="flex items-center space-x-2">
         <u-icon name="i-mdi-application" />

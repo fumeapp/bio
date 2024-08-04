@@ -1,6 +1,7 @@
 import crypto from 'node:crypto'
 import type { Prisma, User } from '@prisma/client'
 import type { TokenLocation } from '~/types/oauth'
+import { cookieOptions } from '~/utils/shared'
 
 export default defineEventHandler(async (event) => {
   const cfg = useRuntimeConfig(event)
@@ -82,7 +83,7 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  setCookie(event, 'token', session.token, { path: '/', httpOnly: true, sameSite: 'strict', maxAge: 60 * 60 * 24 * 365 })
+  setCookie(event, 'token', session.token, cookieOptions)
 
   event.node.res.setHeader('Content-Type', 'text/html')
   event.node.res.end(`<html><head><script> window.opener.postMessage(${JSON.stringify({ user, token: session.token })}, '*'); window.close(); </script></head></html>`)

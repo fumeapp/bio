@@ -68,6 +68,8 @@ if (import.meta.client) {
 
 <template>
   <u-auth-form
+    :ui="{ title: 'text-center text-lg font-semibold' }"
+    title="Sign in / Join"
     :providers="providers"
     :loading="loading"
     :fields="[{ name: 'email', type: 'email', label: 'Email', placeholder: 'Enter your email' }]"

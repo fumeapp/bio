@@ -5,7 +5,16 @@ export default defineEventHandler(async (event) => {
   // GET /
   if (!id && method === 'GET')
     return metapi.init().render({
-      tokens: await prisma.token.findMany({
+      tokens: await prisma.$extends({
+        result: {
+          token: {
+            isCurrent: {
+              needs: { token: true },
+              compute({ token }) { return token === parseCookies(event).token },
+            },
+          },
+        },
+      }).token.findMany({
         where: {
           userId: authUser().id,
         },
