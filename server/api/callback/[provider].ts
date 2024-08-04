@@ -66,8 +66,6 @@ export default defineEventHandler(async (event) => {
     countryName: event.node.req.headers['Cloudfront-Viewer-CountryName'] as string || 'United States',
   }
 
-  console.log(location)
-
   const token = await prisma.token.create({
     data: {
       userId: user.id,

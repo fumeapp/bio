@@ -22,7 +22,7 @@ const isAuth = (): boolean => !!token
 
 const user = (): User => token?.user as User
 
-const hash = (): string | null | undefined => token?.hash
+const hash = (): string | undefined => token?.hash
 
 const clear = (): void => {
   token = null

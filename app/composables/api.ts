@@ -3,6 +3,16 @@ import type { User } from '@prisma/client'
 const user = ref<User | undefined>(undefined)
 
 export const useApi = () => {
+  const success = (message: string) =>
+    useToast().add({ icon: 'i-mdi-check-bold', title: message, color: 'emerald', timeout: 2000 })
+
+  const fetch = $fetch.create({
+    onResponse: ({ response }) => {
+      if (response?._data?.meta?.detail)
+        success(response._data.meta.detail)
+    },
+  })
+
   const setUser = (usr: User, token: string) => {
     user.value = usr
     const tokenCookie = useCookie('token', cookieOptions)
@@ -13,18 +23,19 @@ export const useApi = () => {
       const { data } = await $fetch('/api/me')
       user.value = data
     }
+    // eslint-disable-next-line unused-imports/no-unused-vars
     catch (e) {}
   }
 
   const logout = async () => {
-    await $fetch('/api/logout')
+    await fetch('/api/logout')
     user.value = undefined
+    const tokenCookie = useCookie('token', cookieOptions)
+    tokenCookie.value = undefined
   }
 
-  const success = (message: string) =>
-    useToast().add({ icon: 'i-mdi-check-bold', title: message, color: 'emerald', timeout: 2000 })
-
   return {
+    fetch,
     setUser,
     checkUser,
     user,

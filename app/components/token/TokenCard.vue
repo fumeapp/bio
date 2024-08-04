@@ -16,9 +16,6 @@ const remove = () => confirm('Delete Token', 'Are you sure you want to delete th
   success(meta.detail)
   await useApi().checkUser()
 })
-
-if (import.meta.client)
-  console.log(document.cookie)
 </script>
 
 <template>

@@ -5,12 +5,8 @@
 <template>
   <div>
     <header-main />
-    <u-main class="p-12 bg-gray-100 dark:bg-gray-950">
-      <div class="h-screen flex overlay">
-        <div>
-          <slot />
-        </div>
-      </div>
+    <u-main class="p-12 bg-gray-100 dark:bg-gray-950 overlay">
+      <slot />
     </u-main>
     <layout-footer />
   </div>

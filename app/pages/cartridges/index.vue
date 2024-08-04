@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    Page: history/index
+    Page: cartridges/index
   </div>
 </template>
 

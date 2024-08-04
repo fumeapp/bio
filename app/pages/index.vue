@@ -14,6 +14,6 @@ useSeoMeta({
 
 <template>
   <div>
-    this is a test
+    this is pages/index.vue
   </div>
 </template>

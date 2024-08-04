@@ -23,9 +23,7 @@ onMounted(get)
 </script>
 
 <template>
-  <div>
-    <token-list :tokens="tokens" @reload="get" />
-  </div>
+  <token-list :tokens="tokens" @reload="get" />
 </template>
 
 <style scoped></style>

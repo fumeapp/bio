@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const links = [
   {
+    label: 'Home',
+    to: '/',
+  },
+  {
     label: 'Pens',
     to: '/pens',
   },
@@ -17,7 +21,7 @@ const links = [
       <div class="flex items-center">
         <div class="relative">
           <header-logo />
-          <u-icon name="i-mdi-test-tube" class="w-6 h-6 text-primary-100 absolute bottom-1 right-0.5" />
+          <u-icon name="i-mdi-test-tube" class="w-6 h-6 text-primary-100 absolute bottom-1.5 right-0.5" />
         </div>
         <div class="font-extrabold text-3xl pr-1 text-primary-900 dark:text-primary-100">fume</div>
         <div class="font-extrabold text-3xl pr-1 text-primary-600 dark:text-primary-300 -ml-1">bio</div>

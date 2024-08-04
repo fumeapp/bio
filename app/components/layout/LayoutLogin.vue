@@ -50,7 +50,8 @@ function login(name: string): void {
 }
 
 async function handleMessage(evt: { data: { user: User, token: string } }) {
-  useApi().setUser(evt.data.user)
+  useApi().setUser(evt.data.user, evt.data.token)
+  useApi().success('logged in')
   emit('login')
 }
 
