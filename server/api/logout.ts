@@ -6,6 +6,6 @@ export default defineEventHandler(async (event) => {
     },
   })
   deleteCookie(event, 'token')
-  authClearUser()
+  auth.clear()
   return metapi.init().success('logout successful')
 })

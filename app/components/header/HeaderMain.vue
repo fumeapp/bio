@@ -16,7 +16,7 @@ const links = [
     <template #logo>
       <div class="flex items-center">
         <div class="relative">
-          <logo />
+          <header-logo />
           <u-icon name="i-mdi-test-tube" class="w-6 h-6 text-primary-100 absolute bottom-1 right-0.5" />
         </div>
         <div class="font-extrabold text-3xl pr-1 text-primary-900 dark:text-primary-100">fume</div>
@@ -24,13 +24,15 @@ const links = [
       </div>
     </template>
     <template #right>
-      <header-auth />
-      <client-only>
-        <u-color-mode-toggle />
-        <template #fallback>
-          <u-skeleton class="w-10 h-6 rounded-full" />
-        </template>
-      </client-only>
+      <div class="flex items-center space-x-2">
+        <header-auth />
+        <client-only>
+          <u-color-mode-toggle />
+          <template #fallback>
+            <u-skeleton class="w-10 h-6 rounded-full" />
+          </template>
+        </client-only>
+      </div>
     </template>
   </u-header>
 </template>

@@ -35,7 +35,7 @@ const items = [
         </div>
       </template>
     </u-dropdown>
-    <u-button v-else label="Sign in" color="gray" @click="authModal = true" />
+    <u-button v-else icon="i-mdi-login" label="Sign in" color="gray" @click="authModal = true" />
     <template #fallback>
       <u-skeleton class="w-8 h-8 rounded-full" />
     </template>

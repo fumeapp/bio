@@ -5,9 +5,9 @@ export default defineEventHandler(async (event) => {
     '/api/token',
   ]
   const cookies = parseCookies(event)
-  if (authVerifyToken(useRuntimeConfig(event), cookies.token) === true)
-    await authSetUser(cookies.token)
+  if (auth.verify(useRuntimeConfig(event), cookies.token) === true)
+    await auth.set(cookies.token)
 
   if (gatedRoutes.some(route => getRequestURL(event).pathname.startsWith(route)))
-    if (!authUser()) return metapi.init().error(event, 'Not Authenticated', 401)
+    if (!auth.user()) return metapi.init().error(event, 'Not Authenticated', 401)
 })

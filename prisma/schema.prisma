@@ -38,7 +38,7 @@ model Token {
   id        Int      @id @default(autoincrement())
   userId    Int
   user    User    @relation(fields: [userId], references: [id])
-  token String @unique
+  hash String @unique
   source String 
   ip String
   agent String

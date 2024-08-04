@@ -3,7 +3,7 @@ import type { RuntimeConfig } from 'nuxt/schema'
 
 let token: Token & { user: User } | null = null
 
-export const authSetUser = async (hash: string): Promise<User> => {
+const set = async (hash: string): Promise<User> => {
   token = await prisma.token.findUnique({
     where: {
       token: hash,
@@ -15,15 +15,24 @@ export const authSetUser = async (hash: string): Promise<User> => {
   return token?.user as User
 }
 
-export const authVerifyToken = (cfg: RuntimeConfig, token?: string): boolean =>
+const verify = (cfg: RuntimeConfig, token?: string): boolean =>
   !!token && token.length === (65 + cfg.public.prefix.length)
 
-export const isAuthed = (): boolean => !!token
+const isAuth = (): boolean => !!token
 
-export const authUser = (): User => token?.user as User
+const user = (): User => token?.user as User
 
-export const authToken = (): string => token.token
+const hash = (): string => token.hash
 
-export const authClearUser = (): void => {
+const clear = (): void => {
   token = null
+}
+
+export const auth = {
+  set,
+  verify,
+  isAuth,
+  user,
+  hash,
+  clear,
 }

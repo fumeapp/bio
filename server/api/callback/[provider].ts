@@ -17,9 +17,6 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  console.log(userPayload.info.avatar)
-  console.log(userPayload.info.avatar.length)
-
   if (!user)
     user = await prisma.user.create({
       data: {
@@ -71,10 +68,10 @@ export default defineEventHandler(async (event) => {
 
   console.log(location)
 
-  const session = await prisma.token.create({
+  const token = await prisma.token.create({
     data: {
       userId: user.id,
-      token: `${cfg.public.prefix}_${crypto.createHash('sha256').update(crypto.randomBytes(20).toString('hex')).digest('hex')}`,
+      hash: `${cfg.public.prefix}_${crypto.createHash('sha256').update(crypto.randomBytes(20).toString('hex')).digest('hex')}`,
       source: `oauth:${provider.name}`,
       ip: event.node.req.headers['x-forwarded-for'] as string,
       agent: event.node.req.headers['user-agent'] as string,
@@ -83,7 +80,7 @@ export default defineEventHandler(async (event) => {
     },
   })
 
-  setCookie(event, 'token', session.token, cookieOptions)
+  setCookie(event, 'token', token.hash, cookieOptions)
 
   event.node.res.setHeader('Content-Type', 'text/html')
   event.node.res.end(`<html><head><script> window.opener.postMessage(${JSON.stringify({ user, token: session.token })}, '*'); window.close(); </script></head></html>`)

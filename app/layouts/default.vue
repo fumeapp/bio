@@ -4,14 +4,11 @@
 
 <template>
   <div>
-    <app-header />
+    <header-main />
     <u-main>
       <slot />
     </u-main>
-
-    <app-footer />
-
-    <slot />
+    <layout-footer />
   </div>
 </template>
 
