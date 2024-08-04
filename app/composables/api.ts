@@ -32,6 +32,7 @@ export const useApi = () => {
     user.value = undefined
     const tokenCookie = useCookie('token', cookieOptions)
     tokenCookie.value = undefined
+    await navigateTo('/')
   }
 
   return {

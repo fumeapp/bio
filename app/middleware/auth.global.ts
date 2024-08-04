@@ -6,5 +6,5 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
     '/tokens',
   ]
   if (gatedRoutes.some(route => to.path.startsWith(route)))
-    if (!useApi().user) return '/'
+    if (!useApi().user.value) return '/'
 })
