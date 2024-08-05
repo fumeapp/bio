@@ -16,6 +16,8 @@ model User {
   avatar String?  @db.VarChar(1600)
   providers     Provider[]
   sessions     Token[]
+  pens     Pen[]
+  cartridges     Cartridge[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("users")
@@ -44,8 +46,28 @@ model Token {
   agent String
   location Json
   // coordinate Unsupported("Point")
-  coordinate String @default("30.2423 : -97.7672")
+  coordinate String @default("30.2423 -97.7672")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("tokens")
+}
+
+model Pen {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user    User    @relation(fields: [userId], references: [id])
+  color String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("pens")
+}
+
+model Cartridge {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user    User    @relation(fields: [userId], references: [id])
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("cartridges")
 }
