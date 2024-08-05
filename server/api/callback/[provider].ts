@@ -40,7 +40,7 @@ export default defineEventHandler(async (event) => {
     await prisma.provider.upsert({
       where: {
         userId_name: {
-          userId: user.id,
+          userId: BigInt(user.id),
           name: provider.name,
         },
       },
@@ -49,7 +49,7 @@ export default defineEventHandler(async (event) => {
         payload: userPayload.payload as unknown as Prisma.JsonObject,
       },
       create: {
-        userId: user.id,
+        userId: BigInt(user.id),
         name: provider.name,
         avatar: userPayload.info.avatar,
         payload: userPayload.payload as unknown as Prisma.JsonObject,
@@ -68,7 +68,7 @@ export default defineEventHandler(async (event) => {
 
   const token = await prisma.token.create({
     data: {
-      userId: user.id,
+      userId: BigInt(user.id),
       hash: `${cfg.public.prefix}_${crypto.createHash('sha256').update(crypto.randomBytes(20).toString('hex')).digest('hex')}`,
       source: `oauth:${provider.name}`,
       ip: event.node.req.headers['x-forwarded-for'] as string,

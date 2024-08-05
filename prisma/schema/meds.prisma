@@ -1,0 +1,32 @@
+model Pen {
+  id        BigInt      @id @default(autoincrement())
+  userId    BigInt
+  user    User    @relation(fields: [userId], references: [id])
+  color String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("pens")
+}
+
+model Cartridge {
+  id        BigInt      @id @default(autoincrement())
+  userId    BigInt
+  user    User    @relation(fields: [userId], references: [id])
+  content String
+  ml BigInt
+  shots Shot[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("cartridges")
+}
+
+model Shot {
+  id        BigInt      @id @default(autoincrement())
+  userId    BigInt
+  user    User    @relation(fields: [userId], references: [id])
+  cartridgeId BigInt
+  cartridge    Cartridge    @relation(fields: [cartridgeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@map("shots")
+}
