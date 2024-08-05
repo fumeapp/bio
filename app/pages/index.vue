@@ -15,5 +15,8 @@ useSeoMeta({
 <template>
   <div>
     this is pages/index.vue
+    <u-card class="max-w-md mx-auto">
+      <pen-form />
+    </u-card>
   </div>
 </template>
