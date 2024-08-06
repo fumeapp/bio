@@ -27,7 +27,13 @@ const items = [
 <template>
   <client-only>
     <u-dropdown v-if="user" :items="items">
-      <u-avatar v-if="user" :src="user.avatar" size="sm" />
+      <u-avatar
+        v-if="user"
+        :src="user.avatar"
+        size="sm"
+        icon="i-mdi-account-circle"
+        :ui="{ rounded: 'bg-gray-200 dark:bg-gray-800' }"
+      />
       <template #account>
         <div class="flex flex-col items-start">
           <div class="font-semibold text-gray-800 dark:text-gray-300">{{ user.name }}</div>
@@ -37,7 +43,7 @@ const items = [
     </u-dropdown>
     <u-button v-else icon="i-mdi-login" label="Sign in" color="gray" @click="authModal = true" />
     <template #fallback>
-      <u-skeleton class="w-8 h-8 rounded-full" />
+      <u-skeleton class="w-20 h-8" />
     </template>
   </client-only>
 </template>

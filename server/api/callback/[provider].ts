@@ -6,7 +6,7 @@ import { cookieOptions } from '~/utils/shared'
 export default defineEventHandler(async (event) => {
   const cfg = useRuntimeConfig(event)
   const provider = oauthProvider(event.context.params?.provider, cfg)
-  if (!provider) return metapi.init().error(event, 'Provider not supported')
+  if (!provider) return metapi().error(event, 'Provider not supported')
   const userPayload = await getUser(provider, event.node.req)
 
   let user: User | null = null

@@ -2,7 +2,9 @@
 
 <template>
   <div>
-    Page: pens/index
+    <u-card class="max-w-md mx-auto">
+      <pen-form />
+    </u-card>
   </div>
 </template>
 

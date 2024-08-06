@@ -33,7 +33,7 @@ const links = [
         <client-only>
           <u-color-mode-button />
           <template #fallback>
-            <u-skeleton class="w-10 h-6 rounded-full" />
+            <u-skeleton class="w-8 h-8 rounded-full" />
           </template>
         </client-only>
       </div>

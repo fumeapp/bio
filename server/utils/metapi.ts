@@ -46,14 +46,9 @@ const renderNullError = (event: H3Event, data: any): MetapiResponse => {
   return render(data)
 }
 
-const init = () => {
+const metapi = () => {
   start = performance.now()
   return { render, success, error, renderNullError }
 }
 
-export const metapi = {
-  init,
-  render,
-  error,
-  renderNullError,
-}
+export default metapi

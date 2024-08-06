@@ -19,7 +19,13 @@ const get = async () => {
   tokens.value = data
 }
 
+const testy = async () => {
+  const { data } = await useApi().fetch<MetApiResponse<Token[]>>('/api/token/bob')
+  console.log(data)
+}
+
 onMounted(get)
+testy()
 </script>
 
 <template>

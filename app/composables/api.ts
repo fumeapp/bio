@@ -1,4 +1,5 @@
 import type { User } from '@prisma/client'
+import type { MetapiResponse } from '~/types/metapi'
 
 const user = ref<User | undefined>(undefined)
 
@@ -20,7 +21,7 @@ export const useApi = () => {
   }
   const checkUser = async () => {
     try {
-      const { data } = await $fetch('/api/me')
+      const { data } = await $fetch<MetapiResponse<User>>('/api/me')
       user.value = data
     }
     // eslint-disable-next-line unused-imports/no-unused-vars

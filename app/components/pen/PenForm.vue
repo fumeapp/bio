@@ -11,7 +11,7 @@ const state = reactive({
       <u-input v-model="state.label" placeholder="Pinky" />
     </u-form-group>
     <div class="flex justify-end gap-3">
-      <u-button label="Cancel" variant="soft" @click="$emit('close')" />
+      <u-button label="Cancel" variant="soft" />
       <u-button type="submit" label="Submit" variant="solid" color="primary" />
     </div>
   </u-form>
