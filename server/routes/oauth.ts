@@ -3,7 +3,13 @@ import type { Prisma, User } from '@prisma/client'
 import type { TokenLocation } from '~/types/oauth'
 import { cookieOptions } from '~/utils/shared'
 
-export default defineEventHandler(async (event) => {
+const redirect = defineEventHandler(async (event) => {
+  const provider = oauthProvider(event.context.params?.provider, useRuntimeConfig(event))
+  if (!provider) return metapi().error(event, 'Provider not supported')
+  return await sendRedirect(event, oauthClient(provider).authorizationUrl({ scope: provider.scope }), 302)
+})
+
+const callback = defineEventHandler(async (event) => {
   const cfg = useRuntimeConfig(event)
   const provider = oauthProvider(event.context.params?.provider, cfg)
   if (!provider) return metapi().error(event, 'Provider not supported')
@@ -83,3 +89,8 @@ export default defineEventHandler(async (event) => {
   event.node.res.setHeader('Content-Type', 'text/html')
   event.node.res.end(`<html><head><script> window.opener.postMessage(${JSON.stringify({ user, token: token.hash })}, '*'); window.close(); </script></head></html>`)
 })
+
+export default {
+  redirect,
+  callback,
+}

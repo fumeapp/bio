@@ -7,5 +7,5 @@ export default defineEventHandler(async (event) => {
   })
   deleteCookie(event, 'token')
   auth.clear()
-  return metapi().success('logout successful')
+  return metapi().success('logged out')
 })
