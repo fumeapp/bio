@@ -4,6 +4,7 @@ import me from '../routes/me'
 import token from '../routes/token'
 import oauth from '../routes/oauth'
 import pen from '../routes/pen'
+import cartridge from '../routes/cartridge'
 
 const router = createRouter()
 
@@ -15,5 +16,6 @@ router.get('/me', me)
 
 routing.apiResource('token', router, token)
 routing.apiResource('pen', router, pen)
+routing.apiResource('cartridge', router, cartridge)
 
 export default useBase('/api', router.handler)

@@ -1,30 +1,5 @@
 <script setup lang="ts">
-const crumbs = [{
-  label: 'Home',
-  icon: 'i-heroicons-home',
-  to: '/',
-}, {
-  label: 'Pens',
-  icon: 'i-mdi-pen',
-}]
-
-const links = [
-  {
-    label: 'Home',
-    icon: 'i-heroicons-home',
-    to: '/',
-  },
-  {
-    label: 'Pens',
-    icon: 'i-mdi-pen',
-    to: '/pens',
-  },
-  {
-    label: 'Cartridges',
-    to: '/cartridges',
-    icon: 'i-mdi-bottle-soda-outline',
-  },
-]
+const { crumbs, links } = useCrumb()
 </script>
 
 <template>
@@ -59,8 +34,16 @@ const links = [
     -->
   </u-header>
   <div class="bg-gray-100 dark:bg-gray-950">
-    <div class="py-2 px-10 max-w-7xl mx-auto">
-      <u-breadcrumb :links="crumbs" />
+    <div class="py-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <client-only>
+        <u-breadcrumb :links="crumbs" />
+        <template #fallback>
+          <div class="flex items-center space-x-2">
+            <u-skeleton class="w-6 h-6" />
+            <u-skeleton class="w-14 h-6" />
+          </div>
+        </template>
+      </client-only>
     </div>
   </div>
 </template>

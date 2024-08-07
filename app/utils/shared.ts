@@ -17,3 +17,14 @@ export const penColors = [
   'pink',
   'gray',
 ]
+
+export const cartridgeContents = [
+  'Tirzepatide',
+  'Retatrutide',
+  'Semaglutide',
+]
+
+export const cartridgeMls = [
+  '2.0',
+  '3.0',
+]

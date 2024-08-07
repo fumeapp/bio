@@ -6,7 +6,9 @@
   <div>
     <header-main />
     <u-main class="p-12 bg-gray-100 dark:bg-gray-950 overlay">
-      <slot />
+      <div class="py-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <slot />
+      </div>
     </u-main>
     <layout-footer />
   </div>

@@ -18,14 +18,14 @@ const render = (data: any): MetapiResponse => {
   }
 }
 
-const success = (message: string): MetapiResponse => {
+const success = (message: string, data?: any): MetapiResponse => {
   return {
     meta: {
       benchmark: bench(),
       success: true,
       detail: message,
     },
-    data: [],
+    data,
   }
 }
 

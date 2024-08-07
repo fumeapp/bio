@@ -1,11 +1,12 @@
 import { z } from 'zod'
+import cartridge from './cartridge'
 import { penColors } from '~/utils/shared'
 
 const index = defineEventHandler(async () => {
   return metapi().render(
     await prisma.pen.findMany({
       where: {
-        userId: auth.user().id,
+        userId: BigInt(auth.user().id),
       },
     }),
   )
@@ -17,7 +18,40 @@ const create = defineEventHandler(async (event) => {
   })
   const parsed = schema.safeParse(await readBody(event))
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
-  return metapi().success('pen created')
+  const pen = await prisma.pen.create({
+    data: {
+      color: parsed.data.color,
+      // user: { connect: { id: BigInt(auth.user().id) } },
+      userId: BigInt(auth.user().id),
+      cartridgeId: null,
+    },
+  })
+
+  return metapi().success('pen created', pen)
+})
+
+const update = defineEventHandler(async (event) => {
+  const schema = z.object({
+    id: z.number(),
+    cartridgeId: z.number().optional(),
+  })
+  const parsed = schema.safeParse({
+    id: Number.parseInt(event.context.params?.id as string),
+    cartridgeId: Number.parseInt((await readBody(event))?.cartridgeId) || undefined,
+  })
+  if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
+  console.log(parsed.data)
+  const pen = await prisma.pen.update({
+    where: {
+      id: parsed.data.id,
+      userId: BigInt(auth.user().id),
+    },
+    data: {
+      cartridgeId: parsed.data.cartridgeId ? BigInt(parsed.data.cartridgeId) : null,
+    },
+  })
+
+  return metapi().success('pen updated', pen)
 })
 
 const get = defineEventHandler(async (event) => {
@@ -25,28 +59,29 @@ const get = defineEventHandler(async (event) => {
   const parsed = schema.safeParse({ id: event.context.params?.id })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
 
-  return metapi().renderNullError(event, await prisma.token.findUnique({
+  return metapi().renderNullError(event, await prisma.pen.findUnique({
     where: {
       id: parsed.data.id,
-      userId: auth.user().id,
+      userId: BigInt(auth.user().id),
     },
   }))
 })
 
 const remove = defineEventHandler(async (event) => {
   const id = event.context.params?.id
-  await prisma.token.delete({
+  await prisma.pen.delete({
     where: {
-      id: Number.parseInt(id),
-      userId: auth.user().id,
+      id: Number.parseInt(id as string),
+      userId: BigInt(auth.user().id),
     },
   })
-  return metapi().success('token deleted')
+  return metapi().success('pen deleted')
 })
 
 export default {
   index,
   create,
   get,
+  update,
   remove,
 }
