@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Token } from '@prisma/client'
-import type { MetApiResponse } from '~/types/metapi'
+import type { Token } from '~/types/models'
+import type { MetapiResponse } from '~/types/metapi'
 
 const { data: page } = await useAsyncData('index', () => queryContent('/tokens').findOne())
 
@@ -15,12 +15,12 @@ useSeoMeta({
 })
 const tokens = ref<Token[]>([])
 const get = async () => {
-  const { data } = await useApi().fetch<MetApiResponse<Token[]>>('/api/token')
+  const { data } = await useApi().fetch<MetapiResponse<Token[]>>('/api/token')
   tokens.value = data
 }
 
 const testy = async () => {
-  const { data } = await useApi().fetch<MetApiResponse<Token[]>>('/api/token/bob')
+  const { data } = await useApi().fetch<MetapiResponse<Token[]>>('/api/token/bob')
   console.log(data)
 }
 

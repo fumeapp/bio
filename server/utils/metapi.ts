@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3'
-import type { MetapiResponse } from '~/types/metapi'
+import type { MetapiDetail, MetapiResponse } from '~/types/metapi'
 
 let start: number | undefined
 
@@ -29,13 +29,13 @@ const success = (message: string): MetapiResponse => {
   }
 }
 
-const error = (event: H3Event, message: string, code: number = 400): MetapiResponse => {
+const error = (event: H3Event, detail: MetapiDetail, code: number = 400): MetapiResponse => {
   setResponseStatus(event, code)
   return {
     meta: {
       benchmark: bench(),
       success: false,
-      detail: message,
+      detail,
     },
     data: [],
   }

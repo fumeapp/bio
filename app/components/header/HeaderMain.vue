@@ -1,16 +1,28 @@
 <script setup lang="ts">
+const crumbs = [{
+  label: 'Home',
+  icon: 'i-heroicons-home',
+  to: '/',
+}, {
+  label: 'Pens',
+  icon: 'i-mdi-pen',
+}]
+
 const links = [
   {
     label: 'Home',
+    icon: 'i-heroicons-home',
     to: '/',
   },
   {
     label: 'Pens',
+    icon: 'i-mdi-pen',
     to: '/pens',
   },
   {
     label: 'Cartridges',
     to: '/cartridges',
+    icon: 'i-mdi-bottle-soda-outline',
   },
 ]
 </script>
@@ -19,7 +31,7 @@ const links = [
   <u-header :links="links">
     <template #logo>
       <div class="flex items-center">
-        <div class="relative">
+        <div class="relative w-12 h-12">
           <header-logo />
           <u-icon name="i-mdi-test-tube" class="w-6 h-6 text-primary-100 absolute bottom-1.5 right-0.5" />
         </div>
@@ -38,7 +50,19 @@ const links = [
         </client-only>
       </div>
     </template>
+    <!--
+    <template #bottom>
+      <div class="py-2 px-4">
+        <u-breadcrumb :links="crumbs" />
+      </div>
+    </template>
+    -->
   </u-header>
+  <div class="bg-gray-100 dark:bg-gray-950">
+    <div class="py-2 px-10 max-w-7xl mx-auto">
+      <u-breadcrumb :links="crumbs" />
+    </div>
+  </div>
 </template>
 
 <style>

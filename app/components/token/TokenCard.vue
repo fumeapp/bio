@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Token } from '@prisma/client'
 import { formatDistance } from 'date-fns'
+import type { Token } from '~/types/models'
 
-const props = defineProps<{ token: Token & { client: UAParser.IResult, isCurrent: boolean } }>()
+const props = defineProps<{ token: Token }>()
 
 const emit = defineEmits(['reload'])
 

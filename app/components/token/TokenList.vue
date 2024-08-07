@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Token } from '@prisma/client'
+import type { TokenWithClient } from '~/types/models'
 
-defineProps<{ tokens: Token[] }>()
+defineProps<{ tokens: TokenWithClient[] }>()
 const emit = defineEmits(['reload'])
 </script>
 
