@@ -3,26 +3,21 @@ import type { Cartridge, Pen } from '@prisma/client'
 import type { MetapiResponse } from '~/types/metapi'
 
 const penModal = ref(false)
-const pens = ref<Pen[]>([])
-const cartridges = ref<Cartridge[]>([])
 
-useCrumb().add('Pens')
+useCrumb().add('Pens').action({ label: 'Add a Pen', click: () => penModal.value = true })
 
-const get = async () => {
-  const [p, c] = await Promise.all([
-    useApi().fetch<MetapiResponse<Pen[]>>('/api/pen'),
-    useApi().fetch<MetapiResponse<Cartridge[]>>('/api/cartridge'),
-  ])
-  pens.value = p.data
-  cartridges.value = c.data
+const { data: pens, refresh: penRefresh } = await useApi().api<MetapiResponse<Pen[]>>('/api/pen')
+const { data: cartridges, refresh: cartRefresh } = await useApi().api<MetapiResponse<Cartridge[]>>('/api/cartridge')
+
+const refresh = () => {
+  penRefresh()
+  cartRefresh()
 }
 
 const created = () => {
-  get()
+  refresh()
   penModal.value = false
 }
-
-onMounted(get)
 </script>
 
 <template>
@@ -30,7 +25,7 @@ onMounted(get)
     <div class="flex justify-end -mt-[90px]">
       <u-button :ui="{ rounded: 'rounded-full' }" icon="i-mdi-plus" size="xs" @click="penModal = true" />
     </div>
-    <pen-list :pens="pens" :cartridges="cartridges" class="my-12" @reload="get" />
+    <pen-list :pens="pens.data" :cartridges="cartridges.data" class="my-12" @reload="created" />
     <u-dashboard-modal
       v-model="penModal"
       title="Add a pen"

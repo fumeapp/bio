@@ -7,12 +7,14 @@ interface Button {
   icon?: string
   to?: string
   size?: string
+  variant?: string
   click?: () => void
 }
 
 const defaultAction: Button = {
   icon: 'i-mdi-plus',
-  size: 'xs',
+  size: '2xs',
+  variant: 'soft',
 }
 
 const links: HeaderIconLink[] = [

@@ -5,23 +5,17 @@ import type { MetapiResponse } from '~/types/metapi'
 const cartridgeModal = ref(false)
 useCrumb().add('Cartridges').action({ label: 'Add a Cartridge', click: () => cartridgeModal.value = true })
 
-const cartridges = ref<Cartridge[]>([])
-
-const get = async () => {
-  const { data } = await useApi().fetch<MetapiResponse<Cartridge[]>>('/api/cartridge')
-  cartridges.value = data
-}
+const { data: cartridges, refresh } = await useApi().api<MetapiResponse<Cartridge[]>>('/api/cartridge')
 
 const created = () => {
-  get()
+  refresh()
   cartridgeModal.value = false
 }
-onMounted(get)
 </script>
 
 <template>
   <div>
-    <cartridge-list :cartridges="cartridges" class="my-12" />
+    <cartridge-list :cartridges="cartridges.data" class="my-12" />
     <u-dashboard-modal
       v-model="cartridgeModal"
       title="Add a cartridge"
@@ -29,7 +23,7 @@ onMounted(get)
       icon="i-mdi-cartridge"
       @close="cartridgeModal = false"
     >
-      <cartridge-form @created="created" />
+      <cartridge-form @created="created" @close="cartridgeModal = false" />
     </u-dashboard-modal>
   </div>
 </template>

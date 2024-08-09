@@ -24,7 +24,17 @@ const confirm = () => useConfirm().confirm('Remove Cartridge', 'Are you sure you
   <div>
     <u-card>
       <div class="flex flex-col items-center justify-center space-y-8">
-        <u-icon name="i-mdi-pen" :class="`w-24 h-24 text-${pen.color}-500`" />
+        <pen-model :pen="pen">
+          hi there
+        </pen-model>
+        <div class="flex items-center">
+          <div class="w-2 h-5 rounded-l-sm border-r border-r-gray-900" :class="`bg-${pen.color}-500`" />
+          <div class="w-20 h-6 rounded-l-sm" :class="`bg-${pen.color}-500`" />
+          <div class="w-2 h-6 bg-gray-300" />
+          <div class="w-20 h-6 rounded-l-sm" :class="`bg-${pen.color}-500`" />
+          <div class="w-3 h-6 bg-gray-400" />
+          <div class="w-1 h-6 bg-gray-500 rounded-r-sm" />
+        </div>
         <u-button-group>
           <u-select-menu
             v-model="cartridgeId"
