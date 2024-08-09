@@ -2,6 +2,7 @@ import type { User } from '@prisma/client'
 import type { ZodIssue } from 'zod'
 import type { MetapiResponse } from '~/types/metapi'
 import type { Form } from '#ui/types/form'
+import type { UseFetchOptions } from '#app'
 
 const user = ref<User | undefined>(undefined)
 
@@ -37,6 +38,16 @@ export const useApi = () => {
     },
   })
 
+  const api = <T>(
+    url: string | (() => string),
+    options?: Omit<UseFetchOptions<T>, 'default'> & { default: () => T | Ref<T> },
+  ) => {
+    return useFetch(url, {
+      ...options,
+      $fetch: fetch,
+    })
+  }
+
   const setForm = (frm?: Form<any>) => {
     form.value = frm
     return { fetch }
@@ -49,8 +60,8 @@ export const useApi = () => {
   }
   const checkUser = async () => {
     try {
-      const { data } = await $fetch<MetapiResponse<User>>('/api/me')
-      user.value = data
+      const { data } = await api<MetapiResponse<User>>('/api/me')
+      user.value = data.value.data
     }
     // eslint-disable-next-line unused-imports/no-unused-vars
     catch (e) {}
@@ -66,6 +77,7 @@ export const useApi = () => {
 
   return {
     fetch,
+    api,
     setUser,
     setForm,
     checkUser,

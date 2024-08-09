@@ -27,7 +27,7 @@ onMounted(get)
 
 <template>
   <div>
-    <div class="flex justify-end -mt-20">
+    <div class="flex justify-end -mt-[90px]">
       <u-button :ui="{ rounded: 'rounded-full' }" icon="i-mdi-plus" size="xs" @click="penModal = true" />
     </div>
     <pen-list :pens="pens" :cartridges="cartridges" class="my-12" @reload="get" />
