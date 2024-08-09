@@ -15,7 +15,7 @@ const created = () => {
 
 <template>
   <div>
-    <cartridge-list :cartridges="cartridges.data" class="my-12" />
+    <cartridge-list :cartridges="cartridges.data" />
     <u-dashboard-modal
       v-model="cartridgeModal"
       title="Add a cartridge"

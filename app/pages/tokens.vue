@@ -13,16 +13,10 @@ useSeoMeta({
   description: page.value.description,
   ogDescription: page.value.description,
 })
-const tokens = ref<Token[]>([])
-const get = async () => {
-  const { data } = await useApi().fetch<MetapiResponse<Token[]>>('/api/token')
-  tokens.value = data
-}
-onMounted(get)
+
+const { data: tokens, refresh } = await useApi().api<MetapiResponse<Token[]>>('/api/token')
 </script>
 
 <template>
-  <token-list :tokens="tokens" @reload="get" />
+  <token-list :tokens="tokens.data" @reload="refresh" />
 </template>
-
-<style scoped></style>

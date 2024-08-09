@@ -22,10 +22,7 @@ const created = () => {
 
 <template>
   <div>
-    <div class="flex justify-end -mt-[90px]">
-      <u-button :ui="{ rounded: 'rounded-full' }" icon="i-mdi-plus" size="xs" @click="penModal = true" />
-    </div>
-    <pen-list :pens="pens.data" :cartridges="cartridges.data" class="my-12" @reload="created" />
+    <pen-list :pens="pens.data" :cartridges="cartridges.data" @reload="created" />
     <u-dashboard-modal
       v-model="penModal"
       title="Add a pen"
