@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const { crumbs, links, actions } = useCrumb()
+const { crumbs, actions } = useCrumb()
+const { links } = useMenu()
 </script>
 
 <template>
