@@ -18,14 +18,7 @@ const get = async () => {
   const { data } = await useApi().fetch<MetapiResponse<Token[]>>('/api/token')
   tokens.value = data
 }
-
-const testy = async () => {
-  const { data } = await useApi().fetch<MetapiResponse<Token[]>>('/api/token/bob')
-  console.log(data)
-}
-
 onMounted(get)
-testy()
 </script>
 
 <template>

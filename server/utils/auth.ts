@@ -4,6 +4,7 @@ import type { RuntimeConfig } from 'nuxt/schema'
 let token: Token & { user: User } | null = null
 
 const set = async (hash: string): Promise<User> => {
+  if (token?.user) return token.user
   token = await prisma.token.findUnique({
     where: {
       hash,

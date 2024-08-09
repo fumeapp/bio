@@ -2,7 +2,6 @@ import { z } from 'zod'
 import { cartridgeContents, cartridgeMls } from '~/utils/shared'
 
 const index = defineEventHandler(async () => {
-  console.log('cartridge index')
   return metapi().render(
     await prisma.cartridge.findMany({
       where: {

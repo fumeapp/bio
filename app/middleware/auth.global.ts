@@ -1,5 +1,4 @@
 export default defineNuxtRouteMiddleware(async (to, _from) => {
-  console.log('checkUser', import.meta.server, to.path)
   if (import.meta.server) return
   await useApi().checkUser()
 

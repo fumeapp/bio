@@ -59,6 +59,8 @@ export const useApi = () => {
     tokenCookie.value = token
   }
   const checkUser = async () => {
+    if (user.value) return
+
     try {
       const { data } = await api<MetapiResponse<User>>('/api/me')
       user.value = data.value.data

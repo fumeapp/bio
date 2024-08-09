@@ -2,8 +2,8 @@ import { PrismaClient } from '@prisma/client'
 import { UAParser } from 'ua-parser-js'
 
 const prismaClientSingleton = () => {
-  return new PrismaClient()
-  // return new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
+  // return new PrismaClient()
+  return new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
 }
 
 declare const globalThis: {
