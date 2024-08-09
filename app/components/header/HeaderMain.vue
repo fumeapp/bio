@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const { crumbs, links, actions } = useCrumb()
+import { links } from '~/utils/shared'
+
+const { crumbs, actions } = useCrumb()
 </script>
 
 <template>
