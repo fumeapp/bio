@@ -1,6 +1,5 @@
 <script setup lang="ts">
-const { crumbs, actions } = useCrumb()
-const { links } = useMenu()
+const { crumbs, links, actions } = useCrumb()
 </script>
 
 <template>
@@ -32,7 +31,9 @@ const { links } = useMenu()
       <client-only>
         <div class="flex items-center justify-between space-x-2">
           <u-breadcrumb :links="crumbs" />
-          <u-button v-for="action in actions" :key="action.label" v-bind="action" @click="action.click" />
+          <u-button-group>
+            <u-button v-for="action in actions" :key="action.label" v-bind="action" @click="action.click" />
+          </u-button-group>
         </div>
         <template #fallback>
           <div class="flex items-center space-x-2">

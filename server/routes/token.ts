@@ -36,7 +36,7 @@ const remove = defineEventHandler(async (event) => {
   const id = event.context.params?.id
   await prisma.token.delete({
     where: {
-      id: Number.parseInt(id as string),
+      id: Number.parseInt(id),
       userId: auth.user().id,
     },
   })

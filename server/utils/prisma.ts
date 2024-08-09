@@ -1,16 +1,30 @@
 import { PrismaClient } from '@prisma/client'
-import { tokenClient } from '~/utils/mutators/token'
+import { UAParser } from 'ua-parser-js'
 
 const prismaClientSingleton = () => {
-  return new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
   // return new PrismaClient()
+  return new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
 }
 
 declare const globalThis: {
   prismaGlobal: ReturnType<typeof prismaClientSingleton>
 }
 
-const prisma = globalThis.prismaGlobal ?? prismaClientSingleton().$extends(tokenClient)
+const prisma = globalThis.prismaGlobal ?? prismaClientSingleton().$extends({
+  name: 'tokenParser',
+  result: {
+    token: {
+      client: {
+        needs: {
+          agent: true,
+        },
+        compute({ agent }) {
+          return new UAParser(agent).getResult()
+        },
+      },
+    },
+  },
+})
 
 export type CustomPrismaClient = ReturnType<typeof prismaClientSingleton>
 
