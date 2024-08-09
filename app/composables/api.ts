@@ -5,6 +5,7 @@ import type { Form } from '#ui/types/form'
 import type { UseFetchOptions } from '#app'
 
 const user = ref<User | undefined>(undefined)
+const silent = ref(false)
 
 const form = ref<Form<any>>()
 
@@ -26,6 +27,10 @@ export const useApi = () => {
 
   const fetch = $fetch.create({
     onResponse: ({ response }) => {
+      if (silent.value) {
+        silent.value = false
+        return
+      }
       if (response?._data?.meta.success && response?._data?.meta?.detail)
         success(response._data.meta.detail)
       if (!response?._data?.meta.success && response?._data?.meta?.detail)
@@ -61,6 +66,7 @@ export const useApi = () => {
   const checkUser = async () => {
     if (user.value) return
 
+    silent.value = true
     try {
       const { data } = await api<MetapiResponse<User>>('/api/me')
       user.value = data.value.data
