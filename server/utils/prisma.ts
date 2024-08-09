@@ -3,14 +3,14 @@ import { tokenClient } from '~/utils/mutators/token'
 
 const prismaClientSingleton = () => {
   // const client = new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
-  return new PrismaClient().$extends(tokenClient)
+  return new PrismaClient()
 }
 
 declare const globalThis: {
   prismaGlobal: ReturnType<typeof prismaClientSingleton>
 }
 
-const prisma = globalThis.prismaGlobal ?? prismaClientSingleton()
+const prisma = globalThis.prismaGlobal ?? prismaClientSingleton().$extends(tokenClient)
 
 export type CustomPrismaClient = ReturnType<typeof prismaClientSingleton>
 
