@@ -2,8 +2,8 @@ import { PrismaClient } from '@prisma/client'
 import { tokenClient } from '~/utils/mutators/token'
 
 const prismaClientSingleton = () => {
-  // const client = new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
-  return new PrismaClient()
+  return new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
+  // return new PrismaClient()
 }
 
 declare const globalThis: {
