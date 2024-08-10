@@ -14,7 +14,7 @@ const refresh = () => {
   cartRefresh()
 }
 
-const created = () => {
+const reload = () => {
   refresh()
   penModal.value = false
 }
@@ -22,7 +22,7 @@ const created = () => {
 
 <template>
   <div>
-    <pen-list :pens="pens.data" :cartridges="cartridges.data" @reload="created" />
+    <pen-list :pens="pens.data" :cartridges="cartridges.data" @reload="reload" />
     <u-dashboard-modal
       v-model="penModal"
       title="Add a pen"
@@ -30,9 +30,7 @@ const created = () => {
       icon="i-mdi-pen"
       @close="penModal = false"
     >
-      <pen-form @created="created" />
+      <pen-form @created="reload" />
     </u-dashboard-modal>
   </div>
 </template>
-
-<style scoped></style>

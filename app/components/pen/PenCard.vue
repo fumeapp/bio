@@ -30,28 +30,26 @@ const remove = () => useApi()
   .fetch<MetapiResponse<Cartridge>>(`/api/pen/${props.pen.id}`, { method: 'DELETE' })
   .then(reload)
 
-const confirmEject = () => useConfirm().confirm('Remove Cartridge', 'Are you sure you want to remove this cartridge?', 'Eject', eject)
-const confirmRemove = () => useConfirm().confirm('Remove Cartridge', 'Are you sure you want to delete this pen?', 'Remove', remove)
-
 const items = computed(() => {
   return [
     [
-      {
-        label: 'Attach a Cartridge',
-        icon: 'i-mdi-plus',
-        click: () => attachModal.value = true,
-      },
-      {
-        label: 'Eject Cartridge',
-        icon: 'i-mdi-minus',
-        click: confirmEject,
-      },
+      !cartridge.value
+        ? {
+            label: 'Attach Cartridge',
+            icon: 'i-mdi-plus',
+            click: () => attachModal.value = true,
+          }
+        : {
+            label: 'Eject Cartridge',
+            icon: 'i-mdi-minus',
+            click: () => useConfirm().confirm('Remove Cartridge', 'Are you sure you want to remove this cartridge?', 'Eject', eject),
+          },
     ],
     [
       {
         label: 'Delete pen',
         icon: 'i-mdi-trash',
-        click: confirmRemove,
+        click: () => useConfirm().confirm('Remove Cartridge', 'Are you sure you want to delete this pen?', 'Remove', remove),
       },
     ],
   ]
@@ -59,17 +57,19 @@ const items = computed(() => {
 </script>
 
 <template>
-  <div>
+  <div class="flex">
     <u-card>
       <div class="flex flex-col items-center justify-center space-y-8">
         <u-dropdown class="self-end" :items="items">
-          <u-button icon="i-mdi-dots-vertical" size="xs" variant="soft" />
+          <u-button icon="i-mdi-dots-vertical" size="xs" variant="ghost" />
         </u-dropdown>
         <pen-model :pen="pen">
-          <cartridge-model v-if="cartridge" :cartridge="cartridge" />
+          <transition name="fade">
+            <cartridge-model v-if="cartridge" :cartridge="cartridge" />
+          </transition>
         </pen-model>
 
-        <shot-form :disabled="!cartridge" @created="reload" />
+        <shot-form :pen="pen" :cartridge="cartridge" @created="reload" />
       </div>
     </u-card>
     <u-dashboard-modal v-model="attachModal" title="Attach a Cartridge" description="Choose an available cartridge">
@@ -86,4 +86,14 @@ const items = computed(() => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

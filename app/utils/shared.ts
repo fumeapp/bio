@@ -51,16 +51,7 @@ export const cartridgeMls = [
 ]
 
 export const shotUnits = [
-  {
-    label: '25 units',
-    value: 25,
-  },
-  {
-    label: '50 units',
-    value: 50,
-  },
-  {
-    label: '75 units',
-    value: 75,
-  },
+  25,
+  50,
+  75,
 ]

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import type { Shot } from '@prisma/client'
+import type { Pen, Shot } from '@prisma/client'
+import type { Cartridge } from '~/types/models'
 import type { Form } from '#ui/types/form'
 import type { MetapiResponse } from '~/types/metapi'
 
 import { shotUnits } from '~/utils/shared'
 
-defineProps<{ disabled: boolean }>()
+defineProps<{ pen: Pen, cartridge?: Cartridge }>()
 
 const emit = defineEmits(['created'])
 const form = ref<Form<any>>()
@@ -21,12 +22,13 @@ const create = async () => useApi()
 
 <template>
   <u-form ref="form" :state="state" class="space-y-4" @submit="create">
-    <u-button-group>
+    <span v-if="!cartridge"> Cartridge Required </span>
+    <u-button-group v-else>
       <u-select-menu
         v-model="state.units"
         :options="shotUnits"
       />
-      <u-button label="Log a Shot" icon="i-mdi-syringe" :disabled="disabled" />
+      <u-button label="Log a Shot" icon="i-mdi-syringe" :disabled="!cartridge" />
     </u-button-group>
   </u-form>
 </template>
