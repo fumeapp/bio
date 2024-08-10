@@ -11,7 +11,7 @@ const items = [
     label: 'Tokens',
     icon: 'i-mdi-key',
     shortcuts: ['T'],
-    to: '/token',
+    to: '/tokens',
   }],
   [
     {

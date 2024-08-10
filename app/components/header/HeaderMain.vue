@@ -31,12 +31,12 @@ const { crumbs, actions } = useCrumb()
   <div class="bg-gray-100 dark:bg-gray-950">
     <div class="py-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <client-only>
-        <div class="flex items-center justify-between space-x-2">
+        <div class="flex items-center justify-between space-x-2 py-2">
           <u-breadcrumb :links="crumbs" />
           <u-button v-for="action in actions" :key="action.label" v-bind="action" @click="action.click" />
         </div>
         <template #fallback>
-          <div class="flex items-center justify-between space-x-2">
+          <div class="flex items-center justify-between space-x-2 py-2">
             <div class="flex items-center space-x-2">
               <u-skeleton class="w-6 h-6" />
               <u-skeleton class="w-14 h-6" />

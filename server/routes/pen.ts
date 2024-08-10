@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import cartridge from './cartridge'
 import { penColors } from '~/utils/shared'
 
 const index = defineEventHandler(async () => {
@@ -7,6 +6,9 @@ const index = defineEventHandler(async () => {
     await prisma.pen.findMany({
       where: {
         userId: BigInt(auth.user().id),
+      },
+      include: {
+        cartridge: true,
       },
     }),
   )
@@ -56,7 +58,7 @@ const update = defineEventHandler(async (event) => {
 
 const get = defineEventHandler(async (event) => {
   const schema = z.object({ id: z.number() })
-  const parsed = schema.safeParse({ id: event.context.params?.id })
+  const parsed = schema.safeParse({ id: Number.parseInt(event.context.params?.id as string) })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
 
   return metapi().renderNullError(event, await prisma.pen.findUnique({
@@ -69,6 +71,16 @@ const get = defineEventHandler(async (event) => {
 
 const remove = defineEventHandler(async (event) => {
   const id = event.context.params?.id
+  const pen = await prisma.pen.findFirst({
+    where: {
+      id: Number.parseInt(id as string),
+      userId: BigInt(auth.user().id),
+    },
+  })
+
+  if (pen?.cartridgeId !== null)
+    return metapi().error(event, 'Cannot delete pen with cartridge', 400)
+
   await prisma.pen.delete({
     where: {
       id: Number.parseInt(id as string),

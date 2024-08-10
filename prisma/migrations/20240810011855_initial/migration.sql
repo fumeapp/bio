@@ -1,8 +1,9 @@
 -- CreateTable
-CREATE TABLE `pens` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `userId` INTEGER NOT NULL,
-    `color` VARCHAR(191) NOT NULL,
+CREATE TABLE `cartridges` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `userId` BIGINT NOT NULL,
+    `content` VARCHAR(191) NOT NULL,
+    `ml` DECIMAL(65, 30) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -10,22 +11,23 @@ CREATE TABLE `pens` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `cartridges` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `userId` INTEGER NOT NULL,
-    `content` VARCHAR(191) NOT NULL,
-    `ml` INTEGER NOT NULL,
+CREATE TABLE `pens` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `userId` BIGINT NOT NULL,
+    `cartridgeId` BIGINT NULL,
+    `color` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
+    UNIQUE INDEX `pens_cartridgeId_key`(`cartridgeId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `shots` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `userId` INTEGER NOT NULL,
-    `cartridgeId` INTEGER NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `userId` BIGINT NOT NULL,
+    `cartridgeId` BIGINT NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -34,7 +36,7 @@ CREATE TABLE `shots` (
 
 -- CreateTable
 CREATE TABLE `users` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
     `email` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NULL,
     `avatar` VARCHAR(1600) NULL,
@@ -47,8 +49,8 @@ CREATE TABLE `users` (
 
 -- CreateTable
 CREATE TABLE `providers` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `userId` INTEGER NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `userId` BIGINT NOT NULL,
     `name` VARCHAR(191) NULL,
     `avatar` VARCHAR(1600) NULL,
     `payload` JSON NOT NULL,
@@ -61,8 +63,8 @@ CREATE TABLE `providers` (
 
 -- CreateTable
 CREATE TABLE `tokens` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `userId` INTEGER NOT NULL,
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `userId` BIGINT NOT NULL,
     `hash` VARCHAR(191) NOT NULL,
     `source` VARCHAR(191) NOT NULL,
     `ip` VARCHAR(191) NOT NULL,
@@ -77,10 +79,13 @@ CREATE TABLE `tokens` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
+ALTER TABLE `cartridges` ADD CONSTRAINT `cartridges_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `pens` ADD CONSTRAINT `pens_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `cartridges` ADD CONSTRAINT `cartridges_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `pens` ADD CONSTRAINT `pens_cartridgeId_fkey` FOREIGN KEY (`cartridgeId`) REFERENCES `cartridges`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `shots` ADD CONSTRAINT `shots_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
