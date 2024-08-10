@@ -11,19 +11,26 @@ const options = computed(() => props.cartridges.map(c => ({ label: `${c.content}
 
 const cartridgeId = ref(props.pen.cartridgeId)
 const dirty = computed(() => props.pen.cartridgeId !== cartridgeId.value)
+
 const insert = () => useApi()
   .fetch<MetapiResponse<Cartridge>>(`/api/pen/${props.pen.id}`, { method: 'PUT', body: { cartridgeId: cartridgeId.value } })
   .then(reload)
-const remove = () => useApi()
+const eject = () => useApi()
   .fetch<MetapiResponse<Cartridge>>(`/api/pen/${props.pen.id}`, { method: 'PUT' })
   .then(reload)
-const confirm = () => useConfirm().confirm('Remove Cartridge', 'Are you sure you want to remove this cartridge?', 'Remove', remove)
+const remove = () => useApi()
+  .fetch<MetapiResponse<Cartridge>>(`/api/pen/${props.pen.id}`, { method: 'DELETE' })
+  .then(reload)
+
+const confirmEject = () => useConfirm().confirm('Remove Cartridge', 'Are you sure you want to remove this cartridge?', 'Eject', eject)
+const confirmRemove = () => useConfirm().confirm('Remove Cartridge', 'Are you sure you want to delete this pen?', 'Remove', remove)
 </script>
 
 <template>
   <div>
     <u-card>
       <div class="flex flex-col items-center justify-center space-y-8">
+        <u-button class="self-end" icon="i-mdi-trash" color="red" size="2xs" variant="soft" @click="confirmRemove" />
         <pen-model :pen="pen">
           <cartridge-model v-if="pen.cartridgeId" />
         </pen-model>
@@ -36,7 +43,7 @@ const confirm = () => useConfirm().confirm('Remove Cartridge', 'Are you sure you
             value-attribute="value"
           />
           <u-button v-if="dirty" icon="i-mdi-temperature-add" color="primary" @click="insert" />
-          <u-button v-if="pen.cartridgeId" icon="i-mdi-trash" color="white" @click="confirm" />
+          <u-button v-if="pen.cartridgeId" icon="i-mdi-trash" color="white" @click="confirmEject" />
         </u-button-group>
       </div>
     </u-card>
