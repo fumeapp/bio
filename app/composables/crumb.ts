@@ -1,6 +1,4 @@
-import type { HeaderLink } from '@nuxt/ui-pro/types'
-
-type HeaderIconLink = HeaderLink & { icon: string }
+import { links } from '~/utils/shared'
 
 interface Button {
   label?: string
@@ -16,24 +14,6 @@ const defaultAction: Button = {
   size: '2xs',
   variant: 'soft',
 }
-
-const links: HeaderIconLink[] = [
-  {
-    label: 'Home',
-    icon: 'i-heroicons-home',
-    to: '/',
-  },
-  {
-    label: 'Pens',
-    icon: 'i-mdi-pen',
-    to: '/pens',
-  },
-  {
-    label: 'Cartridges',
-    to: '/cartridges',
-    icon: 'i-mdi-bottle-soda-outline',
-  },
-]
 
 const crumbs = ref<HeaderIconLink[]>([])
 const actions = ref<Button[]>([])
@@ -67,7 +47,6 @@ export const useCrumb = () => {
     actions,
     action,
     add,
-    links,
     init,
   }
 }

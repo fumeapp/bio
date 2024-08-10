@@ -18,4 +18,4 @@ routing.apiResource('token', router, token)
 routing.apiResource('pen', router, pen)
 routing.apiResource('cartridge', router, cartridge)
 
-export default useBase('/api', router.handler)
+export default useBase('/api/', router.handler)

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { links } from '~/utils/shared'
+
 const { crumbs, actions } = useCrumb()
 </script>
 
@@ -34,8 +36,11 @@ const { crumbs, actions } = useCrumb()
           <u-button v-for="action in actions" :key="action.label" v-bind="action" @click="action.click" />
         </div>
         <template #fallback>
-          <div class="flex items-center space-x-2">
-            <u-skeleton class="w-6 h-6" />
+          <div class="flex items-center justify-between space-x-2">
+            <div class="flex items-center space-x-2">
+              <u-skeleton class="w-6 h-6" />
+              <u-skeleton class="w-14 h-6" />
+            </div>
             <u-skeleton class="w-14 h-6" />
           </div>
         </template>
