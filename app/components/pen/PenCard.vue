@@ -14,7 +14,8 @@ const reload = () => {
   emit('reload')
 }
 
-const options = computed(() => props.cartridges.filter(c => c.pen === null || c.pen.id === props.pen.id).map(c => ({ label: `${c.content} ${c.ml}ml`, value: c.id })))
+const options = computed(() => props.cartridges.filter(c => c.pen === null || c.pen.id === props.pen.id)
+  .map(c => ({ label: `${c.content} ${c.ml}ml ${c.mg}mg`, value: c.id })))
 const cartridge = computed(() => props.cartridges.find(c => c.id === props.pen.cartridgeId) || undefined)
 
 const cartridgeId = ref(props.pen.cartridgeId)

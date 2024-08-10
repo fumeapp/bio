@@ -12,6 +12,7 @@ defineProps<{ cartridge: Cartridge }>()
         <div>
           {{ cartridge.content }}
           {{ cartridge.ml }}ml
+          {{ cartridge.mg }}mg
         </div>
       </div>
     </u-card>
