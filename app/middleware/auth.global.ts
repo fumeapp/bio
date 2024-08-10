@@ -5,8 +5,9 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
   useCrumb().init().add('Home')
 
   const gatedRoutes = [
-    '/tokens',
-    '/pens',
+    '/token',
+    '/pen',
+    '/cartridge',
   ]
   if (gatedRoutes.some(route => to.path.startsWith(route)))
     if (!useApi().user.value) return '/'

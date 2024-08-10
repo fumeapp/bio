@@ -1,17 +1,16 @@
-import type { HeaderIconLink } from '~/utils/shared'
-import { links } from '~/utils/shared'
-
 interface Button {
   label?: string
   icon?: string
   to?: string
   size?: string
+  variant?: string
   click?: () => void
 }
 
 const defaultAction: Button = {
   icon: 'i-mdi-plus',
-  size: 'xs',
+  size: '2xs',
+  variant: 'soft',
 }
 
 const crumbs = ref<HeaderIconLink[]>([])
@@ -26,7 +25,7 @@ export const useCrumb = () => {
   }
 
   const add = (label: string) => {
-    links.find(link => link.label === label ? crumbs.value.push(link) : null)
+    useMenu().links.find(link => link.label === label ? crumbs.value.push(link) : null)
     return {
       add,
       action,
