@@ -5,6 +5,7 @@ model Cartridge {
   user    User    @relation(fields: [userId], references: [id])
   content String
   ml Decimal
+  mg Decimal
   shots Shot[]
   pen Pen?
   createdAt DateTime @default(now())

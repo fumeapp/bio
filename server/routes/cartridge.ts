@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { cartridgeContents, cartridgeMls } from '~/utils/shared'
+import { cartridgeContents, cartridgeMgs, cartridgeMls } from '~/utils/shared'
 
 const index = defineEventHandler(async () => {
   return metapi().render(
@@ -18,6 +18,7 @@ const create = defineEventHandler(async (event) => {
   const schema = z.object({
     content: z.enum(cartridgeContents as [string, ...string[]]),
     ml: z.enum(cartridgeMls as [string, ...string[]]),
+    mg: z.enum(cartridgeMgs as [string, ...string[]]),
   })
   const parsed = schema.safeParse(await readBody(event))
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
@@ -25,6 +26,7 @@ const create = defineEventHandler(async (event) => {
     data: {
       content: parsed.data.content,
       ml: parsed.data.ml,
+      mg: parsed.data.mg,
       userId: auth.user().id,
     },
   })

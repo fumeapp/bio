@@ -58,7 +58,7 @@ const items = computed(() => {
 
 <template>
   <div class="flex">
-    <u-card>
+    <u-card class="w-full">
       <div class="flex flex-col items-center justify-center space-y-8">
         <u-dropdown class="self-end" :items="items">
           <u-button icon="i-mdi-dots-vertical" size="xs" variant="ghost" />

@@ -6,12 +6,22 @@ import type { MetapiResponse } from '~/types/metapi'
 
 import { shotUnits } from '~/utils/shared'
 
-defineProps<{ pen: Pen, cartridge?: Cartridge }>()
+const props = defineProps<{ pen: Pen, cartridge?: Cartridge }>()
 
 const emit = defineEmits(['created'])
 const form = ref<Form<any>>()
 const state = reactive({
   units: shotUnits[1],
+})
+// 200 = cartridge.mg
+// 50 = cartridge.mg / 4
+// 25 = cartridge.mg / 8
+// 50 = mg / 4
+// 25 = mg / 8
+// 200 / 50 mg * 200 / 50
+
+const options = computed(() => {
+  return shotUnits.map(units => ({ label: `${units} units - ${(props.cartridge.mg / 200 * units)}mg`, value: units }))
 })
 
 const create = async () => useApi()
@@ -23,13 +33,19 @@ const create = async () => useApi()
 <template>
   <u-form ref="form" :state="state" class="space-y-4" @submit="create">
     <span v-if="!cartridge"> Cartridge Required </span>
-    <u-button-group v-else>
+    <div v-else class="flex flex-col space-y-2 items-stretch">
       <u-select-menu
         v-model="state.units"
-        :options="shotUnits"
-      />
-      <u-button label="Log a Shot" icon="i-mdi-syringe" :disabled="!cartridge" />
-    </u-button-group>
+        :options="options"
+      >
+        <template #label>
+          <div v-if="cartridge">
+            {{ state.units }} - {{ cartridge.mg / 4 }}mg of {{ cartridge.content }}
+          </div>
+        </template>
+      </u-select-menu>
+      <u-button block label="Log a Shot" icon="i-mdi-syringe" :disabled="!cartridge" />
+    </div>
   </u-form>
 </template>
 

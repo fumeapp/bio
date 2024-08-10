@@ -4,6 +4,7 @@ CREATE TABLE `cartridges` (
     `userId` BIGINT NOT NULL,
     `content` VARCHAR(191) NOT NULL,
     `ml` DECIMAL(65, 30) NOT NULL,
+    `mg` DECIMAL(65, 30) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -91,7 +92,7 @@ ALTER TABLE `pens` ADD CONSTRAINT `pens_cartridgeId_fkey` FOREIGN KEY (`cartridg
 ALTER TABLE `shots` ADD CONSTRAINT `shots_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `shots` ADD CONSTRAINT `shots_cartridgeId_fkey` FOREIGN KEY (`cartridgeId`) REFERENCES `cartridges`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `shots` ADD CONSTRAINT `shots_cartridgeId_fkey` FOREIGN KEY (`cartridgeId`) REFERENCES `cartridges`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `providers` ADD CONSTRAINT `providers_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -6,15 +6,15 @@ defineProps<{ pen: Pen }>()
 
 <template>
   <div class="flex items-center relative">
-    <div class="absolute left-6">
+    <div class="absolute left-3">
       <div class="opacity-75">
         <slot />
       </div>
     </div>
     <div class="w-2 h-7 rounded-l-sm" :class="`bg-${pen.color}-500`" />
-    <div class="w-32 h-8 rounded-l-sm flex items-center justify-end border" :class="`border-${pen.color}-500 bg-${pen.color}-500/20`" />
+    <div class="w-32 h-8 rounded-l-sm flex items-center justify-end border-l border-t border-b" :class="`border-${pen.color}-500 bg-${pen.color}-500/20`" />
     <div class="w-2 h-8 bg-gray-300" />
-    <div class="w-20 h-8 border" :class="`border-${pen.color}-500 bg-${pen.color}-500/20`" />
+    <div class="w-20 h-8 border-t border-b border-r" :class="`border-${pen.color}-500 bg-${pen.color}-500/20`" />
     <div class="w-3 h-8 bg-gray-400" />
     <div class="w-1 h-8 bg-gray-500 rounded-r-sm" />
     <!--
