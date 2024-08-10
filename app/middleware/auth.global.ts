@@ -9,6 +9,7 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
     '/pen',
     '/cartridge',
   ]
+  console.log('startsWith', gatedRoutes.some(route => to.path.startsWith(route)))
   if (gatedRoutes.some(route => to.path.startsWith(route)))
     if (!useApi().user.value) return '/'
 })

@@ -68,8 +68,8 @@ export const useApi = () => {
 
     silent.value = true
     try {
-      const { data } = await fetch<MetapiResponse<User>>('/api/me')
-      user.value = data
+      const { data } = await api<MetapiResponse<User>>('/api/me')
+      user.value = data.value.data
     }
     // eslint-disable-next-line unused-imports/no-unused-vars
     catch (e) {}
