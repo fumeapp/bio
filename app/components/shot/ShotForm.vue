@@ -26,7 +26,7 @@ const create = async () => useApi()
 <template>
   <u-form ref="form" :state="state" class="space-y-4" @submit="create">
     <span v-if="!cartridge"> Cartridge Required </span>
-    <div v-else class="flex flex-col space-y-2 items-stretch">
+    <u-button-group v-else orientation="vertical" class="w-52">
       <u-select-menu
         v-model="state.units"
         value-attribute="value"
@@ -39,7 +39,7 @@ const create = async () => useApi()
         </template>
       </u-select-menu>
       <u-button block label="Log a Shot" icon="i-mdi-syringe" :disabled="!cartridge" />
-    </div>
+    </u-button-group>
   </u-form>
 </template>
 

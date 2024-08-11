@@ -63,8 +63,8 @@ const cartPen = (pen: Pen, cartridges: Cartridge[]) => {
       </template>
       <template #actions-data="{ row }">
         <u-button-group size="sm" variant="soft">
-          <u-button icon="i-mdi-pen" :to="`/users/${row.id}/pens`" color="white" />
-          <u-button icon="i-mdi-bottle-soda" :to="`/users/${row.id}/cartridges`" color="white" />
+          <u-button icon="i-mdi-pen" :to="`/users/${row.id}/pens`" color="white" label="Pens" />
+          <u-button icon="i-mdi-bottle-soda" :to="`/users/${row.id}/cartridges`" color="white" label="Cartridges" />
         </u-button-group>
       </template>
     </u-table>
