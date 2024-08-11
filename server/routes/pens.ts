@@ -1,33 +1,27 @@
 import { z } from 'zod'
 import { penColors } from '~/utils/shared'
 
-/*
-const index = defineEventHandler({
-  handler: async () => {
-    return metapi().render(
-      await prisma.user.findMany({
-      }),
-    )
-  },
-  before: [
-    middleware.requireAdmin(),
-  ],
-})
-*/
-
 const index = defineEventHandler(async (event) => {
   if (!middleware.requireAdmin()) return metapi().notFound(event)
+  const schema = z.object({
+    id: z.number(),
+  })
+  const parsed = schema.safeParse({
+    id: Number.parseInt(event.context.params?.user as string),
+  })
+  if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
   return metapi().render(
-    await prisma.user.findMany({
+    await prisma.pen.findMany({
+      where: {
+        userId: parsed.data.id,
+      },
       include: {
-        cartridges: true,
-        pens: true,
+        cartridge: true,
       },
     }),
   )
 })
 
-/*
 const create = defineEventHandler(async (event) => {
   const schema = z.object({
     color: z.enum(penColors as [string, ...string[]]),
@@ -56,7 +50,6 @@ const update = defineEventHandler(async (event) => {
     cartridgeId: Number.parseInt((await readBody(event))?.cartridgeId) || undefined,
   })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
-  console.log(parsed.data)
   const pen = await prisma.pen.update({
     where: {
       id: parsed.data.id,
@@ -103,8 +96,11 @@ const remove = defineEventHandler(async (event) => {
   })
   return metapi().success('pen deleted')
 })
-  */
 
 export default {
   index,
+  create,
+  get,
+  update,
+  remove,
 }

@@ -4,7 +4,7 @@ import type { MetapiResponse } from '~/types/metapi'
 import type { Form } from '#ui/types/form'
 import { penColors } from '~/utils/shared'
 
-const emit = defineEmits(['created'])
+const emit = defineEmits(['created', 'close'])
 const form = ref<Form<any>>()
 const state = reactive({
   color: penColors[0],
@@ -32,7 +32,7 @@ const create = async () => useApi()
       </div>
     </u-form-group>
     <div class="flex justify-end gap-3">
-      <u-button label="Cancel" variant="soft" />
+      <u-button label="Cancel" variant="soft" @click="emit('close')" />
       <u-button type="submit" label="Submit" variant="solid" color="primary" />
     </div>
   </u-form>

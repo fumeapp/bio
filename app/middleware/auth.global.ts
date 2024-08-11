@@ -8,7 +8,9 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
     '/token',
     '/pen',
     '/cartridge',
+    '/users',
   ]
+
   if (gatedRoutes.some(route => to.path.startsWith(route)))
-    if (!useApi().user.value) return '/'
+    if (!useApi().user.value) return await navigateTo('/')
 })

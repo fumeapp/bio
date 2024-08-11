@@ -106,7 +106,7 @@ export interface TokenLocation {
 export interface OAuthPayload {
   info: UserInfo
   payload: {
-    oauth: GoogleUserInfo | GithubUserInfo
+    oauth: GoogleUserInfo | GithubUserInfo | MicrosoftUserInfo
     tokenSet: import('openid-client').TokenSet
   }
 }

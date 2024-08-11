@@ -13,13 +13,6 @@ const form = ref<Form<any>>()
 const state = reactive({
   units: shotUnits[1],
 })
-// 200 = cartridge.mg
-// 50 = cartridge.mg / 4
-// 25 = cartridge.mg / 8
-// 50 = mg / 4
-// 25 = mg / 8
-// 200 / 50 mg * 200 / 50
-
 const options = computed(() => {
   return shotUnits.map(units => ({ label: `${units} units - ${(props.cartridge.mg / 200 * units)}mg`, value: units }))
 })
@@ -36,11 +29,12 @@ const create = async () => useApi()
     <div v-else class="flex flex-col space-y-2 items-stretch">
       <u-select-menu
         v-model="state.units"
+        value-attribute="value"
         :options="options"
       >
         <template #label>
           <div v-if="cartridge">
-            {{ state.units }} - {{ cartridge.mg / 4 }}mg of {{ cartridge.content }}
+            {{ state.units }} units - {{ cartridge.mg / 4 }}mg
           </div>
         </template>
       </u-select-menu>

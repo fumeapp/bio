@@ -30,7 +30,7 @@ const reload = () => {
       icon="i-mdi-pen"
       @close="penModal = false"
     >
-      <pen-form @created="reload" />
+      <pen-form @created="reload" @close="penModal = false" />
     </u-dashboard-modal>
   </div>
 </template>

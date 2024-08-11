@@ -7,7 +7,7 @@ defineProps<{ pen: Pen }>()
 <template>
   <div class="flex items-center relative">
     <div class="absolute left-3">
-      <div class="opacity-75">
+      <div class="opacity-95">
         <slot />
       </div>
     </div>
@@ -18,6 +18,7 @@ defineProps<{ pen: Pen }>()
     <div class="w-3 h-8 bg-gray-400" />
     <div class="w-1 h-8 bg-gray-500 rounded-r-sm" />
     <!--
+    bg-pink-500/90
     border-cyan-500
     border-sky-500
     border-teal-500

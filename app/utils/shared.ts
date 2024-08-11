@@ -16,6 +16,7 @@ export const links: HeaderIconLink[] = [
     icon: 'i-mdi-account',
     to: '/users',
   },
+  /*
   {
     label: 'Pens',
     icon: 'i-mdi-pen',
@@ -26,6 +27,7 @@ export const links: HeaderIconLink[] = [
     to: '/cartridges',
     icon: 'i-mdi-bottle-soda-outline',
   },
+  */
 ]
 
 export const cookieOptions: CookieOptions & { readonly?: false } = {
@@ -64,5 +66,4 @@ export const cartridgeMgs = [
 export const shotUnits = [
   25,
   50,
-  75,
 ]

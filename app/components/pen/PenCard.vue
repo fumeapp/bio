@@ -69,6 +69,9 @@ const items = computed(() => {
             <cartridge-model v-if="cartridge" :cartridge="cartridge" />
           </transition>
         </pen-model>
+        <div>
+          {{ cartridge?.content || 'No Cartridge' }}
+        </div>
 
         <shot-form :pen="pen" :cartridge="cartridge" @created="reload" />
       </div>

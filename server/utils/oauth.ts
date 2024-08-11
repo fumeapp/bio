@@ -1,8 +1,10 @@
-import { Issuer } from 'openid-client'
+import fs from 'node:fs'
+import { Buffer } from 'node:buffer'
 import type { H3Event } from 'h3'
 import type { RuntimeConfig } from 'nuxt/schema'
-import type { BaseClient, IssuerMetadata } from 'openid-client'
-import type { GithubUserInfo, GoogleUserInfo, MicrosoftUserInfo, OauthProvider, UserInfo, UserPayload } from '~/types/oauth'
+import type { BaseClient } from 'openid-client'
+import { Issuer } from 'openid-client'
+import type { GithubUserInfo, GoogleUserInfo, MicrosoftUserInfo, OAuthPayload, OauthProvider } from '~/types/oauth'
 
 export const oauthProviders = (cfg: RuntimeConfig): OauthProvider[] => {
   return [
@@ -71,8 +73,8 @@ export const oauthClient = (provider: OauthProvider): BaseClient => {
   })
 }
 
-export const getUser = async (provider: OauthProvider, req: H3Event['node']['req']): Promise<UserPayload> => {
-  const user = { payload: { oauth: {}, tokenSet: {} }, info: {} } as UserPayload
+export const getUser = async (provider: OauthProvider, req: H3Event['node']['req']): Promise<OAuthPayload> => {
+  const user = { payload: { oauth: {}, tokenSet: {} }, info: {} } as OAuthPayload
   const client = oauthClient(provider)
   const params = client.callbackParams(req)
   user.payload.tokenSet = ['github', 'microsoft'].includes(provider.name)
@@ -88,19 +90,17 @@ export const getUser = async (provider: OauthProvider, req: H3Event['node']['req
 
   if (provider.name === 'microsoft') {
     user.payload.oauth = await client.userinfo(user.payload.tokenSet.access_token as string) as MicrosoftUserInfo
-    // GET https://graph.microsoft.com/v1.0//users/{id | userPrincipalName}/photo/$value
-    // const result = await $fetch(`https://graph.microsoft.com/v1.0/users/${user.payload.oauth.userPrincipalName}/photo/$value`)
-    // console.log(result)
+    /*
+    const result = await client.requestResource(
+        `https://graph.microsoft.com/v1.0/users/${user.payload.oauth.userPrincipalName}/photo/$value`,
+        user.payload.tokenSet.access_token,
+    )
+    if (result.body) await fs.promises.writeFile('avatar.jpg', Buffer.from(result.body, 'data'))
+    */
     user.info.email = user.payload.oauth.userPrincipalName
     user.info.name = user.payload.oauth.displayName
     user.info.avatar = ''
   }
 
-  else {
-    user.payload.oauth = await client.userinfo(user.payload.tokenSet.access_token as string) as GoogleUserInfo
-    user.info.email = user.payload.oauth.email
-    user.info.name = `${user.payload.oauth.given_name} ${user.payload.oauth.family_name}`
-    user.info.avatar = user.payload.oauth.picture
-  }
   return user
 }

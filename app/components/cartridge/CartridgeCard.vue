@@ -8,7 +8,7 @@ defineProps<{ cartridge: Cartridge }>()
   <div>
     <u-card>
       <div class="flex flex-col items-center justify-center space-y-8">
-        <cartridge-model />
+        <cartridge-model :cartridge="cartridge" />
         <div>
           {{ cartridge.content }}
           {{ cartridge.ml }}ml
