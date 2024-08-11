@@ -17,7 +17,7 @@
     "date-fns": "^3.6.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.25.0",
+    "@antfu/eslint-config": "^2.25.1",
     "@iconify-json/logos": "^1.1.44",
     "@iconify-json/mdi": "^1.1.68",
     "@nuxt/content": "^2.13.2",
