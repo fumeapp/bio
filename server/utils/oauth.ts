@@ -88,7 +88,9 @@ export const getUser = async (provider: OauthProvider, req: H3Event['node']['req
 
   if (provider.name === 'microsoft') {
     user.payload.oauth = await client.userinfo(user.payload.tokenSet.access_token as string) as MicrosoftUserInfo
-    console.log(user.payload.oauth)
+    // GET https://graph.microsoft.com/v1.0//users/{id | userPrincipalName}/photo/$value
+    // const result = await $fetch(`https://graph.microsoft.com/v1.0/users/${user.payload.oauth.userPrincipalName}/photo/$value`)
+    // console.log(result)
     user.info.email = user.payload.oauth.userPrincipalName
     user.info.name = user.payload.oauth.displayName
     user.info.avatar = ''
