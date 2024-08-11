@@ -8,7 +8,7 @@ defineProps<{ cartridge?: Cartridge }>()
   <div class="flex items-center">
     <div class="w-2 h-5 bg-gray-500 rounded-sm" />
     <div class="w-1 h-3 bg-gray-300" />
-    <div class="w-48 h-6 bg-gray-300 flex rounded-l-lg relative">
+    <div class="w-48 h-6 bg-gray-300 flex rounded-l overflow-hidden relative">
       <div class="absolute text-xs left-2 top-1 text-black">
         <span v-if="cartridge" class="shadow">
           {{ cartridge.content }} {{ cartridge.mg }}mg

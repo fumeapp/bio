@@ -1,10 +1,13 @@
+import type { ButtonColor, ButtonSize } from '#ui/types'
+
 import { links } from '~/utils/shared'
 
 interface Button {
   label?: string
   icon?: string
   to?: string
-  size?: string
+  size?: ButtonSize
+  color?: ButtonColor
   variant?: string
   click?: () => void
 }
@@ -12,7 +15,7 @@ interface Button {
 const defaultAction: Button = {
   icon: 'i-mdi-plus',
   size: '2xs',
-  variant: 'soft',
+  color: 'white',
 }
 
 const crumbs = ref<HeaderIconLink[]>([])

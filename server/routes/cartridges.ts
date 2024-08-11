@@ -13,6 +13,7 @@ const index = defineEventHandler(async (event) => {
       },
       include: {
         pen: true,
+        shots: true,
       },
     }),
   )

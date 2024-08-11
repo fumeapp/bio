@@ -1,5 +1,5 @@
-import type { User } from '@prisma/client'
 import type { ZodIssue } from 'zod'
+import type { User } from '~/types/models'
 import type { MetapiResponse } from '~/types/metapi'
 import type { Form } from '#ui/types/form'
 import type { UseFetchOptions } from '#app'

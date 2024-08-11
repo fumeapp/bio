@@ -7,6 +7,7 @@ import pen from '../routes/pen'
 import pens from '../routes/pens'
 import cartridge from '../routes/cartridge'
 import cartridges from '../routes/cartridges'
+import shots from '../routes/shots'
 import user from '../routes/user'
 
 const router = createRouter()
@@ -26,5 +27,6 @@ routing.apiResource('user', router, user)
 
 routing.apiResource('user/:user/pen', router, pens)
 routing.apiResource('user/:user/cartridge', router, cartridges)
+routing.apiResource('cartridge/:cartridge/shot', router, shots)
 
 export default useBase('/api/', router.handler)

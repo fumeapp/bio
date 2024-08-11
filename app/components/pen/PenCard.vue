@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { Pen } from '@prisma/client'
-import type { Cartridge } from '~/types/models'
+import type { Cartridge, Pen } from '~/types/models'
 import type { MetapiResponse } from '~/types/metapi'
 
 const props = defineProps<{ pen: Pen, cartridges: Cartridge[] }>()
@@ -16,7 +15,6 @@ const reload = () => {
 
 const options = computed(() => props.cartridges.filter(c => c.pen === null || c.pen.id === props.pen.id)
   .map(c => ({ label: `${c.content} ${c.ml}ml ${c.mg}mg`, value: c.id })))
-const cartridge = computed(() => props.cartridges.find(c => c.id === props.pen.cartridgeId) || undefined)
 
 const cartridgeId = ref(props.pen.cartridgeId)
 const dirty = computed(() => props.pen.cartridgeId !== cartridgeId.value)
@@ -34,7 +32,7 @@ const remove = () => useApi()
 const items = computed(() => {
   return [
     [
-      !cartridge.value
+      !props.pen.cartridge
         ? {
             label: 'Attach Cartridge',
             icon: 'i-mdi-plus',
@@ -64,16 +62,22 @@ const items = computed(() => {
         <u-dropdown class="self-end" :items="items">
           <u-button icon="i-mdi-dots-vertical" size="xs" variant="ghost" />
         </u-dropdown>
-        <pen-model :pen="pen">
+        <pen-model :color="pen.color">
           <transition name="fade">
-            <cartridge-model v-if="cartridge" :cartridge="cartridge" />
+            <cartridge-model v-if="pen.cartridge" :cartridge="pen.cartridge" />
           </transition>
         </pen-model>
-        <div>
-          {{ cartridge?.content || 'No Cartridge' }}
+        <div v-if="pen.cartridge">
+          {{ pen.cartridge.content }} {{ pen.cartridge.ml }}ml {{ pen.cartridge.mg }}mg
+        </div>
+        <div v-else>
+          No cartridge attached
+        </div>
+        <div v-if="pen.cartridge?.shots">
+          <shot-log :shots="pen.cartridge.shots" />
         </div>
 
-        <shot-form :pen="pen" :cartridge="cartridge" @created="reload" />
+        <shot-form :pen="pen" :cartridge="pen.cartridge" @created="reload" />
       </div>
     </u-card>
     <u-dashboard-modal v-model="attachModal" title="Attach a Cartridge" description="Choose an available cartridge">

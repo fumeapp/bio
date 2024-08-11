@@ -20,8 +20,15 @@ const index = defineEventHandler(async (event) => {
   return metapi().render(
     await prisma.user.findMany({
       include: {
-        cartridges: true,
-        pens: true,
+        pens: {
+          include: {
+            cartridge: {
+              include: {
+                shots: true,
+              },
+            },
+          },
+        },
       },
     }),
   )

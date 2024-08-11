@@ -29,6 +29,8 @@ CREATE TABLE `shots` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
     `userId` BIGINT NOT NULL,
     `cartridgeId` BIGINT NOT NULL,
+    `units` INTEGER NOT NULL,
+    `date` DATE NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 

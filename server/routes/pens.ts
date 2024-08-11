@@ -12,7 +12,11 @@ const index = defineEventHandler(async (event) => {
         userId: parsed.data.id,
       },
       include: {
-        cartridge: true,
+        cartridge: {
+          include: {
+            shots: true,
+          },
+        },
       },
     }),
   )

@@ -33,7 +33,9 @@ const { crumbs, actions } = useCrumb()
       <client-only>
         <div class="flex items-center justify-between space-x-2 py-2">
           <u-breadcrumb :links="crumbs" />
-          <u-button v-for="action in actions" :key="action.label" v-bind="action" @click="action.click" />
+          <u-button-group v-if="actions && actions[0]" :size="actions[0].size">
+            <u-button v-for="action in actions" :key="action.label" v-bind="action" @click="action.click" />
+          </u-button-group>
         </div>
         <template #fallback>
           <div class="flex items-center justify-between space-x-2 py-2">

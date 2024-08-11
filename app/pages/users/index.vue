@@ -30,9 +30,6 @@ const columns = [
 ]
 
 const { data: users, refresh } = await useApi().api<MetapiResponse<User>>('/api/user')
-const cartPen = (pen: Pen, cartridges: Cartridge[]) => {
-  return cartridges.find(cartridge => cartridge.id === pen.cartridgeId)
-}
 </script>
 
 <template>
@@ -54,18 +51,15 @@ const cartPen = (pen: Pen, cartridges: Cartridge[]) => {
         {{ formatDistance(new Date(row.updatedAt), new Date(), { addSuffix: true }) }}
       </template>
       <template #pens-data="{ row }">
-        <pen-model v-for="pen in row.pens" :key="pen.id" :pen="pen">
-          <cartridge-model v-if="cartPen(pen, row.cartridges)" :cartridge="cartPen(pen, row.cartridges)" />
+        <pen-model v-for="pen in row.pens" :key="pen.id" :color="pen.color">
+          <cartridge-model v-if="pen.cartridge" :cartridge="pen.cartridge" />
           <div v-else>
             No Cartridge
           </div>
         </pen-model>
       </template>
       <template #actions-data="{ row }">
-        <u-button-group size="sm" variant="soft">
-          <u-button icon="i-mdi-pen" :to="`/users/${row.id}/pens`" color="white" label="Pens" />
-          <u-button icon="i-mdi-bottle-soda" :to="`/users/${row.id}/cartridges`" color="white" label="Cartridges" />
-        </u-button-group>
+        <u-button icon="i-mdi-medical-bag" :to="`/users/${row.id}/equipment`" color="white" label="Equipment" />
       </template>
     </u-table>
   </div>
