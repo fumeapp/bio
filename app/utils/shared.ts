@@ -12,6 +12,11 @@ export const links: HeaderIconLink[] = [
     to: '/',
   },
   {
+    label: 'Users',
+    icon: 'i-mdi-account',
+    to: '/users',
+  },
+  {
     label: 'Pens',
     icon: 'i-mdi-pen',
     to: '/pens',

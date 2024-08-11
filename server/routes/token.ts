@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 const index = defineEventHandler(async (event) => {
+  console.log(parseCookies(event))
   return metapi().render(
     await prisma.$extends({
       result: {

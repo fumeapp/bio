@@ -58,6 +58,43 @@ export interface GithubUserInfo {
   updated_at: string
 }
 
+/*
+
+type MicrosoftOauthUser struct {
+	Id                string `json:"id"`
+	DisplayName       string `json:"displayName"`
+	GivenName         string `json:"givenName"`
+	Surname           string `json:"surname"`
+	UserPrincipalName string `json:"userPrincipalName"`
+	Mail              string `json:"mail"`
+	MobilePhone       string `json:"mobilePhone"`
+	OfficeLocation    string `json:"officeLocation"`
+	PreferredLanguage string `json:"preferredLanguage"`
+	BusinessPhones    []string
+	JobTitle          string `json:"jobTitle"`
+}
+
+*/
+
+export interface MicrosoftUserInfo {
+  id: string
+  displayName: string
+  givenName: string
+  surname: string
+  userPrincipalName: string
+  mail: string
+  mobilePhone: string
+  officeLocation: string
+  preferredLanguage: string
+  businessPhones: string[]
+  jobTitle: string
+  info: {
+    email?: string
+    name: string
+    avatar: string
+  }
+}
+
 export interface TokenLocation {
   city: string
   region: string

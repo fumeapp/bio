@@ -1,7 +1,8 @@
 import { z } from 'zod'
 import { cartridgeContents, cartridgeMgs, cartridgeMls } from '~/utils/shared'
 
-const index = defineEventHandler(async () => {
+const index = defineEventHandler(async (event) => {
+  if (!middleware.requireAuth()) return metapi().notFound(event)
   return metapi().render(
     await prisma.cartridge.findMany({
       where: {

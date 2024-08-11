@@ -41,6 +41,8 @@ const error = (event: H3Event, detail: MetapiDetail, code: number = 400): Metapi
   }
 }
 
+const notFound = (event: H3Event): MetapiResponse => error(event, 'Not Found', 404)
+
 const renderNullError = (event: H3Event, data: any): MetapiResponse => {
   if (data === null) return error(event, 'Not Found', 404)
   return render(data)
@@ -48,7 +50,6 @@ const renderNullError = (event: H3Event, data: any): MetapiResponse => {
 
 const metapi = () => {
   start = performance.now()
-  return { render, success, error, renderNullError }
+  return { render, success, error, renderNullError, notFound }
 }
-
 export default metapi

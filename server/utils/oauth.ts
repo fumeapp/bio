@@ -2,7 +2,7 @@ import { Issuer } from 'openid-client'
 import type { H3Event } from 'h3'
 import type { RuntimeConfig } from 'nuxt/schema'
 import type { BaseClient, IssuerMetadata } from 'openid-client'
-import type { GithubUserInfo, GoogleUserInfo, OauthProvider, UserInfo, UserPayload } from '~/types/oauth'
+import type { GithubUserInfo, GoogleUserInfo, MicrosoftUserInfo, OauthProvider, UserInfo, UserPayload } from '~/types/oauth'
 
 export const oauthProviders = (cfg: RuntimeConfig): OauthProvider[] => {
   return [
@@ -20,6 +20,25 @@ export const oauthProviders = (cfg: RuntimeConfig): OauthProvider[] => {
       scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
       callback: `${cfg.public.url}/api/callback/google`,
     },
+    {
+      name: 'microsoft',
+      id: cfg.public.microsoftClientId,
+      secret: cfg.private.microsoftClientSecret,
+      issuer: {
+        issuer: 'https://login.microsoftonline.com/common',
+        /*
+        authorization_endpoint: 'https://login.live.com/oauth20_authorize.srf',
+        token_endpoint: 'https://login.live.com/oauth20_token.srf',
+        */
+        authorization_endpoint: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
+        token_endpoint: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
+        jwks_uri: 'https://www.googleapis.com/oauth2/v3/certs',
+        userinfo_endpoint: 'https://graph.microsoft.com/v1.0/me',
+      },
+      scope: 'User.Read',
+      callback: `${cfg.public.url}/api/callback/microsoft`,
+    },
+
     {
       name: 'github',
       id: cfg.public.githubClientId,
@@ -56,7 +75,7 @@ export const getUser = async (provider: OauthProvider, req: H3Event['node']['req
   const user = { payload: { oauth: {}, tokenSet: {} }, info: {} } as UserPayload
   const client = oauthClient(provider)
   const params = client.callbackParams(req)
-  user.payload.tokenSet = provider.name === 'github'
+  user.payload.tokenSet = ['github', 'microsoft'].includes(provider.name)
     ? await client.oauthCallback(provider.callback, params)
     : await client.callback(provider.callback, params)
 
@@ -66,6 +85,15 @@ export const getUser = async (provider: OauthProvider, req: H3Event['node']['req
     user.info.name = user.payload.oauth.name
     user.info.avatar = user.payload.oauth.avatar_url
   }
+
+  if (provider.name === 'microsoft') {
+    user.payload.oauth = await client.userinfo(user.payload.tokenSet.access_token as string) as MicrosoftUserInfo
+    console.log(user.payload.oauth)
+    user.info.email = user.payload.oauth.userPrincipalName
+    user.info.name = user.payload.oauth.displayName
+    user.info.avatar = ''
+  }
+
   else {
     user.payload.oauth = await client.userinfo(user.payload.tokenSet.access_token as string) as GoogleUserInfo
     user.info.email = user.payload.oauth.email

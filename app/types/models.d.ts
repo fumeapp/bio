@@ -1,4 +1,4 @@
-import type { Token as PrismaToken } from '@prisma/client'
+import type { Token as PrismaToken, User as PrismaUser } from '@prisma/client'
 import type { Cartridge as PrismaCartridge } from '@prisma/client'
 
 export interface Token extends PrismaToken {

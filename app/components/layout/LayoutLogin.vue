@@ -22,6 +22,14 @@ const providers = reactive<Provider[]>([
     loading: false,
   },
   {
+    name: 'microsoft',
+    label: 'Microsoft',
+    color: 'white',
+    icon: 'i-mdi-microsoft',
+    click: () => login('microsoft'),
+    loading: false,
+  },
+  {
     name: 'github',
     label: 'GitHub',
     color: 'white',

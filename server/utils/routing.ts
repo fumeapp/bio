@@ -8,7 +8,11 @@ interface ApiRoutes {
   remove?: (event: H3Event<EventHandlerRequest>) => Promise<any>
 }
 
-const apiResource = (name: string, router: Router, routes: ApiRoutes) => {
+const apiResource = (
+  name: string,
+  router: Router,
+  routes: ApiRoutes,
+) => {
   if (routes.index) router.get(`/${name}`, routes.index)
   if (routes.create) router.post(`/${name}`, routes.create)
   if (routes.get) router.get(`/${name}/:id`, routes.get)

@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
-import user from './mutators/user'
+import user from '../lib/mutators/user'
+import token from '../lib/mutators/token'
 
 const prismaClientSingleton = () => {
   // return new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
@@ -9,7 +10,9 @@ const prismaClientSingleton = () => {
 declare const globalThis: {
   prismaGlobal: ReturnType<typeof prismaClientSingleton>
 }
-const prisma = globalThis.prismaGlobal ?? prismaClientSingleton().$extends(user.admin)
+const prisma = globalThis.prismaGlobal ?? prismaClientSingleton()
+  .$extends(user.admin)
+  .$extends(token.client)
 /*
 for (const key in mutators)
   if (Object.prototype.hasOwnProperty.call(mutators, key))

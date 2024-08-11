@@ -1,7 +1,22 @@
 import { z } from 'zod'
 import { penColors } from '~/utils/shared'
 
-const index = defineEventHandler(async () => {
+/*
+const index = defineEventHandler({
+  handler: async () => {
+    return metapi().render(
+      await prisma.user.findMany({
+      }),
+    )
+  },
+  before: [
+    middleware.requireAdmin(),
+  ],
+})
+*/
+
+const index = defineEventHandler(async (event) => {
+  if (!middleware.requireAdmin()) return metapi().notFound(event)
   return metapi().render(
     await prisma.user.findMany({
     }),
@@ -9,7 +24,6 @@ const index = defineEventHandler(async () => {
 })
 
 /*
-
 const create = defineEventHandler(async (event) => {
   const schema = z.object({
     color: z.enum(penColors as [string, ...string[]]),
