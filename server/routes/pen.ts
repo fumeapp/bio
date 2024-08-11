@@ -9,7 +9,15 @@ const index = defineEventHandler(async (event) => {
         userId: BigInt(auth.user().id),
       },
       include: {
-        cartridge: true,
+        cartridge: {
+          include: {
+            shots: {
+              include: {
+                cartridge: true,
+              },
+            },
+          },
+        },
       },
     }),
   )

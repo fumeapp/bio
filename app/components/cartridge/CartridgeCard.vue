@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Cartridge } from '@prisma/client'
+import type { Cartridge } from '~/types/models'
 
 defineProps<{ cartridge: Cartridge }>()
 </script>
@@ -14,6 +14,7 @@ defineProps<{ cartridge: Cartridge }>()
           {{ cartridge.ml }}ml
           {{ cartridge.mg }}mg
         </div>
+        <shot-log :shots="cartridge?.shots" />
       </div>
     </u-card>
   </div>

@@ -8,8 +8,6 @@ const penModal = ref(false)
 const cartridgeModal = ref(false)
 const { data: user } = await useApi().api<MetapiResponse<User>>(`/api/user/${route.params.user}`)
 
-console.log(user.value.data.name)
-
 useCrumb()
   .add('Users')
   .custom({

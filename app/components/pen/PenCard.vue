@@ -2,7 +2,7 @@
 import type { Cartridge, Pen } from '~/types/models'
 import type { MetapiResponse } from '~/types/metapi'
 
-const props = defineProps<{ pen: Pen, cartridges: Cartridge[] }>()
+const props = defineProps<{ pen: Pen, cartridges: Cartridge[], readonly?: boolean }>()
 
 const emit = defineEmits(['reload'])
 
@@ -59,7 +59,7 @@ const items = computed(() => {
   <div class="flex">
     <u-card class="w-full">
       <div class="flex flex-col items-center justify-center space-y-8">
-        <u-dropdown class="self-end" :items="items">
+        <u-dropdown v-if="!readonly" class="self-end" :items="items">
           <u-button icon="i-mdi-dots-vertical" size="xs" variant="ghost" />
         </u-dropdown>
         <pen-model :color="pen.color">
@@ -74,7 +74,7 @@ const items = computed(() => {
           No cartridge attached
         </div>
         <div v-if="pen.cartridge?.shots">
-          <shot-log :shots="pen.cartridge.shots" />
+          <shot-summary :shots="pen.cartridge.shots" />
         </div>
 
         <shot-form :pen="pen" :cartridge="pen.cartridge" @created="reload" />

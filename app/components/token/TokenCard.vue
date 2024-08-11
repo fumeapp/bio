@@ -60,7 +60,7 @@ const remove = () => confirm('Delete Token', 'Are you sure you want to delete th
       </div>
       <div class="flex items-center space-x-2">
         <u-icon name="i-mdi-clock" />
-        <div> Last Activity  {{ formatDistance(new Date(token.updatedAt), new Date(), { addSuffix: true }) }}</div>
+        <div> Updated {{ formatDistance(new Date(token.updatedAt), new Date(), { addSuffix: true }) }}</div>
       </div>
     </div>
   </u-card>
