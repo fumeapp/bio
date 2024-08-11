@@ -31,6 +31,17 @@ export const useCrumb = () => {
     return {
       add,
       action,
+      // eslint-disable-next-line ts/no-use-before-define
+      custom,
+    }
+  }
+
+  const custom = (link: HeaderIconLink) => {
+    crumbs.value.push(link)
+    return {
+      add,
+      custom,
+      action,
     }
   }
   const init = () => {
@@ -39,6 +50,7 @@ export const useCrumb = () => {
     return {
       add,
       action,
+      custom,
     }
   }
 

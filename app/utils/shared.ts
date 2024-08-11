@@ -13,7 +13,7 @@ export const links: HeaderIconLink[] = [
   },
   {
     label: 'Users',
-    icon: 'i-mdi-account',
+    icon: 'i-mdi-account-group',
     to: '/users',
   },
   /*

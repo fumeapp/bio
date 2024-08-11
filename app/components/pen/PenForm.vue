@@ -5,14 +5,18 @@ import type { Form } from '#ui/types/form'
 import { penColors } from '~/utils/shared'
 
 const emit = defineEmits(['created', 'close'])
+
+const route = useRoute()
+
 const form = ref<Form<any>>()
 const state = reactive({
   color: penColors[0],
+  user: route.params.user,
 })
 
 const create = async () => useApi()
   .setForm(form?.value)
-  .fetch<MetapiResponse<Pen>>('/api/pen', { method: 'POST', body: state })
+  .fetch<MetapiResponse<Pen>>(`/api/user/${route.params.user}/pen`, { method: 'POST', body: state })
   .then(() => emit('created'))
 </script>
 

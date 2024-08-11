@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { penColors } from '~/utils/shared'
+import { cartridgeContents, cartridgeMgs, cartridgeMls } from '~/utils/shared'
 
 const index = defineEventHandler(async (event) => {
   if (!middleware.requireAdmin()) return metapi().notFound(event)
@@ -7,12 +7,12 @@ const index = defineEventHandler(async (event) => {
   const parsed = schema.safeParse({ id: Number.parseInt(event.context.params?.user as string) })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
   return metapi().render(
-    await prisma.pen.findMany({
+    await prisma.cartridge.findMany({
       where: {
         userId: parsed.data.id,
       },
       include: {
-        cartridge: true,
+        pen: true,
       },
     }),
   )
@@ -22,48 +22,26 @@ const create = defineEventHandler(async (event) => {
   if (!middleware.requireAdmin()) return metapi().notFound(event)
   const schema = z.object({
     user: z.string(),
-    color: z.enum(penColors as [string, ...string[]]),
+    content: z.enum(cartridgeContents as [string, ...string[]]),
+    ml: z.enum(cartridgeMls as [string, ...string[]]),
+    mg: z.enum(cartridgeMgs as [string, ...string[]]),
   })
   const parsed = schema.safeParse(await readBody(event))
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
-  const pen = await prisma.pen.create({
+  const cartridge = await prisma.cartridge.create({
     data: {
-      color: parsed.data.color,
+      content: parsed.data.content,
+      ml: parsed.data.ml,
+      mg: parsed.data.mg,
       userId: BigInt(parsed.data.user),
-      cartridgeId: null,
     },
   })
 
-  return metapi().success('pen created', pen)
-})
-
-const update = defineEventHandler(async (event) => {
-  if (!middleware.requireAdmin()) return metapi().notFound(event)
-  const schema = z.object({
-    id: z.number(),
-    user: z.number(),
-    cartridgeId: z.number().optional(),
-  })
-  const parsed = schema.safeParse({
-    id: Number.parseInt(event.context.params?.id as string),
-    user: Number.parseInt(event.context.params?.user as string),
-    cartridgeId: Number.parseInt((await readBody(event))?.cartridgeId) || undefined,
-  })
-  if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
-  const pen = await prisma.pen.update({
-    where: {
-      id: parsed.data.id,
-      userId: parsed.data.id,
-    },
-    data: {
-      cartridgeId: parsed.data.cartridgeId ? BigInt(parsed.data.cartridgeId) : null,
-    },
-  })
-
-  return metapi().success('pen updated', pen)
+  return metapi().success('cartridge created', cartridge)
 })
 
 const get = defineEventHandler(async (event) => {
+  if (!middleware.requireAdmin()) return metapi().notFound(event)
   const schema = z.object({ id: z.number(), user: z.number() })
   const parsed = schema.safeParse({
     id: event.context.params?.id,
@@ -71,7 +49,7 @@ const get = defineEventHandler(async (event) => {
   })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
 
-  return metapi().renderNullError(event, await prisma.pen.findUnique({
+  return metapi().renderNullError(event, await prisma.cartridge.findUnique({
     where: {
       id: parsed.data.id,
       userId: BigInt(parsed.data.id),
@@ -84,29 +62,18 @@ const remove = defineEventHandler(async (event) => {
   const schema = z.object({ id: z.number(), user: z.number() })
   const parsed = schema.safeParse({ id: event.context.params?.id, user: Number.parseInt(event.context.params?.user as string) })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
-  const pen = await prisma.pen.findFirst({
+  await prisma.cartridge.delete({
     where: {
       id: parsed.data.id,
       userId: BigInt(parsed.data.id),
     },
   })
-
-  if (pen?.cartridgeId !== null)
-    return metapi().error(event, 'Cannot delete pen with cartridge', 400)
-
-  await prisma.pen.delete({
-    where: {
-      id: parsed.data.id,
-      userId: BigInt(parsed.data.id),
-    },
-  })
-  return metapi().success('pen deleted')
+  return metapi().success('cartridge deleted')
 })
 
 export default {
   index,
   create,
   get,
-  update,
   remove,
 }

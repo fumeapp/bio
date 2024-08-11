@@ -5,8 +5,10 @@ import type { Form } from '#ui/types/form'
 import { cartridgeContents, cartridgeMgs, cartridgeMls } from '~/utils/shared'
 
 const emit = defineEmits(['created', 'close'])
+const route = useRoute()
 const form = ref<Form<any>>()
 const state = reactive({
+  user: route.params.user,
   content: cartridgeContents[0],
   ml: cartridgeMls[0],
   mg: cartridgeMgs[0],
@@ -14,7 +16,7 @@ const state = reactive({
 
 const create = async () => useApi()
   .setForm(form?.value)
-  .fetch<MetapiResponse<Cartridge>>('/api/cartridge', { method: 'POST', body: state })
+  .fetch<MetapiResponse<Cartridge>>(`/api/user/${route.params.user}/cartridge`, { method: 'POST', body: state })
   .then(() => emit('created'))
 </script>
 

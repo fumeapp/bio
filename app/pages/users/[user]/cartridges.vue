@@ -1,11 +1,24 @@
 <script setup lang="ts">
 import type { Cartridge } from '@prisma/client'
 import type { MetapiResponse } from '~/types/metapi'
+import type { User } from '~/types/models'
 
+const route = useRoute()
 const cartridgeModal = ref(false)
-useCrumb().add('Cartridges').action({ label: 'Add a Cartridge', click: () => cartridgeModal.value = true })
+const { data: user } = await useApi().api<MetapiResponse<User>>(`/api/user/${route.params.user}`)
+useCrumb()
+  .add('Users')
+  .custom({
+    label: user.value.data.name as string,
+    icon: 'i-mdi-account',
+  })
+  .custom({
+    label: 'Cartridges',
+    icon: 'i-mdi-bottle-soda-outline',
+  })
+  .action({ label: 'Add a Cartridge', click: () => cartridgeModal.value = true })
 
-const { data: cartridges, refresh } = await useApi().api<MetapiResponse<Cartridge[]>>('/api/cartridge')
+const { data: cartridges, refresh } = await useApi().api<MetapiResponse<Cartridge[]>>(`/api/user/${route.params.user}/cartridge`)
 
 const created = () => {
   refresh()

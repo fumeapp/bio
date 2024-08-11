@@ -1,0 +1,51 @@
+<script setup lang="ts">
+import type { Cartridge, Pen } from '@prisma/client'
+import type { MetapiResponse } from '~/types/metapi'
+import type { User } from '~/types/models'
+
+const route = useRoute()
+const penModal = ref(false)
+const { data: user } = await useApi().api<MetapiResponse<User>>(`/api/user/${route.params.user}`)
+
+console.log(user.value.data.name)
+
+useCrumb()
+  .add('Users')
+  .custom({
+    label: user.value.data.name as string,
+    icon: 'i-mdi-account',
+  })
+  .custom({
+    label: 'Pens',
+    icon: 'i-mdi-pen',
+  })
+  .action({ label: 'Add a Pen', click: () => penModal.value = true })
+
+const { data: pens, refresh: penRefresh } = await useApi().api<MetapiResponse<Pen[]>>(`/api/user/${route.params.user}/pen`)
+const { data: cartridges, refresh: cartRefresh } = await useApi().api<MetapiResponse<Cartridge[]>>(`/api/user/${route.params.user}/cartridge`)
+
+const refresh = () => {
+  penRefresh()
+  cartRefresh()
+}
+
+const reload = () => {
+  refresh()
+  penModal.value = false
+}
+</script>
+
+<template>
+  <div>
+    <pen-list :pens="pens.data" :cartridges="cartridges.data" @reload="reload" />
+    <u-dashboard-modal
+      v-model="penModal"
+      title="Add a pen"
+      description="Choose the color of your pen"
+      icon="i-mdi-pen"
+      @close="penModal = false"
+    >
+      <pen-form @created="reload" @close="penModal = false" />
+    </u-dashboard-modal>
+  </div>
+</template>
