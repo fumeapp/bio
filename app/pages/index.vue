@@ -6,10 +6,8 @@ const { data: page } = await useAsyncData('index', () => queryContent('/').findO
 if (!page.value)
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 
-/*
-const { data: pens } = await useApi().api<MetapiResponse<Pen[]>>('/api/pen')
-const { data: cartridges } = await useApi().api<MetapiResponse<Cartridge[]>>('/api/cartridge')
-*/
+const { data: pens, refresh: pensRefresh } = await useApi().api<MetapiResponse<Pen[]>>('/api/pen')
+const { data: cartridges, refresh: cartridgesRefresh } = await useApi().api<MetapiResponse<Cartridge[]>>('/api/cartridge')
 
 useSeoMeta({
   titleTemplate: '',
@@ -18,10 +16,22 @@ useSeoMeta({
   description: page.value.description,
   ogDescription: page.value.description,
 })
+
+const reload = async () => {
+  await pensRefresh()
+  await cartridgesRefresh()
+}
 </script>
 
 <template>
-  <div>
-    wtf
+  <div class="w-full max-w-md mx-auto">
+    <u-alert
+      icon="i-mdi-clock"
+      title="Awaiting Implementation"
+      description="We are still setting up your account, check back soon!"
+      :actions="[{ label: 'Refresh', icon: 'i-mdi-refresh', onClick: reload, variant: 'solid' }]"
+    >
+      wtf
+    </u-alert>
   </div>
 </template>

@@ -13,6 +13,17 @@ export interface Token extends PrismaToken {
   }
 }
 
+export interface UserPayload {
+  roles?: {
+    admin?: boolean
+  }
+}
+
+export interface User extends PrismaUser {
+  payload: UserPayload
+  isAdmin: boolean
+}
+
 export interface Cartridge extends PrismaCartridge {
   pen?: Pen
 }

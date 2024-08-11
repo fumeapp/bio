@@ -41,6 +41,7 @@ CREATE TABLE `users` (
     `email` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NULL,
     `avatar` VARCHAR(1600) NULL,
+    `payload` JSON NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 

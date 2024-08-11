@@ -1,7 +1,8 @@
 import crypto from 'node:crypto'
 import type { Prisma, User } from '@prisma/client'
-import type { TokenLocation } from '~/types/oauth'
+import type { OAuthPayload, TokenLocation } from '~/types/oauth'
 import { cookieOptions } from '~/utils/shared'
+import type { UserPayload } from '~/types/models'
 
 const redirect = defineEventHandler(async (event) => {
   const provider = oauthProvider(event.context.params?.provider, useRuntimeConfig(event))
@@ -29,6 +30,7 @@ const callback = defineEventHandler(async (event) => {
         email: userPayload.info.email,
         name: userPayload.info.name,
         avatar: userPayload.info.avatar,
+        payload: ({ roles: { admin: false } } as UserPayload) as unknown as Prisma.JsonObject,
         providers: {
           create: [
             {

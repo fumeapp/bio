@@ -8,6 +8,7 @@ model User {
   pens     Pen[]
   cartridges     Cartridge[]
   shots     Shot[]
+  payload Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("users")

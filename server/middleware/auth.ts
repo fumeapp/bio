@@ -4,6 +4,7 @@ export default defineEventHandler(async (event) => {
     '/api/me',
     '/api/token',
   ]
+
   const cookies = parseCookies(event)
   if (cookies.token && auth.verify(useRuntimeConfig(event), cookies.token) === true)
     await auth.set(cookies.token)

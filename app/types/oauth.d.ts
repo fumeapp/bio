@@ -66,7 +66,7 @@ export interface TokenLocation {
   countryName: string
 }
 
-export interface UserPayload {
+export interface OAuthPayload {
   info: UserInfo
   payload: {
     oauth: GoogleUserInfo | GithubUserInfo

@@ -1,10 +1,11 @@
-import type { Token, User } from '@prisma/client'
+import type { Token } from '@prisma/client'
 import type { RuntimeConfig } from 'nuxt/schema'
+import type { User } from '~/types/models'
 
 let token: Token & { user: User } | null = null
 
 const set = async (hash: string): Promise<User> => {
-  if (token?.user) return token.user
+  // if (token?.user) return token.user
   token = await prisma.token.findUnique({
     where: {
       hash,
@@ -12,7 +13,7 @@ const set = async (hash: string): Promise<User> => {
     include: {
       user: true,
     },
-  })
+  }) as (Token & { user: User }) | null
   return token?.user as User
 }
 
