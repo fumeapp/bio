@@ -38,7 +38,9 @@ const reload = () => {
 
 <template>
   <div class="flex flex-col space-y-8">
+    <div class="text-lg font-semibold">Pens </div>
     <pen-list :pens="pens.data" :cartridges="cartridges.data" @reload="reload" />
+    <div class="text-lg font-semibold">Cartridges </div>
     <cartridge-list :cartridges="cartridges.data" @reload="reload" />
     <u-dashboard-modal
       v-model="penModal"

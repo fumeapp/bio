@@ -5,7 +5,7 @@ defineProps<{ cartridge: Cartridge }>()
 </script>
 
 <template>
-  <div>
+  <div class="flex">
     <u-card>
       <div class="flex flex-col items-center justify-center space-y-8">
         <cartridge-model :cartridge="cartridge" />
@@ -14,6 +14,7 @@ defineProps<{ cartridge: Cartridge }>()
           {{ cartridge.ml }}ml
           {{ cartridge.mg }}mg
         </div>
+        <shot-summary :shots="cartridge?.shots" />
         <shot-log :shots="cartridge?.shots" />
       </div>
     </u-card>

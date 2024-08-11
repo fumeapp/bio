@@ -1,5 +1,5 @@
 import type { Token as PrismaToken, User as PrismaUser } from '@prisma/client'
-import type { Cartridge as PrismaCartridge, Pen as PrismaPen, Shot } from '@prisma/client'
+import type { Cartridge as PrismaCartridge, Pen as PrismaPen, Shot as PrismaShot } from '@prisma/client'
 
 export interface Token extends PrismaToken {
   client: import('ua-parser-js').IResult
@@ -22,6 +22,10 @@ export interface UserPayload {
 export interface User extends PrismaUser {
   payload: UserPayload
   isAdmin: boolean
+}
+
+export interface Shot extends PrismaShot {
+  cartridge?: Cartridge
 }
 
 export interface Cartridge extends PrismaCartridge {

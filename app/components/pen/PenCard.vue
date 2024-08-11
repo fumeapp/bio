@@ -74,7 +74,7 @@ const items = computed(() => {
           No cartridge attached
         </div>
         <div v-if="pen.cartridge?.shots">
-          <shot-summary :shots="pen.cartridge.shots" />
+          <shot-summary :shots="pen.cartridge.shots" :cartridge="pen.cartridge" />
         </div>
 
         <shot-form :pen="pen" :cartridge="pen.cartridge" @created="reload" />
