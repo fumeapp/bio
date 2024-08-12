@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   extends: ['@nuxt/ui-pro'],
-  modules: ['@nuxt/ui', '@prisma/nuxt', '@nuxt/eslint', '@nuxt/content', "@nuxt/image"],
+  modules: ['@nuxt/ui', '@prisma/nuxt', '@nuxt/eslint', '@nuxt/content', '@nuxt/image'],
   eslint: {
     config: {
       standalone: false,
@@ -32,5 +32,13 @@ export default defineNuxtConfig({
   },
   future: {
     compatibilityVersion: 4,
+  },
+
+  vite: {
+    resolve: {
+      alias: {
+        '.prisma/client/index-browser': './prisma/schema/node_modules/@prisma/client/.prisma/client/index-browser.js',
+      },
+    },
   },
 })
