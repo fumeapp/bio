@@ -61,6 +61,7 @@ async function handleMessage(evt: { data: { user: User, token: string } }) {
   useApi().setUser(evt.data.user, evt.data.token)
   useApi().success('logged in')
   emit('login')
+  await refreshNuxtData()
 }
 
 function messageHandler(add: boolean): void {
