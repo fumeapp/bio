@@ -1,0 +1,25 @@
+name: Deploy with Fume
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://fume.bio
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 9
+          run_install: false
+      - uses: fumeapp/action@master
+        with:
+          token: ${{ secrets.FUME_TOKEN }}
+          environment: production
+        env:
+          NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
