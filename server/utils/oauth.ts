@@ -11,7 +11,7 @@ export const oauthProviders = (cfg: RuntimeConfig): OauthProvider[] => {
     {
       name: 'google',
       id: cfg.public.googleClientId,
-      secret: cfg.private.googleClientSecret,
+      secret: cfg.googleClientSecret,
       issuer: {
         issuer: 'https://accounts.google.com',
         authorization_endpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
@@ -25,7 +25,7 @@ export const oauthProviders = (cfg: RuntimeConfig): OauthProvider[] => {
     {
       name: 'microsoft',
       id: cfg.public.microsoftClientId,
-      secret: cfg.private.microsoftClientSecret,
+      secret: cfg.microsoftClientSecret,
       issuer: {
         issuer: 'https://login.microsoftonline.com/common',
         /*
@@ -44,7 +44,7 @@ export const oauthProviders = (cfg: RuntimeConfig): OauthProvider[] => {
     {
       name: 'github',
       id: cfg.public.githubClientId,
-      secret: cfg.private.githubClientSecret,
+      secret: cfg.githubClientSecret,
       issuer: {
         issuer: 'https://github.com',
         authorization_endpoint: 'https://github.com/login/oauth/authorize',
@@ -80,6 +80,13 @@ export const getUser = async (provider: OauthProvider, req: H3Event['node']['req
   user.payload.tokenSet = ['github', 'microsoft'].includes(provider.name)
     ? await client.oauthCallback(provider.callback, params)
     : await client.callback(provider.callback, params)
+
+  if (provider.name === 'google') {
+    user.payload.oauth = await client.userinfo(user.payload.tokenSet.access_token as string) as GoogleUserInfo
+    user.info.email = user.payload.oauth.email
+    user.info.name = user.payload.oauth.name
+    user.info.avatar = user.payload.oauth.picture
+  }
 
   if (provider.name === 'github') {
     user.payload.oauth = await client.userinfo(user.payload.tokenSet.access_token as string) as GithubUserInfo

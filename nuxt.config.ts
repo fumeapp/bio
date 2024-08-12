@@ -18,17 +18,15 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-08-01',
   runtimeConfig: {
     public: {
-      url: process.env.URL,
-      prefix: process.env.PREFIX ?? 'bio',
-      googleClientId: process.env.GOOGLE_CLIENT_ID,
-      microsoftClientId: process.env.MICROSOFT_CLIENT_ID,
-      githubClientId: process.env.GITHUB_CLIENT_ID,
+      url: '',
+      prefix: '',
+      googleClientId: '',
+      microsoftClientId: '',
+      githubClientId: '',
     },
-    private: {
-      googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      microsoftClientSecret: process.env.MICROSOFT_CLIENT_SECRET,
-      githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
-    },
+    googleClientSecret: '',
+    microsoftClientSecret: '',
+    githubClientSecret: '',
   },
   future: {
     compatibilityVersion: 4,
@@ -37,7 +35,7 @@ export default defineNuxtConfig({
   vite: {
     resolve: {
       alias: {
-        '.prisma/client/index-browser': './prisma/schema/node_modules/@prisma/client/.prisma/client/index-browser.js',
+        '.prisma/client/index-browser': './node_modules/.pnpm/@prisma+client@5.18.0_prisma@5.18.0/node_modules/.prisma/client/index-browser.js',
       },
     },
   },
