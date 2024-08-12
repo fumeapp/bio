@@ -17,6 +17,8 @@ useSeoMeta({
   ogDescription: page.value.description,
 })
 
+const publicConfig = useRuntimeConfig().public
+
 const reload = async () => {
   await pensRefresh()
   await cartridgesRefresh()
@@ -25,6 +27,9 @@ const reload = async () => {
 
 <template>
   <div>
+    <pre>
+    {{ publicConfig }}
+    </pre>
     <div
       v-if="pens?.data.length === 0"
       class="w-full max-w-md mx-auto"
