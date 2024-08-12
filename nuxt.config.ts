@@ -18,7 +18,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-08-01',
   runtimeConfig: {
     public: {
-      url: process.env.URL ?? 'http://localhost:3000',
+      url: process.env.URL,
       prefix: process.env.PREFIX ?? 'bio',
       googleClientId: process.env.GOOGLE_CLIENT_ID,
       microsoftClientId: process.env.MICROSOFT_CLIENT_ID,
