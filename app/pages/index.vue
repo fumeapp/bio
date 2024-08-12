@@ -26,7 +26,7 @@ const reload = async () => {
 <template>
   <div>
     <div
-      v-if="pens.data.length === 0"
+      v-if="pens?.data.length === 0"
       class="w-full max-w-md mx-auto"
     >
       <u-alert
@@ -36,6 +36,6 @@ const reload = async () => {
         :actions="[{ label: 'Refresh', icon: 'i-mdi-refresh', onClick: reload, variant: 'solid' }]"
       />
     </div>
-    <pen-list v-else :pens="pens.data" :cartridges="cartridges.data" readonly />
+    <pen-list v-else :pens="pens?.data" :cartridges="cartridges?.data" readonly />
   </div>
 </template>

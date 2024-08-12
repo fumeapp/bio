@@ -14,7 +14,6 @@ defineProps<{ cartridge: Cartridge }>()
           {{ cartridge.ml }}ml
           {{ cartridge.mg }}mg
         </div>
-        <shot-summary :shots="cartridge?.shots" />
         <shot-log :shots="cartridge?.shots" />
       </div>
     </u-card>

@@ -73,7 +73,7 @@ const items = computed(() => {
         <div v-else>
           No cartridge attached
         </div>
-        <div v-if="pen.cartridge?.shots">
+        <div v-if="pen.cartridge && pen.cartridge.shots">
           <shot-summary :shots="pen.cartridge.shots" :cartridge="pen.cartridge" />
         </div>
 
