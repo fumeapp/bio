@@ -1,8 +1,12 @@
+import type { H3Event } from 'h3'
 import type { Token } from '@prisma/client'
 import type { RuntimeConfig } from 'nuxt/schema'
 import type { User } from '~/types/models'
 
 let token: Token & { user: User } | null = null
+
+const bearer = (event: H3Event): string | undefined =>
+  (event.node.req.headers.authentication as string)?.split(' ')[1] || undefined
 
 const set = async (hash: string): Promise<User> => {
   // if (token?.user) return token.user
@@ -37,4 +41,5 @@ export const auth = {
   user,
   hash,
   clear,
+  bearer,
 }

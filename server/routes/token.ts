@@ -1,14 +1,13 @@
 import { z } from 'zod'
 
 const index = defineEventHandler(async (event) => {
-  console.log(parseCookies(event))
   return metapi().render(
     await prisma.$extends({
       result: {
         token: {
           isCurrent: {
             needs: { hash: true },
-            compute({ hash }) { return hash === parseCookies(event).token },
+            compute({ hash }) { return hash === auth.bearer(event) },
           },
         },
       },
