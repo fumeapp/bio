@@ -7,6 +7,13 @@ const index = defineEventHandler(async (event) => {
       where: {
         userId: user.id,
       },
+      include: {
+        cartridge: {
+          include: {
+            pen: true,
+          },
+        },
+      },
     }),
   )
 })
@@ -34,7 +41,7 @@ const create = defineEventHandler(async (event) => {
 
 const remove = defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event)
-  const schema = z.object({ id: z.number(), user: z.number() })
+  const schema = z.object({ id: z.string() })
   const parsed = schema.safeParse({ id: event.context.params?.id })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
   await prisma.shot.delete({

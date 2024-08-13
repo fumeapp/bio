@@ -29,6 +29,6 @@ routing.apiResource('shot', router, shot)
 routing.apiResource('user', router, user)
 routing.apiResource('user/:user/pen', router, pens)
 routing.apiResource('user/:user/cartridge', router, cartridges)
-routing.apiResource('cartridge/:cartridge/shot', router, shots)
+routing.apiResource('user/:user/shot', router, shots)
 
 export default useBase('/api/', router.handler)

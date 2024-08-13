@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Cartridge, Pen } from '@prisma/client'
+import type { UseFetchOptions } from '#app'
 import type { MetapiResponse } from '~/types/metapi'
 
 const { data: page } = await useAsyncData('index', () => queryContent('/').findOne())
@@ -21,6 +22,7 @@ const { data: pens, refresh: pensRefresh } = await useApi().fetch<MetapiResponse
 const { data: cartridges, refresh: cartridgesRefresh } = await useApi().fetch<MetapiResponse<Cartridge[]>>('/api/cartridge')
 
 const reload = async () => {
+  console.log('home.reload')
   await pensRefresh()
   await cartridgesRefresh()
 }
@@ -35,5 +37,5 @@ const reload = async () => {
       :actions="[{ label: 'Refresh', icon: 'i-mdi-refresh', onClick: reload, variant: 'solid' }]"
     />
   </div>
-  <pen-list v-else-if="pens && cartridges" :pens="pens?.data" :cartridges="cartridges?.data" readonly />
+  <pen-list v-else-if="pens && cartridges" :pens="pens?.data" :cartridges="cartridges?.data" readonly @reload="reload" />
 </template>

@@ -6,8 +6,8 @@ defineProps<{ shots?: Shot[] }>()
 </script>
 
 <template>
-  <div v-if="shots">
-    <div v-for="shot in shots" :key="shot.id.toString()">
+  <div v-if="shots" class="border border-gray-300 dark:border-gray-800 rounded-lg flex flex-col divide-y divide-gray-300 dark:divide-gray-800">
+    <div v-for="shot in shots" :key="shot.id.toString()" class="py-1 px-4">
       {{ shot.units }} units taken at {{ format(shot.date, 'M/d/yy') }}
     </div>
   </div>

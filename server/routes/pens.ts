@@ -60,10 +60,11 @@ const update = defineEventHandler(async (event) => {
     cartridgeId: Number.parseInt((await readBody(event))?.cartridgeId) || undefined,
   })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
+
   const pen = await prisma.pen.update({
     where: {
       id: parsed.data.id,
-      userId: parsed.data.id,
+      userId: parsed.data.user,
     },
     data: {
       cartridgeId: parsed.data.cartridgeId ? BigInt(parsed.data.cartridgeId) : null,

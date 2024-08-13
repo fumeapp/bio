@@ -4,25 +4,32 @@ import { format } from 'date-fns'
 import type { Pen } from '~/types/models'
 import type { Form } from '#ui/types/form'
 import type { MetapiResponse } from '~/types/metapi'
-
 import { shotUnits } from '~/utils/shared'
 
 const props = defineProps<{ pen: Pen }>()
-
 const emit = defineEmits(['created'])
+const route = useRoute()
+const { user } = useUserSession()
 const form = ref<Form<any>>()
 const state = reactive({
+  user: route.params.user ? route.params.user : user.id,
   cartridge: props.pen.cartridge?.id,
   units: shotUnits[1],
   date: format(new Date(), 'yyyy-MM-dd'),
 })
-const options = computed(() => {
-  return shotUnits.map(units => ({ label: `${units} units - ${((props.pen.cartridge?.mg || 0) / 200 * units)}mg`, value: units }))
-})
+const options = computed(() =>
+  shotUnits.map(units => ({
+    label: `${units} units - ${((props.pen.cartridge?.mg as any || 0) / 200 * units)}mg`,
+    value: units,
+  })),
+)
 
 const create = async () => useApi()
   .setForm(form?.value)
-  .fetch<MetapiResponse<Shot>>(`/api/cartridge/${props.pen.cartridge?.id}/shot`, { method: 'POST', body: state })
+  .fetch<MetapiResponse<Shot>>(
+    route.params.user ? `/api/user/${route.params.user}/shot` : '/api/shot',
+    { method: 'POST', body: state },
+  )
   .then(() => emit('created'))
 </script>
 

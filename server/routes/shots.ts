@@ -1,21 +1,23 @@
 import { z } from 'zod'
 
 const index = defineEventHandler(async (event) => {
-  if (!middleware.requireAdmin()) return metapi().notFound(event)
+  const { user } = await requireUserSession(event)
+  if (!user.isAdmin) return metapi().notFound(event)
   const schema = z.object({ id: z.number() })
-  const parsed = schema.safeParse({ id: Number.parseInt(event.context.params?.cartridge as string) })
+  const parsed = schema.safeParse({ id: Number.parseInt(event.context.params?.user as string) })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
   return metapi().render(
     await prisma.shot.findMany({
       where: {
-        cartridgeId: parsed.data.id,
+        userId: parsed.data.id,
       },
     }),
   )
 })
 
 const create = defineEventHandler(async (event) => {
-  if (!middleware.requireAdmin()) return metapi().notFound(event)
+  const { user } = await requireUserSession(event)
+  if (!user.isAdmin) return metapi().notFound(event)
   const schema = z.object({
     user: z.string(),
     cartridge: z.string(),
