@@ -6,10 +6,12 @@ import type { UseFetchOptions } from '#app'
 
 const user = ref<User | undefined>(undefined)
 const silent = ref(false)
+const hash = ref<string | undefined>(undefined)
 
 const form = ref<Form<any>>()
 
 export const useApi = () => {
+  hash.value = useCookie('token', cookieOptions).value
   const success = (message: string) =>
     useToast().add({ icon: 'i-mdi-check-bold', title: message, color: 'emerald', timeout: 2000 })
 
@@ -26,7 +28,7 @@ export const useApi = () => {
   }
 
   const fetch = $fetch.create({
-    headers: { Accept: 'application/json', Authentication: `Bearer: ${useCookie('token', cookieOptions).value}` },
+    headers: { Accept: 'application/json', Authentication: `Bearer: ${hash.value}` },
     onResponse: ({ response }) => {
       if (silent.value) {
         silent.value = false
@@ -63,9 +65,12 @@ export const useApi = () => {
     user.value = usr
     const tokenCookie = useCookie('token', cookieOptions)
     tokenCookie.value = token
+    hash.value = tokenCookie.value
   }
   const checkUser = async () => {
     if (user.value) return
+
+    if (!hash.value) return
 
     silent.value = true
     try {

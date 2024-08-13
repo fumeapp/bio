@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { User } from '@prisma/client'
+import type { User } from '~/types/models.d.ts'
 
 const emit = defineEmits(['login'])
 const loading = ref(false)

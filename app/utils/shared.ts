@@ -33,7 +33,6 @@ export const links: HeaderIconLink[] = [
 
 export const cookieOptions: CookieOptions & { readonly?: false } = {
   path: '/',
-  httpOnly: true,
   sameSite: 'strict',
   maxAge: 60 * 60 * 24 * 365,
 }
