@@ -50,12 +50,14 @@ const { data: users } = await useFetch<MetapiResponse<User>>('/api/user')
         {{ formatDistance(new Date(row.updatedAt), new Date(), { addSuffix: true }) }}
       </template>
       <template #pens-data="{ row }">
-        <pen-model v-for="pen in row.pens" :key="pen.id" :color="pen.color">
-          <cartridge-model v-if="pen.cartridge" :cartridge="pen.cartridge" label />
-          <div v-else>
-            No Cartridge
-          </div>
-        </pen-model>
+        <div class="flex flex-col space-y-1">
+          <pen-model v-for="pen in row.pens" :key="pen.id" :color="pen.color">
+            <cartridge-model v-if="pen.cartridge" :cartridge="pen.cartridge" label />
+            <div v-else>
+              No Cartridge
+            </div>
+          </pen-model>
+        </div>
       </template>
       <template #actions-data="{ row }">
         <u-button-group>

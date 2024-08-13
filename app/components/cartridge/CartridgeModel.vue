@@ -14,6 +14,9 @@ const units = computed(() =>
     <div class="w-3 h-8 bg-gray-500 rounded-sm" />
     <div class="w-2 h-5 bg-gray-300" />
     <div class="w-[310px] h-10 bg-gray-300 flex rounded-l overflow-hidden relative">
+      <div class="absolute bg-white w-1 h-4 rounded-t bottom-0 left-[50px]" />
+      <div class="absolute bg-white w-1 h-4 rounded-t bottom-0 left-[100px]" />
+      <div class="absolute bg-white w-1 h-4 rounded-t bottom-0 left-[150px]" />
       <div class="absolute text-xs left-2 top-1 text-black">
         <span v-if="cartridge && label" class="shadow">
           {{ cartridge.content }} {{ cartridge.mg }}mg
