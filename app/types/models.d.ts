@@ -22,6 +22,7 @@ export interface UserPayload {
 export interface User extends PrismaUser {
   payload: UserPayload
   isAdmin: boolean
+  hash: string
 }
 
 export interface Shot extends PrismaShot {

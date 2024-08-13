@@ -2,7 +2,14 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   extends: ['@nuxt/ui-pro'],
-  modules: ['@nuxt/ui', '@prisma/nuxt', '@nuxt/eslint', '@nuxt/content', '@nuxt/image'],
+  modules: [
+    '@nuxt/ui',
+    '@prisma/nuxt',
+    '@nuxt/eslint',
+    '@nuxt/content',
+    '@nuxt/image',
+    'nuxt-auth-utils',
+  ],
   eslint: {
     config: {
       standalone: false,

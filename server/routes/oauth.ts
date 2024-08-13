@@ -1,8 +1,7 @@
 import crypto from 'node:crypto'
-import type { Prisma, User } from '@prisma/client'
-import type { OAuthPayload, TokenLocation } from '~/types/oauth'
-import { cookieOptions } from '~/utils/shared'
-import type { UserPayload } from '~/types/models'
+import type { Prisma } from '@prisma/client'
+import type { User, UserPayload } from '~/types/models'
+import type { TokenLocation } from '~/types/oauth'
 
 const redirect = defineEventHandler(async (event) => {
   const provider = oauthProvider(event.context.params?.provider, useRuntimeConfig(event))
@@ -22,7 +21,7 @@ const callback = defineEventHandler(async (event) => {
     where: {
       email: userPayload.info.email,
     },
-  })
+  }) as unknown as User
 
   if (!user)
     user = await prisma.user.create({
@@ -43,7 +42,7 @@ const callback = defineEventHandler(async (event) => {
           ],
         },
       },
-    })
+    }) as unknown as User
   else
     await prisma.provider.upsert({
       where: {
@@ -86,7 +85,8 @@ const callback = defineEventHandler(async (event) => {
     },
   })
 
-  setCookie(event, 'token', token.hash, cookieOptions)
+  user.hash = token.hash
+  await setUserSession(event, { user })
 
   event.node.res.setHeader('Content-Type', 'text/html')
   event.node.res.end(`<html><head><script> window.opener.postMessage(${JSON.stringify({ user, token: token.hash })}, '*'); window.close(); </script></head></html>`)

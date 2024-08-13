@@ -2,7 +2,7 @@
 import type { Pen } from '@prisma/client'
 import { formatDistance } from 'date-fns'
 import type { MetapiResponse } from '~/types/metapi'
-import type { Cartridge, User } from '~/types/models'
+import type { User } from '~/types/models'
 
 useCrumb().add('Users')
 
@@ -29,7 +29,7 @@ const columns = [
   },
 ]
 
-const { data: users, refresh } = await useApi().api<MetapiResponse<User>>('/api/user')
+const { data: users } = await useApi().fetch<MetapiResponse<User>>('/api/user')
 </script>
 
 <template>

@@ -1,17 +1,13 @@
 import type { ZodIssue } from 'zod'
-import type { User } from '~/types/models'
-import type { MetapiResponse } from '~/types/metapi'
+import type { FetchOptions } from 'ofetch'
 import type { Form } from '#ui/types/form'
 import type { UseFetchOptions } from '#app'
 
-const user = ref<User | undefined>(undefined)
 const silent = ref(false)
-const hash = ref<string | undefined>(undefined)
 
 const form = ref<Form<any>>()
 
 export const useApi = () => {
-  hash.value = useCookie('token', cookieOptions).value
   const success = (message: string) =>
     useToast().add({ icon: 'i-mdi-check-bold', title: message, color: 'emerald', timeout: 2000 })
 
@@ -27,75 +23,41 @@ export const useApi = () => {
       )
   }
 
-  const fetch = $fetch.create({
-    headers: { Accept: 'application/json', Authentication: `Bearer: ${hash.value}` },
-    onResponse: ({ response }) => {
-      if (silent.value) {
-        silent.value = false
-        return
-      }
-      if (response?._data?.meta.success && response?._data?.meta?.detail)
-        success(response._data.meta.detail)
-      if (!response?._data?.meta.success && response?._data?.meta?.detail)
-        danger(response._data.meta.detail)
-      if (!response?._data?.meta.success && response?._data?.meta?.detail && form.value)
-        form.value?.setErrors(response._data.meta.detail.map((err: ZodIssue) => ({
-          message: err.message,
-          path: err.path[0],
-        })))
-    },
-  })
-
-  const api = <T>(
+  const fetch = <T>(
     url: string | (() => string),
     options?: Omit<UseFetchOptions<T>, 'default'> & { default: () => T | Ref<T> },
-  ) => {
-    return useFetch(url, {
+  ) =>
+    useFetch(url, {
       ...options,
-      $fetch: fetch,
+      onResponse: ({ response }) => {
+        if (silent.value) {
+          silent.value = false
+          return
+        }
+        if (response?._data?.meta.success && response?._data?.meta?.detail)
+          success(response._data.meta.detail)
+        if (!response?._data?.meta.success && response?._data?.meta?.detail)
+          danger(response._data.meta.detail)
+        if (!response?._data?.meta.success && response?._data?.meta?.detail && form.value)
+          form.value?.setErrors(response._data.meta.detail.map((err: ZodIssue) => ({
+            message: err.message,
+            path: err.path[0],
+          })))
+      },
     })
-  }
-
   const setForm = (frm?: Form<any>) => {
     form.value = frm
     return { fetch }
   }
 
-  const setUser = (usr: User, token: string) => {
-    user.value = usr
-    const tokenCookie = useCookie('token', cookieOptions)
-    tokenCookie.value = token
-    hash.value = tokenCookie.value
-  }
-  const checkUser = async () => {
-    if (user.value) return
-
-    if (!hash.value) return
-
-    silent.value = true
-    try {
-      const { data } = await fetch<MetapiResponse<User>>('/api/me')
-      user.value = data
-    }
-    // eslint-disable-next-line unused-imports/no-unused-vars
-    catch (e) {}
-  }
-
   const logout = async () => {
     await fetch('/api/logout')
-    user.value = undefined
-    const tokenCookie = useCookie('token', cookieOptions)
-    tokenCookie.value = undefined
     await navigateTo('/')
   }
 
   return {
     fetch,
-    api,
-    setUser,
     setForm,
-    checkUser,
-    user,
     logout,
     success,
   }

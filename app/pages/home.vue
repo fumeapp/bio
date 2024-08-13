@@ -3,6 +3,7 @@ import type { Cartridge, Pen } from '@prisma/client'
 import type { MetapiResponse } from '~/types/metapi'
 
 const { data: page } = await useAsyncData('index', () => queryContent('/').findOne())
+
 if (!page.value)
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 
@@ -14,10 +15,10 @@ useSeoMeta({
   ogDescription: page.value.description,
 })
 
-const { user } = useApi()
+const { loggedIn } = useUserSession()
 
-const { data: pens, refresh: pensRefresh } = await useApi().api<MetapiResponse<Pen[]>>('/api/pen')
-const { data: cartridges, refresh: cartridgesRefresh } = await useApi().api<MetapiResponse<Cartridge[]>>('/api/cartridge')
+const { data: pens, refresh: pensRefresh } = await useApi().fetch<MetapiResponse<Pen[]>>('/api/pen')
+const { data: cartridges, refresh: cartridgesRefresh } = await useApi().fetch<MetapiResponse<Cartridge[]>>('/api/cartridge')
 
 const reload = async () => {
   await pensRefresh()
@@ -26,15 +27,13 @@ const reload = async () => {
 </script>
 
 <template>
-  <client-only>
-    <div v-if="user && pens?.data.length === 0" class="w-full max-w-md mx-auto">
-      <u-alert
-        icon="i-mdi-clock"
-        title="Awaiting Implementation"
-        description="We are still setting up your account, check back soon!"
-        :actions="[{ label: 'Refresh', icon: 'i-mdi-refresh', onClick: reload, variant: 'solid' }]"
-      />
-    </div>
-    <pen-list v-else-if="pens && cartridges" :pens="pens?.data" :cartridges="cartridges?.data" readonly />
-  </client-only>
+  <div v-if="loggedIn && pens?.data.length === 0" class="w-full max-w-md mx-auto">
+    <u-alert
+      icon="i-mdi-clock"
+      title="Awaiting Implementation"
+      description="We are still setting up your account, check back soon!"
+      :actions="[{ label: 'Refresh', icon: 'i-mdi-refresh', onClick: reload, variant: 'solid' }]"
+    />
+  </div>
+  <pen-list v-else-if="pens && cartridges" :pens="pens?.data" :cartridges="cartridges?.data" readonly />
 </template>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-const { user } = useApi()
-
+const { user } = await useUserSession()
 const items = [
   [
     {

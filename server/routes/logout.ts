@@ -1,11 +1,11 @@
 export default defineEventHandler(async (event) => {
+  const { user } = await requireUserSession(event)
   await prisma.token.delete({
     where: {
-      userId: auth.user().id,
-      hash: auth.hash(),
+      userId: user.id,
+      hash: user.hash,
     },
   })
-  deleteCookie(event, 'token')
-  auth.clear()
+  await clearUserSession(event)
   return metapi().success('logged out')
 })

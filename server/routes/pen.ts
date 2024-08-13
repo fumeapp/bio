@@ -2,11 +2,11 @@ import { z } from 'zod'
 import { penColors } from '~/utils/shared'
 
 const index = defineEventHandler(async (event) => {
-  if (!middleware.requireAuth()) return metapi().notFound(event)
+  const { user } = await requireUserSession(event)
   return metapi().render(
     await prisma.pen.findMany({
       where: {
-        userId: BigInt(auth.user().id),
+        userId: BigInt(user.id),
       },
       include: {
         cartridge: {
@@ -20,16 +20,15 @@ const index = defineEventHandler(async (event) => {
 })
 
 const create = defineEventHandler(async (event) => {
-  const schema = z.object({
-    color: z.enum(penColors as [string, ...string[]]),
-  })
+  const { user } = await requireUserSession(event)
+  const schema = z.object({ color: z.enum(penColors as [string, ...string[]]) })
   const parsed = schema.safeParse(await readBody(event))
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
   const pen = await prisma.pen.create({
     data: {
       color: parsed.data.color,
       // user: { connect: { id: BigInt(auth.user().id) } },
-      userId: BigInt(auth.user().id),
+      userId: BigInt(user.id),
       cartridgeId: null,
     },
   })
@@ -38,6 +37,7 @@ const create = defineEventHandler(async (event) => {
 })
 
 const update = defineEventHandler(async (event) => {
+  const { user } = await requireUserSession(event)
   const schema = z.object({
     id: z.number(),
     cartridgeId: z.number().optional(),
@@ -50,7 +50,7 @@ const update = defineEventHandler(async (event) => {
   const pen = await prisma.pen.update({
     where: {
       id: parsed.data.id,
-      userId: BigInt(auth.user().id),
+      userId: user.id,
     },
     data: {
       cartridgeId: parsed.data.cartridgeId ? BigInt(parsed.data.cartridgeId) : null,
@@ -61,6 +61,7 @@ const update = defineEventHandler(async (event) => {
 })
 
 const get = defineEventHandler(async (event) => {
+  const { user } = await requireUserSession(event)
   const schema = z.object({ id: z.number() })
   const parsed = schema.safeParse({ id: Number.parseInt(event.context.params?.id as string) })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
@@ -68,17 +69,18 @@ const get = defineEventHandler(async (event) => {
   return metapi().renderNullError(event, await prisma.pen.findUnique({
     where: {
       id: parsed.data.id,
-      userId: BigInt(auth.user().id),
+      userId: user.id,
     },
   }))
 })
 
 const remove = defineEventHandler(async (event) => {
+  const { user } = await requireUserSession(event)
   const id = event.context.params?.id
   const pen = await prisma.pen.findFirst({
     where: {
       id: Number.parseInt(id as string),
-      userId: BigInt(auth.user().id),
+      userId: user.id,
     },
   })
 
@@ -88,7 +90,7 @@ const remove = defineEventHandler(async (event) => {
   await prisma.pen.delete({
     where: {
       id: Number.parseInt(id as string),
-      userId: BigInt(auth.user().id),
+      userId: user.id,
     },
   })
   return metapi().success('pen deleted')

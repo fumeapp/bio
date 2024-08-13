@@ -1,7 +1,5 @@
 export default defineNuxtRouteMiddleware(async (to, _from) => {
-  // if (import.meta.server) return
-  const token = useCookie('token', cookieOptions)
-  await useApi().checkUser()
+  const { loggedIn } = useUserSession()
 
   useCrumb().init().add('Home')
 
@@ -14,5 +12,5 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
   ]
 
   if (gatedRoutes.some(route => to.path.startsWith(route)))
-    if (!useApi().user.value) return await navigateTo('/')
+    if (!loggedIn.value) return await navigateTo('/')
 })
