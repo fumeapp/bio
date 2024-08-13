@@ -10,11 +10,6 @@ export default defineNuxtConfig({
     '@nuxt/image',
     'nuxt-auth-utils',
   ],
-  runtimeConfig: {
-    session: {
-      maxAge: 60 * 60 * 24 * 365, // 1 year
-    },
-  },
   eslint: {
     config: {
       standalone: false,
@@ -29,6 +24,10 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2024-08-01',
   runtimeConfig: {
+    session: {
+      maxAge: 60 * 60 * 24 * 365, // 1 year
+      name: 'fumebio-session',
+    },
     public: {
       url: '',
       prefix: '',

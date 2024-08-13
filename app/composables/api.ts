@@ -22,34 +22,43 @@ export const useApi = () => {
         alert(`Field: ${issue.path} Error: ${issue.message}`), 100 * (index + 1)),
       )
   }
+
+  const globalOptions: FetchOptions = {
+    onResponse: ({ response }) => {
+      if (silent.value) {
+        silent.value = false
+        return
+      }
+      if (response?._data?.meta.success && response?._data?.meta?.detail)
+        success(response._data.meta.detail)
+      if (!response?._data?.meta.success && response?._data?.meta?.detail)
+        danger(response._data.meta.detail)
+      if (!response?._data?.meta.success && response?._data?.meta?.detail && form.value)
+        form.value?.setErrors(response._data.meta.detail.map((err: ZodIssue) => ({
+          message: err.message,
+          path: err.path[0],
+        })))
+    },
+  }
+
+  const api = $fetch.create(globalOptions)
+
   const fetch = <T>(
     url: string | (() => string),
     options?: Omit<UseFetchOptions<T>, 'default'> & { default: () => T | Ref<T> },
   ) =>
-    useFetch(url, {
+    useFetch<T>(url, {
       ...options,
-      onResponse: ({ response }) => {
-        if (silent.value) {
-          silent.value = false
-          return
-        }
-        if (response?._data?.meta.success && response?._data?.meta?.detail)
-          success(response._data.meta.detail)
-        if (!response?._data?.meta.success && response?._data?.meta?.detail)
-          danger(response._data.meta.detail)
-        if (!response?._data?.meta.success && response?._data?.meta?.detail && form.value)
-          form.value?.setErrors(response._data.meta.detail.map((err: ZodIssue) => ({
-            message: err.message,
-            path: err.path[0],
-          })))
-      },
+      globalOptions,
     })
+
   const setForm = (frm?: Form<any>) => {
     form.value = frm
     return { fetch }
   }
 
   return {
+    api,
     fetch,
     setForm,
     success,

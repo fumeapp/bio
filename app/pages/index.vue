@@ -3,6 +3,7 @@ const { authModal } = useAuth()
 definePageMeta({ layout: 'bare' })
 const { user } = useUserSession()
 const detected = () => {
+  refreshNuxtData()
   if (import.meta.client) document.location.href = '/home'
 }
 </script>

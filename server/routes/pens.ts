@@ -44,13 +44,16 @@ const create = defineEventHandler(async (event) => {
 })
 
 const update = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
+  const { user } = await getUserSession(event)
   if (!user.isAdmin) return metapi().notFound(event)
   const schema = z.object({
     id: z.number(),
     user: z.number(),
     cartridgeId: z.number().optional(),
   })
+
+  event = routing.routeParams(event, { user: 1, id: 3 })
+
   const parsed = schema.safeParse({
     id: Number.parseInt(event.context.params?.id as string),
     user: Number.parseInt(event.context.params?.user as string),

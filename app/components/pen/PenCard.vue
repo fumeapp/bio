@@ -13,20 +13,20 @@ const reload = () => {
   emit('reload')
 }
 
-const options = computed(() => props.cartridges.filter(c => c.pen === null || c.pen.id === props.pen.id)
+const options = computed(() => props.cartridges.filter(c => c.pen === null || c.pen?.id === props.pen.id)
   .map(c => ({ label: `${c.content} ${c.ml}ml ${c.mg}mg`, value: c.id })))
 
 const cartridgeId = ref(props.pen.cartridgeId)
 const dirty = computed(() => props.pen.cartridgeId !== cartridgeId.value)
 
 const insert = () => useApi()
-  .fetch<MetapiResponse<Cartridge>>(`/api/pen/${props.pen.id}`, { method: 'PUT', body: { cartridgeId: cartridgeId.value } })
+  .api<MetapiResponse<Cartridge>>(`/api/user/${props.pen.userId}/pen/${props.pen.id}`, { method: 'PUT', body: { cartridgeId: cartridgeId.value } })
   .then(reload)
 const eject = () => useApi()
-  .fetch<MetapiResponse<Cartridge>>(`/api/pen/${props.pen.id}`, { method: 'PUT' })
+  .api<MetapiResponse<Cartridge>>(`/api/user/${props.pen.userId}/pen/${props.pen.id}`, { method: 'PUT' })
   .then(reload)
 const remove = () => useApi()
-  .fetch<MetapiResponse<Cartridge>>(`/api/pen/${props.pen.id}`, { method: 'DELETE' })
+  .api<MetapiResponse<Cartridge>>(`/api/user/${props.pen.userId}/pen/${props.pen.id}`, { method: 'DELETE' })
   .then(reload)
 
 const items = computed(() => {

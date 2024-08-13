@@ -20,6 +20,16 @@ const apiResource = (
   if (routes.remove) router.delete(`/${name}/:id`, routes.remove)
 }
 
+const routeParams = (event: H3Event, positions: any) => {
+  const results = event.context?.params?._.split('/')
+  if (event.context.params && results)
+    for (const key in positions)
+      event.context.params[key] = results[positions[key]]
+
+  return event
+}
+
 export const routing = {
   apiResource,
+  routeParams,
 }
