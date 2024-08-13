@@ -11,6 +11,13 @@ const index = defineEventHandler(async (event) => {
       where: {
         userId: parsed.data.id,
       },
+      include: {
+        cartridge: {
+          include: {
+            pen: true,
+          },
+        },
+      },
     }),
   )
 })
@@ -39,13 +46,17 @@ const create = defineEventHandler(async (event) => {
 })
 
 const remove = defineEventHandler(async (event) => {
-  if (!middleware.requireAdmin()) return metapi().notFound(event)
-  const schema = z.object({ id: z.number(), user: z.number() })
-  const parsed = schema.safeParse({ id: event.context.params?.id })
+  const { user } = await requireUserSession(event)
+  if (!user.isAdmin) return metapi().notFound(event)
+  event = routing.routeParams(event, { user: 1, id: 3 })
+  console.log('shots.remove', event.context.params)
+  const schema = z.object({ id: z.string(), user: z.string() })
+  const parsed = schema.safeParse({ id: event.context.params?.id, user: event.context.params?.user })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
   await prisma.shot.delete({
     where: {
-      id: parsed.data.id,
+      userId: BigInt(parsed.data.user),
+      id: BigInt(parsed.data.id),
     },
   })
   return metapi().success('shot deleted')

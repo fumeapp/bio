@@ -26,7 +26,7 @@ const options = computed(() =>
 
 const create = async () => useApi()
   .setForm(form?.value)
-  .fetch<MetapiResponse<Shot>>(
+  .api<MetapiResponse<Shot>>(
     route.params.user ? `/api/user/${route.params.user}/shot` : '/api/shot',
     { method: 'POST', body: state },
   )
@@ -44,7 +44,7 @@ const create = async () => useApi()
       >
         <template #label>
           <div v-if="pen.cartridge">
-            {{ state.units }} units - {{ pen.cartridge.mg / 4 }}mg
+            {{ state.units }} units - {{ (pen.cartridge.mg as unknown as number) / 200 * state.units }}mg
           </div>
         </template>
       </u-select-menu>

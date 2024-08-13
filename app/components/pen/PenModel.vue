@@ -11,11 +11,9 @@ defineProps<{ color: string }>()
     </div>
     <div class="w-2 h-7 rounded-l-sm" :class="`bg-${color}-500`" />
     <div
-      class="w-32 h-8 rounded-l-sm flex tems-center justify-end border-l border-t border-b"
-      :class="`border-${color}-500 bg-${color}-500`"
+      class="w-56 h-8 rounded-l-sm flex tems-center justify-end border-l border-t border-b"
+      :class="`border-${color}-500`"
     />
-    <div class="w-2 h-8 bg-gray-300" />
-    <div class="w-20 h-8 border-t border-b border-r" :class="`border-${color}-500 bg-${color}-500`" />
     <div class="w-3 h-8 bg-gray-400" />
     <div class="w-1 h-8 bg-gray-500 rounded-r-sm" />
     <!--

@@ -2,6 +2,7 @@ import type { ZodIssue } from 'zod'
 import type { FetchOptions } from 'ofetch'
 import type { Form } from '#ui/types/form'
 import type { UseFetchOptions } from '#app'
+import type { MetapiResponse } from '~/types/metapi'
 
 const silent = ref(false)
 
@@ -46,15 +47,22 @@ export const useApi = () => {
   const fetch = <T>(
     url: string | (() => string),
     options?: Omit<UseFetchOptions<T>, 'default'> & { default: () => T | Ref<T> },
+  ) => useFetch<T>(url, {
+    ...options,
+    globalOptions,
+  })
+
+  /*
+  const fetch = <T>(
+    url: string | (() => string),
+    options?: UseFetchOptions<any, any, any, any, any, any>,
   ) =>
-    useFetch<T>(url, {
-      ...options,
-      globalOptions,
-    })
+    useFetch<T>(url, { options, ...globalOptions })
+    */
 
   const setForm = (frm?: Form<any>) => {
     form.value = frm
-    return { fetch }
+    return { api }
   }
 
   return {

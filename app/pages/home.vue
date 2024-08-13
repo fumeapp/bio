@@ -22,7 +22,6 @@ const { data: pens, refresh: pensRefresh } = await useApi().fetch<MetapiResponse
 const { data: cartridges, refresh: cartridgesRefresh } = await useApi().fetch<MetapiResponse<Cartridge[]>>('/api/cartridge')
 
 const reload = async () => {
-  console.log('home.reload')
   await pensRefresh()
   await cartridgesRefresh()
 }
