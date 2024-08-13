@@ -8,20 +8,17 @@ const { crumbs, actions } = useCrumb()
   <u-header :links="links">
     <template #logo>
       <div class="flex items-center">
-        <div class="relative w-12 h-12">
-          <header-logo />
-          <u-icon name="i-mdi-test-tube" class="w-6 h-6 text-primary-100 absolute bottom-1.5 right-0.5" />
-        </div>
-        <div class="font-extrabold text-3xl pr-1 text-primary-900 dark:text-primary-100">fume</div>
-        <div class="font-extrabold text-3xl pr-1 text-primary-600 dark:text-primary-300 -ml-1">bio</div>
+        <logo-bio class="w-12 h-12" />
+        <logo-text class="text-3xl" />
       </div>
     </template>
     <template #right>
       <div class="flex items-center space-x-2">
-        <header-auth />
         <client-only>
+          <header-auth />
           <u-color-mode-button />
           <template #fallback>
+            <u-skeleton class="w-8 h-8 rounded-full" />
             <u-skeleton class="w-8 h-8 rounded-full" />
           </template>
         </client-only>

@@ -9,7 +9,12 @@ const cartridgeModal = ref(false)
 const { data: user } = await useApi().api<MetapiResponse<User>>(`/api/user/${route.params.user}`)
 
 useCrumb()
-  .add('Users')
+  .custom({
+    label: 'Users',
+    icon: 'i-mdi-account-multiple',
+    to: '/users',
+  },
+  )
   .custom({
     label: user.value.data.name as string,
     icon: 'i-mdi-account',

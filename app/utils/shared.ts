@@ -9,13 +9,14 @@ export const links: HeaderIconLink[] = [
   {
     label: 'Home',
     icon: 'i-heroicons-home',
-    to: '/',
+    to: '/home',
   },
   {
-    label: 'Users',
-    icon: 'i-mdi-account-group',
-    to: '/users',
+    label: 'Shots',
+    icon: 'i-mdi-syringe',
+    to: '/history',
   },
+
   /*
   {
     label: 'Pens',

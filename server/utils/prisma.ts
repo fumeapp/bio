@@ -10,12 +10,17 @@ const prismaClientSingleton = () => {
 declare const globalThis: {
   prismaGlobal: ReturnType<typeof prismaClientSingleton>
 }
+const prisma = globalThis.prismaGlobal ?? prismaClientSingleton()
+  .$extends(user.admin)
+  .$extends(token.client)
+/*
 const prisma = import.meta.client
   ? undefined
   : globalThis.prismaGlobal ?? prismaClientSingleton()
     .$extends(user.admin)
     .$extends(token.client)
-/*
+/
+
 for (const key in mutators)
   if (Object.prototype.hasOwnProperty.call(mutators, key))
     if (typeof mutators[key] === 'function')

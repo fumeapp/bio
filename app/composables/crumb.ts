@@ -62,6 +62,7 @@ export const useCrumb = () => {
     actions,
     action,
     add,
+    custom,
     init,
   }
 }

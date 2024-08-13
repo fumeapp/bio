@@ -5,6 +5,7 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
   useCrumb().init().add('Home')
 
   const gatedRoutes = [
+    '/home',
     '/token',
     '/pen',
     '/cartridge',

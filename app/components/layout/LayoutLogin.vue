@@ -62,6 +62,7 @@ async function handleMessage(evt: { data: { user: User, token: string } }) {
   useApi().success('logged in')
   emit('login')
   await refreshNuxtData()
+  await navigateTo('/home')
 }
 
 function messageHandler(add: boolean): void {
@@ -82,6 +83,5 @@ if (import.meta.client) {
     title="Sign in / Join"
     :providers="providers"
     :loading="loading"
-    :fields="[{ name: 'email', type: 'email', label: 'Email', placeholder: 'Enter your email' }]"
   />
 </template>

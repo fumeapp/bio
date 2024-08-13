@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { penColors } from '~/utils/shared'
 
 const index = defineEventHandler(async (event) => {
   if (!middleware.requireAdmin()) return metapi().notFound(event)
