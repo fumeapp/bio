@@ -6,11 +6,9 @@ import type { User } from '~/types/models'
 let token: Token & { user: User } | null = null
 
 const bearer = (event: H3Event): string | undefined =>
-  (event.node.req.headers.authentication as string)?.split(' ')[1] || undefined
+  (event.node.req.headers.authentication as string)?.split(' ')[1] || getCookie(event, 'token')
 
 const set = async (hash: string): Promise<User> => {
-  console.log('auth.set', hash)
-  // if (token?.user) return token.user
   token = await prisma.token.findUnique({
     where: {
       hash,
