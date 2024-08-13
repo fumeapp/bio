@@ -11,12 +11,12 @@ const state = reactive({
   user: route.params.user,
   content: cartridgeContents[0],
   ml: cartridgeMls[0],
-  mg: cartridgeMgs[0],
+  mg: cartridgeMgs[1],
 })
 
 const create = async () => useApi()
   .setForm(form?.value)
-  .fetch<MetapiResponse<Cartridge>>(`/api/user/${route.params.user}/cartridge`, { method: 'POST', body: state })
+  .api<MetapiResponse<Cartridge>>(`/api/user/${route.params.user}/cartridge`, { method: 'POST', body: state })
   .then(() => emit('created'))
 </script>
 

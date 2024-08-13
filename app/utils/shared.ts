@@ -58,6 +58,7 @@ export const cartridgeMls = [
 ]
 
 export const cartridgeMgs = [
+  '10',
   '20',
   '30',
   '40',

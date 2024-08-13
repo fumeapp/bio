@@ -6,7 +6,7 @@ import type { User } from '~/types/models'
 const route = useRoute()
 const penModal = ref(false)
 const cartridgeModal = ref(false)
-const { data: user } = await useApi().fetch<MetapiResponse<User>>(`/api/user/${route.params.user}`)
+const { data: user } = await useFetch<MetapiResponse<User>>(`/api/user/${route.params.user}`)
 
 useCrumb()
   .custom({
@@ -26,8 +26,8 @@ useCrumb()
   .action({ label: 'Add a Pen', click: () => penModal.value = true })
   .action({ label: 'Add a Cartridge', click: () => cartridgeModal.value = true })
 
-const { data: pens, refresh: penRefresh } = await useApi().fetch<MetapiResponse<Pen[]>>(`/api/user/${route.params.user}/pen`)
-const { data: cartridges, refresh: cartRefresh } = await useApi().fetch<MetapiResponse<Cartridge[]>>(`/api/user/${route.params.user}/cartridge`)
+const { data: pens, refresh: penRefresh } = await useFetch<MetapiResponse<Pen[]>>(`/api/user/${route.params.user}/pen`)
+const { data: cartridges, refresh: cartRefresh } = await useFetch<MetapiResponse<Cartridge[]>>(`/api/user/${route.params.user}/cartridge`)
 
 const refresh = () => {
   penRefresh()

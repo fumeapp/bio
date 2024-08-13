@@ -1,7 +1,5 @@
 import type { ZodIssue } from 'zod'
-import type { FetchOptions } from 'ofetch'
 import type { Form } from '#ui/types/form'
-import type { UseFetchOptions } from '#app'
 import type { MetapiResponse } from '~/types/metapi'
 
 const silent = ref(false)
@@ -24,7 +22,7 @@ export const useApi = () => {
       )
   }
 
-  const globalOptions: FetchOptions = {
+  const api = $fetch.create({
     onResponse: ({ response }) => {
       if (silent.value) {
         silent.value = false
@@ -40,25 +38,7 @@ export const useApi = () => {
           path: err.path[0],
         })))
     },
-  }
-
-  const api = $fetch.create(globalOptions)
-
-  const fetch = <T>(
-    url: string | (() => string),
-    options?: Omit<UseFetchOptions<T>, 'default'> & { default: () => T | Ref<T> },
-  ) => useFetch<T>(url, {
-    ...options,
-    globalOptions,
   })
-
-  /*
-  const fetch = <T>(
-    url: string | (() => string),
-    options?: UseFetchOptions<any, any, any, any, any, any>,
-  ) =>
-    useFetch<T>(url, { options, ...globalOptions })
-    */
 
   const setForm = (frm?: Form<any>) => {
     form.value = frm
@@ -67,7 +47,6 @@ export const useApi = () => {
 
   return {
     api,
-    fetch,
     setForm,
     success,
   }

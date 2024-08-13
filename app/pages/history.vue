@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { format } from 'date-fns'
+import type { MetapiResponse } from '~/types/metapi'
+import type { Shot } from '~/types/models'
 
 useCrumb().add('Shots')
 
@@ -12,13 +14,10 @@ const columns = [
   { label: 'Actions', key: 'actions' },
 ]
 
-const { data: shots, refresh } = useApi().fetch('/api/shot')
+const { data: shots, refresh } = useFetch<MetapiResponse<Shot[]>>('/api/shot')
 
 const remove = async (id: number) =>
-  await useApi().fetch(
-    route.params.user ? `/api/user/${route.params.user}/shot/${id}` : `/api/shot/${id}`,
-    { method: 'DELETE' },
-  ).then(refresh)
+  await useApi().api(`/api/shot/${id}`, { method: 'DELETE' }).then(refresh)
 </script>
 
 <template>

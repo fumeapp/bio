@@ -29,7 +29,7 @@ const items = [
       icon: 'i-mdi-logout',
       click: async () => {
         clear()
-        useApi().fetch('/api/logout')
+        useApi().api('/api/logout')
         await navigateTo('/')
       },
       shortcuts: ['L'],

@@ -9,13 +9,13 @@ defineProps<{ color: string }>()
         <slot />
       </div>
     </div>
-    <div class="w-2 h-7 rounded-l-sm" :class="`bg-${color}-500`" />
+    <div class="w-2 h-12 rounded-l-sm" :class="`bg-${color}-500`" />
     <div
-      class="w-56 h-8 rounded-l-sm flex tems-center justify-end border-l border-t border-b"
+      class="w-[340px] h-14 rounded-l flex tems-center justify-end border-l border-t border-b"
       :class="`border-${color}-500`"
     />
-    <div class="w-3 h-8 bg-gray-400" />
-    <div class="w-1 h-8 bg-gray-500 rounded-r-sm" />
+    <div class="w-3 h-14 bg-gray-400" />
+    <div class="w-1 h-14 bg-gray-500 rounded-r-sm" />
     <!--
     border-cyan-500
     border-sky-500

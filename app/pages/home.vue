@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Cartridge, Pen } from '@prisma/client'
-import type { UseFetchOptions } from '#app'
 import type { MetapiResponse } from '~/types/metapi'
 
 const { data: page } = await useAsyncData('index', () => queryContent('/').findOne())
@@ -18,8 +17,8 @@ useSeoMeta({
 
 const { loggedIn } = useUserSession()
 
-const { data: pens, refresh: pensRefresh } = await useApi().fetch<MetapiResponse<Pen[]>>('/api/pen')
-const { data: cartridges, refresh: cartridgesRefresh } = await useApi().fetch<MetapiResponse<Cartridge[]>>('/api/cartridge')
+const { data: pens, refresh: pensRefresh } = await useFetch<MetapiResponse<Pen[]>>('/api/pen')
+const { data: cartridges, refresh: cartridgesRefresh } = await useFetch<MetapiResponse<Cartridge[]>>('/api/cartridge')
 
 const reload = async () => {
   await pensRefresh()

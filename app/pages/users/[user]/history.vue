@@ -4,7 +4,7 @@ import type { Shot, User } from '~/types/models'
 import type { MetapiResponse } from '~/types/metapi'
 
 const route = useRoute()
-const { data: user } = await useApi().fetch<MetapiResponse<User>>(`/api/user/${route.params.user}`)
+const { data: user } = await useFetch<MetapiResponse<User>>(`/api/user/${route.params.user}`)
 
 useCrumb()
   .custom({
@@ -28,7 +28,7 @@ const columns = [
   { label: 'Actions', key: 'actions' },
 ]
 
-const { data: shots, refresh } = await useApi().fetch<MetapiResponse<Shot[]>>(`/api/user/${route.params.user}/shot`)
+const { data: shots, refresh } = await useFetch<MetapiResponse<Shot[]>>(`/api/user/${route.params.user}/shot`)
 
 const remove = async (id: number) =>
   await useApi().api(`/api/user/${route.params.user}/shot/${id}`, { method: 'DELETE' }).then(() => refresh())

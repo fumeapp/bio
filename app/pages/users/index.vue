@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Pen } from '@prisma/client'
 import { formatDistance } from 'date-fns'
 import type { MetapiResponse } from '~/types/metapi'
 import type { User } from '~/types/models'
@@ -29,7 +28,7 @@ const columns = [
   },
 ]
 
-const { data: users } = await useApi().fetch<MetapiResponse<User>>('/api/user')
+const { data: users } = await useFetch<MetapiResponse<User>>('/api/user')
 </script>
 
 <template>

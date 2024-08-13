@@ -16,7 +16,7 @@ const state = reactive({
 
 const create = async () => useApi()
   .setForm(form?.value)
-  .fetch<MetapiResponse<Pen>>(`/api/user/${route.params.user}/pen`, { method: 'POST', body: state })
+  .api<MetapiResponse<Pen>>(`/api/user/${route.params.user}/pen`, { method: 'POST', body: state })
   .then(() => emit('created'))
 </script>
 

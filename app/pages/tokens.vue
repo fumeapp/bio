@@ -14,9 +14,9 @@ useSeoMeta({
   ogDescription: page.value.description,
 })
 
-const { data: tokens, refresh } = await useApi().fetch<MetapiResponse<Token[]>>('/api/token')
+const { data: tokens, refresh } = await useFetch<MetapiResponse<Token[]>>('/api/token')
 </script>
 
 <template>
-  <token-list :tokens="tokens?.data" @reload="refresh" />
+  <token-list v-if="tokens?.data" :tokens="tokens.data" @reload="refresh" />
 </template>

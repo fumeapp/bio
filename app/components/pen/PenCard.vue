@@ -77,7 +77,7 @@ const items = computed(() => {
           <shot-summary :shots="pen.cartridge.shots" :cartridge="pen.cartridge" />
         </div>
         <div v-if="pen.cartridge && pen.cartridge.shots">
-          <shot-log :shots="pen.cartridge.shots" />
+          <shot-log :shots="pen.cartridge.shots" @reload="emit('reload')" />
         </div>
 
         <shot-form :pen="pen" :cartridge="pen.cartridge" @created="reload" />
