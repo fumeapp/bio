@@ -12,7 +12,6 @@ const props = defineProps<{ pen: Pen }>()
 const emit = defineEmits(['created'])
 const form = ref<Form<any>>()
 const state = reactive({
-  user: props.pen.cartridge?.userId,
   cartridge: props.pen.cartridge?.id,
   units: shotUnits[1],
   date: format(new Date(), 'yyyy-MM-dd'),
