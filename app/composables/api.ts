@@ -22,7 +22,6 @@ export const useApi = () => {
         alert(`Field: ${issue.path} Error: ${issue.message}`), 100 * (index + 1)),
       )
   }
-
   const fetch = <T>(
     url: string | (() => string),
     options?: Omit<UseFetchOptions<T>, 'default'> & { default: () => T | Ref<T> },
@@ -50,15 +49,9 @@ export const useApi = () => {
     return { fetch }
   }
 
-  const logout = async () => {
-    await fetch('/api/logout')
-    await navigateTo('/')
-  }
-
   return {
     fetch,
     setForm,
-    logout,
     success,
   }
 }

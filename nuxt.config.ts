@@ -10,6 +10,11 @@ export default defineNuxtConfig({
     '@nuxt/image',
     'nuxt-auth-utils',
   ],
+  runtimeConfig: {
+    session: {
+      maxAge: 60 * 60 * 24 * 365, // 1 year
+    },
+  },
   eslint: {
     config: {
       standalone: false,

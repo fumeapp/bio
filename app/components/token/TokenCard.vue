@@ -14,7 +14,6 @@ const remove = () => confirm('Delete Token', 'Are you sure you want to delete th
   })
   emit('reload')
   success(meta.detail)
-  await useApi().checkUser()
 })
 </script>
 

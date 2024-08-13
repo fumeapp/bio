@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const emit = defineEmits(['login'])
+import type { User } from '~/types/models'
+
+const emit = defineEmits(['loggedin'])
 const loading = ref(false)
 interface Provider {
   name: string
@@ -57,9 +59,9 @@ function login(name: string): void {
 
 async function handleMessage(evt: { data: { user: User, token: string } }) {
   useApi().success('logged in')
-  emit('login')
+  emit('loggedin')
   await refreshNuxtData()
-  await navigateTo('/home')
+  setTimeout(async () => await navigateTo('/home'), 500)
 }
 
 function messageHandler(add: boolean): void {

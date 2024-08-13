@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { user } = await useUserSession()
+const { user, clear } = await useUserSession()
 const items = [
   [
     {
@@ -27,7 +27,11 @@ const items = [
     {
       label: 'Logout',
       icon: 'i-mdi-logout',
-      click: () => useApi().logout(),
+      click: async () => {
+        clear()
+        useApi().fetch('/api/logout')
+        await navigateTo('/')
+      },
       shortcuts: ['L'],
     },
   ],

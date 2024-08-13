@@ -1,7 +1,10 @@
 <script setup lang="ts">
 const { authModal } = useAuth()
 definePageMeta({ layout: 'bare' })
-const { user } = useApi()
+const { user } = useUserSession()
+const detected = () => {
+  if (import.meta.client) document.location.href = '/home'
+}
 </script>
 
 <template>
@@ -15,6 +18,7 @@ const { user } = useApi()
         <u-skeleton class="w-28 h-10" />
       </template>
     </client-only>
+    <modal-login @loggedin="detected" />
   </div>
 </template>
 

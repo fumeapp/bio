@@ -32,7 +32,6 @@ useSeoMeta({
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-    <modal-login />
     <layout-confirm />
     <u-notifications>
       <template #title="{ title }">
