@@ -27,8 +27,7 @@ const create = defineEventHandler(async (event) => {
   const pen = await prisma.pen.create({
     data: {
       color: parsed.data.color,
-      // user: { connect: { id: BigInt(auth.user().id) } },
-      userId: BigInt(user.id),
+      userId: user.id,
       cartridgeId: null,
     },
   })

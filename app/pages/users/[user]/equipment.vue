@@ -6,7 +6,7 @@ import type { User } from '~/types/models'
 const route = useRoute()
 const penModal = ref(false)
 const cartridgeModal = ref(false)
-const { data: user } = await useApi().api<MetapiResponse<User>>(`/api/user/${route.params.user}`)
+const { data: user } = await useApi().fetch<MetapiResponse<User>>(`/api/user/${route.params.user}`)
 
 useCrumb()
   .custom({
@@ -16,7 +16,7 @@ useCrumb()
   },
   )
   .custom({
-    label: user.value.data.name as string,
+    label: user.value?.data.name as string,
     icon: 'i-mdi-account',
   })
   .custom({
@@ -26,8 +26,8 @@ useCrumb()
   .action({ label: 'Add a Pen', click: () => penModal.value = true })
   .action({ label: 'Add a Cartridge', click: () => cartridgeModal.value = true })
 
-const { data: pens, refresh: penRefresh } = await useApi().api<MetapiResponse<Pen[]>>(`/api/user/${route.params.user}/pen`)
-const { data: cartridges, refresh: cartRefresh } = await useApi().api<MetapiResponse<Cartridge[]>>(`/api/user/${route.params.user}/cartridge`)
+const { data: pens, refresh: penRefresh } = await useApi().fetch<MetapiResponse<Pen[]>>(`/api/user/${route.params.user}/pen`)
+const { data: cartridges, refresh: cartRefresh } = await useApi().fetch<MetapiResponse<Cartridge[]>>(`/api/user/${route.params.user}/cartridge`)
 
 const refresh = () => {
   penRefresh()
@@ -44,9 +44,9 @@ const reload = () => {
 <template>
   <div class="flex flex-col space-y-8">
     <div class="text-lg font-semibold">Pens </div>
-    <pen-list :pens="pens.data" :cartridges="cartridges.data" @reload="reload" />
+    <pen-list :pens="pens?.data" :cartridges="cartridges?.data" @reload="reload" />
     <div class="text-lg font-semibold">Cartridges </div>
-    <cartridge-list :cartridges="cartridges.data" @reload="reload" />
+    <cartridge-list :cartridges="cartridges?.data" @reload="reload" />
     <u-dashboard-modal
       v-model="penModal"
       title="Add a pen"

@@ -2,7 +2,8 @@ import { z } from 'zod'
 import { cartridgeContents, cartridgeMgs, cartridgeMls } from '~/utils/shared'
 
 const index = defineEventHandler(async (event) => {
-  if (!middleware.requireAdmin()) return metapi().notFound(event)
+  const { user } = await requireUserSession(event)
+  if (!user.isAdmin) return metapi().notFound(event)
   const schema = z.object({ id: z.number() })
   const parsed = schema.safeParse({ id: Number.parseInt(event.context.params?.user as string) })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
@@ -20,7 +21,8 @@ const index = defineEventHandler(async (event) => {
 })
 
 const create = defineEventHandler(async (event) => {
-  if (!middleware.requireAdmin()) return metapi().notFound(event)
+  const { user } = await requireUserSession(event)
+  if (!user.isAdmin) return metapi().notFound(event)
   const schema = z.object({
     user: z.string(),
     content: z.enum(cartridgeContents as [string, ...string[]]),
@@ -42,7 +44,8 @@ const create = defineEventHandler(async (event) => {
 })
 
 const get = defineEventHandler(async (event) => {
-  if (!middleware.requireAdmin()) return metapi().notFound(event)
+  const { user } = await requireUserSession(event)
+  if (!user.isAdmin) return metapi().notFound(event)
   const schema = z.object({ id: z.number(), user: z.number() })
   const parsed = schema.safeParse({
     id: event.context.params?.id,
@@ -59,7 +62,8 @@ const get = defineEventHandler(async (event) => {
 })
 
 const remove = defineEventHandler(async (event) => {
-  if (!middleware.requireAdmin()) return metapi().notFound(event)
+  const { user } = await requireUserSession(event)
+  if (!user.isAdmin) return metapi().notFound(event)
   const schema = z.object({ id: z.number(), user: z.number() })
   const parsed = schema.safeParse({ id: event.context.params?.id, user: Number.parseInt(event.context.params?.user as string) })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
