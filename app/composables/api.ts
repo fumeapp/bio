@@ -26,6 +26,7 @@ export const useApi = () => {
   }
 
   const fetch = $fetch.create({
+    headers: { Accept: 'application/json', Authentication: `Bearer: ${useCookie('token', cookieOptions).value}` },
     onResponse: ({ response }) => {
       if (silent.value) {
         silent.value = false
