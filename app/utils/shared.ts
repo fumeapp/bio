@@ -16,19 +16,6 @@ export const links: HeaderIconLink[] = [
     icon: 'i-mdi-syringe',
     to: '/history',
   },
-
-  /*
-  {
-    label: 'Pens',
-    icon: 'i-mdi-pen',
-    to: '/pens',
-  },
-  {
-    label: 'Cartridges',
-    to: '/cartridges',
-    icon: 'i-mdi-bottle-soda-outline',
-  },
-  */
 ]
 
 export const cookieOptions: CookieOptions & { readonly?: false } = {

@@ -28,16 +28,25 @@ export default defineNuxtConfig({
       maxAge: 60 * 60 * 24 * 365, // 1 year
       name: 'fumebio-session',
     },
+    oauth: {
+      google: {
+        clientId: '',
+        clientSecret: '',
+      },
+      microsoft: {
+        clientId: '',
+        clientSecret: '',
+        tenant: '',
+      },
+      github: {
+        clientId: '',
+        clientSecret: '',
+      },
+    },
     public: {
       url: '',
       prefix: '',
-      googleClientId: '',
-      microsoftClientId: '',
-      githubClientId: '',
     },
-    googleClientSecret: '',
-    microsoftClientSecret: '',
-    githubClientSecret: '',
   },
   future: {
     compatibilityVersion: 4,

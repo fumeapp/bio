@@ -2,7 +2,6 @@ import { createRouter, useBase } from 'h3'
 import logout from '../routes/logout'
 import me from '../routes/me'
 import token from '../routes/token'
-import oauth from '../routes/oauth'
 import pen from '../routes/pen'
 import pens from '../routes/pens'
 import cartridge from '../routes/cartridge'
@@ -10,13 +9,15 @@ import cartridges from '../routes/cartridges'
 import shots from '../routes/shots'
 import shot from '../routes/shot'
 import user from '../routes/user'
+import { githubHandler, googleHandler } from '../utils/oauth'
 
 const router = createRouter()
 
 router.get('/**', defineEventHandler(event => metapi().notFound(event)))
 
-router.get('/redirect/:provider', oauth.redirect)
-router.get('/callback/:provider', oauth.callback)
+router.get('/oauth/google', googleHandler)
+router.get('/oauth/github', githubHandler)
+router.get('/oauth/microsoft', microsoftHandler)
 
 router.get('/logout', logout)
 

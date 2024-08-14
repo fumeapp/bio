@@ -1,12 +1,3 @@
-export interface OauthProvider {
-  id: string
-  name: string
-  secret: string
-  issuer: import('openid-client').IssuerMetadata
-  scope: string
-  callback: string
-}
-
 export interface UserInfo {
   name: string
   avatar: string
@@ -58,24 +49,6 @@ export interface GithubUserInfo {
   updated_at: string
 }
 
-/*
-
-type MicrosoftOauthUser struct {
-	Id                string `json:"id"`
-	DisplayName       string `json:"displayName"`
-	GivenName         string `json:"givenName"`
-	Surname           string `json:"surname"`
-	UserPrincipalName string `json:"userPrincipalName"`
-	Mail              string `json:"mail"`
-	MobilePhone       string `json:"mobilePhone"`
-	OfficeLocation    string `json:"officeLocation"`
-	PreferredLanguage string `json:"preferredLanguage"`
-	BusinessPhones    []string
-	JobTitle          string `json:"jobTitle"`
-}
-
-*/
-
 export interface MicrosoftUserInfo {
   id: string
   displayName: string
@@ -88,11 +61,6 @@ export interface MicrosoftUserInfo {
   preferredLanguage: string
   businessPhones: string[]
   jobTitle: string
-  info: {
-    email?: string
-    name: string
-    avatar: string
-  }
 }
 
 export interface TokenLocation {
@@ -101,12 +69,4 @@ export interface TokenLocation {
   country: string
   timezone: string
   countryName: string
-}
-
-export interface OAuthPayload {
-  info: UserInfo
-  payload: {
-    oauth: GoogleUserInfo | GithubUserInfo | MicrosoftUserInfo
-    tokenSet: import('openid-client').TokenSet
-  }
 }

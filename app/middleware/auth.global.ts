@@ -6,8 +6,6 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
   const gatedRoutes = [
     '/home',
     '/token',
-    '/pen',
-    '/cartridge',
     '/users',
   ]
 

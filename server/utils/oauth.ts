@@ -1,113 +1,132 @@
+import crypto from 'node:crypto'
 import fs from 'node:fs'
 import { Buffer } from 'node:buffer'
-import type { H3Event } from 'h3'
-import type { RuntimeConfig } from 'nuxt/schema'
-import type { BaseClient } from 'openid-client'
-import { Issuer } from 'openid-client'
-import type { GithubUserInfo, GoogleUserInfo, MicrosoftUserInfo, OAuthPayload, OauthProvider } from '~/types/oauth'
+import type { EventHandlerRequest, H3Event } from 'h3'
+import type { User } from '~/types/models'
+import type { GithubUserInfo, GoogleUserInfo, MicrosoftUserInfo, TokenLocation, UserInfo } from '~/types/oauth'
 
-export const oauthProviders = (cfg: RuntimeConfig): OauthProvider[] => {
-  return [
-    {
-      name: 'google',
-      id: cfg.public.googleClientId,
-      secret: cfg.googleClientSecret,
-      issuer: {
-        issuer: 'https://accounts.google.com',
-        authorization_endpoint: 'https://accounts.google.com/o/oauth2/v2/auth',
-        token_endpoint: 'https://oauth2.googleapis.com/token',
-        jwks_uri: 'https://www.googleapis.com/oauth2/v3/certs',
-        userinfo_endpoint: 'https://openidconnect.googleapis.com/v1/userinfo',
-      },
-      scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
-      callback: `${cfg.public.url}/api/callback/google`,
+const signIn = async (event: H3Event<EventHandlerRequest>, oauthPayload: any, provider: string): Promise<User> => {
+  let user: User | null = null
+
+  let userPayload: GithubUserInfo | GoogleUserInfo | MicrosoftUserInfo | null = null
+  userPayload = oauthPayload as GithubUserInfo
+  const info: UserInfo = { email: '', name: '', avatar: '' }
+
+  if (provider === 'google') {
+    userPayload = oauthPayload as GoogleUserInfo
+    info.email = userPayload.email
+    info.name = userPayload.name
+    info.avatar = userPayload.picture
+  }
+
+  if (provider === 'github') {
+    userPayload = oauthPayload as GithubUserInfo
+    info.email = userPayload.email
+    info.name = userPayload.name
+    info.avatar = userPayload.avatar_url
+  }
+
+  if (provider === 'microsoft') {
+    userPayload = oauthPayload as MicrosoftUserInfo
+    info.email = userPayload.displayName
+    info.name = userPayload.givenName
+    info.avatar = ''
+  }
+
+  user = await prisma.user.findUnique({
+    where: {
+      email: info.email,
     },
-    {
-      name: 'microsoft',
-      id: cfg.public.microsoftClientId,
-      secret: cfg.microsoftClientSecret,
-      issuer: {
-        issuer: 'https://login.microsoftonline.com/common',
-        /*
-        authorization_endpoint: 'https://login.live.com/oauth20_authorize.srf',
-        token_endpoint: 'https://login.live.com/oauth20_token.srf',
-        */
-        authorization_endpoint: 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
-        token_endpoint: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-        jwks_uri: 'https://www.googleapis.com/oauth2/v3/certs',
-        userinfo_endpoint: 'https://graph.microsoft.com/v1.0/me',
+  }) as unknown as User
+
+  if (!user)
+    user = await prisma.user.create({
+      data: {
+        email: info.email,
+        name: info.name,
+        avatar: info.avatar,
+        payload: ({ roles: { admin: false } } as UserPayload) as unknown as Prisma.JsonObject,
+        providers: {
+          create: [
+            {
+
+              name: provider,
+              avatar: info.avatar,
+              payload: oauthPayload as unknown as Prisma.JsonObject,
+            },
+
+          ],
+        },
       },
-      scope: 'User.Read',
-      callback: `${cfg.public.url}/api/callback/microsoft`,
-    },
-
-    {
-      name: 'github',
-      id: cfg.public.githubClientId,
-      secret: cfg.githubClientSecret,
-      issuer: {
-        issuer: 'https://github.com',
-        authorization_endpoint: 'https://github.com/login/oauth/authorize',
-        token_endpoint: 'https://github.com/login/oauth/access_token',
-        jwks_uri: 'https://api.github.com/oauth/jwks',
-        userinfo_endpoint: 'https://api.github.com/user',
+    }) as unknown as User
+  else
+    await prisma.provider.upsert({
+      where: {
+        userId_name: {
+          userId: BigInt(user.id),
+          name: provider,
+        },
       },
-      scope: 'user:email',
-      callback: `${cfg.public.url}/api/callback/github`,
+      update: {
+        avatar: info.avatar,
+        payload: oauthPayload as unknown as Prisma.JsonObject,
+      },
+      create: {
+        userId: BigInt(user.id),
+        name: provider,
+        avatar: info.avatar,
+        payload: oauthPayload as unknown as Prisma.JsonObject,
+      },
+    })
+
+  const coordinate = `${event.node.req.headers['Cloudfront-Viewer-Latitude']} ${event.node.req.headers['Cloudfront-Viewer-Longitude']}`
+
+  const location: TokenLocation = {
+    city: event.node.req.headers['Cloudfront-Viewer-City'] as string || 'Austin',
+    region: event.node.req.headers['Cloudfront-Viewer-Region-Name'] as string || 'TX',
+    country: event.node.req.headers['Cloudfront-Viewer-Country'] as string || 'US',
+    timezone: event.node.req.headers['Cloudfront-Viewer-Timezone'] as string || 'America/Chicago',
+    countryName: event.node.req.headers['Cloudfront-Viewer-CountryName'] as string || 'United States',
+  }
+
+  const cfg = useRuntimeConfig(event)
+
+  const token = await prisma.token.create({
+    data: {
+      userId: BigInt(user.id),
+      hash: `${cfg.public.prefix}_${crypto.createHash('sha256').update(crypto.randomBytes(20).toString('hex')).digest('hex')}`,
+      source: `oauth:${provider}`,
+      ip: event.node.req.headers['x-forwarded-for'] as string,
+      agent: event.node.req.headers['user-agent'] as string,
+      location: location as unknown as Prisma.JsonObject,
+      coordinate: coordinate === 'undefined undefined' ? '30.2423 -97.7672' : coordinate,
     },
-  ]
-}
-
-export const oauthProvider = (name: string | undefined, cfg: RuntimeConfig): OauthProvider | undefined => {
-  return oauthProviders(cfg).find((p: OauthProvider) => p.name === name)
-}
-
-export const oauthClient = (provider: OauthProvider): BaseClient => {
-  const issuer = new Issuer(provider.issuer)
-
-  return new issuer.Client({
-    client_id: provider.id,
-    client_secret: provider.secret,
-    redirect_uris: [provider.callback],
-    response_types: ['code'],
   })
-}
 
-export const getUser = async (provider: OauthProvider, req: H3Event['node']['req']): Promise<OAuthPayload> => {
-  const user = { payload: { oauth: {}, tokenSet: {} }, info: {} } as OAuthPayload
-  const client = oauthClient(provider)
-  const params = client.callbackParams(req)
-  user.payload.tokenSet = ['github', 'microsoft'].includes(provider.name)
-    ? await client.oauthCallback(provider.callback, params)
-    : await client.callback(provider.callback, params)
-
-  if (provider.name === 'google') {
-    user.payload.oauth = await client.userinfo(user.payload.tokenSet.access_token as string) as GoogleUserInfo
-    user.info.email = user.payload.oauth.email
-    user.info.name = user.payload.oauth.name
-    user.info.avatar = user.payload.oauth.picture
-  }
-
-  if (provider.name === 'github') {
-    user.payload.oauth = await client.userinfo(user.payload.tokenSet.access_token as string) as GithubUserInfo
-    user.info.email = user.payload.oauth.email
-    user.info.name = user.payload.oauth.name
-    user.info.avatar = user.payload.oauth.avatar_url
-  }
-
-  if (provider.name === 'microsoft') {
-    user.payload.oauth = await client.userinfo(user.payload.tokenSet.access_token as string) as MicrosoftUserInfo
-    /*
-    const result = await client.requestResource(
-        `https://graph.microsoft.com/v1.0/users/${user.payload.oauth.userPrincipalName}/photo/$value`,
-        user.payload.tokenSet.access_token,
-    )
-    if (result.body) await fs.promises.writeFile('avatar.jpg', Buffer.from(result.body, 'data'))
-    */
-    user.info.email = user.payload.oauth.userPrincipalName
-    user.info.name = user.payload.oauth.displayName
-    user.info.avatar = ''
-  }
-
+  user.hash = token.hash
   return user
 }
+
+export const googleHandler = oauthGoogleEventHandler({
+  async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
+    const dbUser = await signIn(event, user, 'google')
+    await setUserSession(event, { user: dbUser })
+    return sendRedirect(event, '/home')
+  },
+})
+
+export const microsoftHandler = oauthMicrosoftEventHandler({
+  async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
+    const dbUser = await signIn(event, user, 'microsoft')
+    await setUserSession(event, { user: dbUser })
+    return sendRedirect(event, '/home')
+  },
+})
+
+export const githubHandler = oauthGitHubEventHandler({
+  async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
+    const dbUser = await signIn(event, user, 'github')
+    await setUserSession(event, { user: dbUser })
+    return sendRedirect(event, '/home')
+  },
+})

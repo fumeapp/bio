@@ -14,14 +14,8 @@ const { crumbs, actions } = useCrumb()
     </template>
     <template #right>
       <div class="flex items-center space-x-2">
-        <client-only>
-          <header-auth />
-          <u-color-mode-button />
-          <template #fallback>
-            <u-skeleton class="w-8 h-8 rounded-full" />
-            <u-skeleton class="w-8 h-8 rounded-full" />
-          </template>
-        </client-only>
+        <header-auth />
+        <u-color-mode-button />
       </div>
     </template>
   </u-header>
