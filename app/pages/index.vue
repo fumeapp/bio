@@ -9,7 +9,6 @@ const { user } = useUserSession()
     <logo-text class="text-5xl mb-8" />
     <layout-login v-if="!user" />
     <u-button v-else class="w-28" icon="i-mdi-home" label="Home" to="/home" size="lg" color="gray" />
-    <modal-login />
   </div>
 </template>
 

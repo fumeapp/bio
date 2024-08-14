@@ -35,9 +35,7 @@ const providers = reactive<Provider[]>([
 </script>
 
 <template>
-  <div class="max-w-xs w-full mx-auto">
-    <u-auth-form
-      :providers="providers"
-    />
-  </Div>
+  <u-button-group>
+    <u-button v-for="provider in providers" :key="provider.name" v-bind="provider" @click="provider.click" />
+  </u-button-group>
 </template>
