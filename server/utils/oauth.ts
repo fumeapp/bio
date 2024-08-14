@@ -33,6 +33,7 @@ const signIn = async (event: H3Event<EventHandlerRequest>, oauthPayload: any, pr
     info.avatar = ''
   }
 
+  console.log(info)
   user = await prisma.user.findUnique({
     where: {
       email: info.email,

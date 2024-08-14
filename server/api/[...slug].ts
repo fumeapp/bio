@@ -1,5 +1,5 @@
-import type { Router } from 'h3'
 import { createRouter, useBase } from 'h3'
+import type { Token } from '@prisma/client'
 import { githubHandler, googleHandler } from '../utils/oauth'
 import logout from './routes/logout'
 import me from './routes/me'
@@ -14,17 +14,14 @@ import user from './routes/user'
 
 const router = createRouter()
 
-routing.middleware('auth', router).group((router: Router) => {
-  console.log('were in our group', router)
-  router.get('/test', defineEventHandler(() => metapi().success('heyoo')))
-})
+router.get('/me', routing.authedEventHandler(async ({ user }) => metapi().render(user)))
+router.get('/tokentest/:token', routing.routeModelHandler('token', async ({ mdl }: { mdl: Token }) => metapi().render(mdl)))
 
 router.get('/**', defineEventHandler(event => metapi().notFound(event)))
 
 router.get('/oauth/google', googleHandler)
 router.get('/oauth/github', githubHandler)
 router.get('/oauth/microsoft', microsoftHandler)
-router.get('/me', me)
 
 router.get('/logout', logout)
 
