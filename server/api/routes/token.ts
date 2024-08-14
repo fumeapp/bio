@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 const index = defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event)
+  console.log('we are passed requireUserSession')
   return metapi().render(
     await prisma.$extends({
       result: {

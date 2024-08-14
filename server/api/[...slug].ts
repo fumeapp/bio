@@ -1,3 +1,4 @@
+import type { Router } from 'h3'
 import { createRouter, useBase } from 'h3'
 import { githubHandler, googleHandler } from '../utils/oauth'
 import logout from './routes/logout'
@@ -13,15 +14,20 @@ import user from './routes/user'
 
 const router = createRouter()
 
+routing.middleware('auth', router).group((router: Router) => {
+  console.log('were in our group', router)
+  router.get('/test', defineEventHandler(() => metapi().success('heyoo')))
+})
+
 router.get('/**', defineEventHandler(event => metapi().notFound(event)))
 
 router.get('/oauth/google', googleHandler)
 router.get('/oauth/github', githubHandler)
 router.get('/oauth/microsoft', microsoftHandler)
+router.get('/me', me)
 
 router.get('/logout', logout)
 
-router.get('/me', me)
 routing.apiResource('token', router, token)
 routing.apiResource('pen', router, pen)
 routing.apiResource('cartridge', router, cartridge)

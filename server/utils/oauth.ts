@@ -28,8 +28,8 @@ const signIn = async (event: H3Event<EventHandlerRequest>, oauthPayload: any, pr
 
   if (provider === 'microsoft') {
     userPayload = oauthPayload as MicrosoftUserInfo
-    info.email = userPayload.displayName
-    info.name = userPayload.givenName
+    info.email = userPayload.mail
+    info.name = userPayload.displayName
     info.avatar = ''
   }
 

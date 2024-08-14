@@ -8,6 +8,15 @@ interface ApiRoutes {
   remove?: (event: H3Event<EventHandlerRequest>) => Promise<any>
 }
 
+const middleware = (name: string, router: Router) => {
+  // apply here?
+  return {
+    group: (groupFunction: (router: Router) => void) => {
+      groupFunction(router)
+    },
+  }
+}
+
 const apiResource = (
   name: string,
   router: Router,
@@ -32,4 +41,5 @@ const routeParams = (event: H3Event, positions: any) => {
 export const routing = {
   apiResource,
   routeParams,
+  middleware,
 }
