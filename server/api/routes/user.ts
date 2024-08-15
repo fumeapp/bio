@@ -1,10 +1,7 @@
 import { z } from 'zod'
 import type { User } from '~/types/models'
-import { eventModelHandler } from '~~/server/utils/handlers'
 
-const index = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  if (!user.isAdmin) return metapi().notFound(event)
+const index = authedHandler(async () => {
   return metapi().render(
     await prisma.user.findMany({
       include: {
@@ -24,9 +21,9 @@ const index = defineEventHandler(async (event) => {
       },
     }),
   )
-})
+}, true)
 
-const get = eventModelHandler<User>(async ({ user, event, model }) => {
+const get = authedModelHandler<User>(async ({ event, model }) => {
   return metapi().renderNullError(event, model)
 }, { admin: true, bindUser: false })
 

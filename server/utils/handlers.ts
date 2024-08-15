@@ -1,7 +1,13 @@
 import type { H3Event } from 'h3'
 import type { User } from '~/types/models'
 
-export function authedEventHandler<T>(handler: ({ user, event }: { user: User, event: H3Event }) => Promise<T>) {
+/**
+ * eventHandler wrapper that requires the user to be authenticated with an option to also require user.isAdmin
+ * @param handler
+ * @param requireAdmin
+ * @returns ({ user, event }: { user: User, event: H3Event }) => Promise<T>
+ */
+export function authedHandler<T>(handler: ({ user, event }: { user: User, event: H3Event }) => Promise<T>, requireAdmin = false) {
   return defineEventHandler(async (event: H3Event) => {
     const { user } = await requireUserSession(event)
     try {
@@ -15,13 +21,7 @@ export function authedEventHandler<T>(handler: ({ user, event }: { user: User, e
       clearUserSession(event)
       throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
     }
-    return handler({ user, event })
-  })
-}
-
-export function adminEventHandler(handler: ({ user, event }: { user: User, event: H3Event }) => Promise<any>) {
-  return authedEventHandler(async ({ user, event }) => {
-    if (!user.isAdmin) return metapi().notFound(event)
+    if (requireAdmin && !user.isAdmin) return metapi().notFound(event)
     return handler({ user, event })
   })
 }
@@ -50,6 +50,8 @@ interface ModelOptions {
    */
   props?: object
 }
+
+type BaseModelOptions = Omit<ModelOptions, 'authed' | 'admin' | 'bindUser'>
 
 async function handleModelLookup(event: H3Event, options: ModelOptions, user?: User) {
   if (
@@ -89,22 +91,34 @@ async function handleModelLookup(event: H3Event, options: ModelOptions, user?: U
   return model
 }
 
-export function eventModelHandler<T>(handler: ({ user, event, model }: { user?: User, event: H3Event, model: T }) => Promise<any>, options?: ModelOptions) {
+function mergeOptions(options?: ModelOptions) {
   const defaultOptions = {
     authed: true,
+    admin: false,
     bindUser: true,
     props: {},
   }
 
-  const mergedOptions = { ...defaultOptions, ...options }
+  return { ...defaultOptions, ...options }
+}
 
-  if (!mergedOptions.authed)
-    return defineEventHandler(async (event: H3Event) => {
-      const model = await handleModelLookup(event, mergedOptions)
-      return handler({ event, model })
-    })
+export function modelHandler<T>(
+  handler: ({ event, model }: { user?: User, event: H3Event, model: T }) => Promise<any>,
+  options?: BaseModelOptions,
+) {
+  return defineEventHandler(async (event: H3Event) => {
+    const model = await handleModelLookup(event, mergeOptions(options))
+    return handler({ event, model })
+  })
+}
 
-  return authedEventHandler(async ({ user, event }) => {
+export function authedModelHandler<T>(
+  handler: ({ user, event, model }: { user: User, event: H3Event, model: T }) => Promise<any>,
+  options?: ModelOptions,
+) {
+  const mergedOptions = mergeOptions(options)
+
+  return authedHandler(async ({ user, event }) => {
     const model = await handleModelLookup(event, mergedOptions, user)
     if (mergedOptions.admin && !user.isAdmin) return metapi().notFound(event)
     return handler({ user, event, model })

@@ -1,1 +1,1 @@
-export default authedEventHandler(async ({ user }) => metapi().render(user))
+export default authedHandler(async ({ user }) => metapi().render(user))
