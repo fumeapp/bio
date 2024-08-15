@@ -34,9 +34,8 @@ const create = async () => useApi()
 </script>
 
 <template>
-  <u-form ref="form" :state="state" class="space-y-4" @submit="create">
-    <span v-if="!pen.cartridge"> Cartridge Required </span>
-    <u-button-group v-else orientation="vertical" class="w-52">
+  <u-form v-if="pen.cartridge" ref="form" :state="state" class="space-y-4" @submit="create">
+    <u-button-group orientation="vertical" class="w-52">
       <u-select-menu
         v-model="state.units"
         value-attribute="value"

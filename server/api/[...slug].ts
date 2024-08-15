@@ -1,5 +1,4 @@
 import { createRouter, useBase } from 'h3'
-import type { Token } from '@prisma/client'
 import { githubHandler, googleHandler } from '../utils/oauth'
 import logout from './routes/logout'
 import me from './routes/me'
@@ -14,9 +13,7 @@ import user from './routes/user'
 
 const router = createRouter()
 
-router.get('/me', routing.authedEventHandler(async ({ user }) => metapi().render(user)))
-router.get('/tokentest/:token', routing.routeModelHandler('token', async ({ mdl }: { mdl: Token }) => metapi().render(mdl)))
-
+router.get('/me', me)
 router.get('/**', defineEventHandler(event => metapi().notFound(event)))
 
 router.get('/oauth/google', googleHandler)

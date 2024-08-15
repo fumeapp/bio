@@ -1,8 +1,7 @@
 import { z } from 'zod'
 import { penColors } from '~/utils/shared'
 
-const index = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
+const index = authedEventHandler(async ({ user, event }) => {
   if (!user.isAdmin) return metapi().notFound(event)
   const schema = z.object({ id: z.number() })
   const parsed = schema.safeParse({ id: Number.parseInt(event.context.params?.user as string) })
@@ -43,8 +42,7 @@ const create = defineEventHandler(async (event) => {
   return metapi().success('pen created', pen)
 })
 
-const update = defineEventHandler(async (event) => {
-  const { user } = await getUserSession(event)
+const update = authedEventHandler(async ({ user, event }) => {
   if (!user.isAdmin) return metapi().notFound(event)
   const schema = z.object({
     id: z.number(),
