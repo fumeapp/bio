@@ -32,16 +32,18 @@ export default defineNuxtConfig({
       google: {
         clientId: '',
         clientSecret: '',
+        redirectURL: '',
       },
       microsoft: {
         clientId: '',
         clientSecret: '',
         tenant: '',
-        redirectUrl: '',
+        redirectURL: '',
       },
       github: {
         clientId: '',
         clientSecret: '',
+        redirectURL: '',
       },
     },
     public: {

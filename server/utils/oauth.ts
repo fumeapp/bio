@@ -33,7 +33,6 @@ const signIn = async (event: H3Event<EventHandlerRequest>, oauthPayload: any, pr
     info.avatar = ''
   }
 
-  console.log(info)
   user = await prisma.user.findUnique({
     where: {
       email: info.email,
@@ -109,13 +108,6 @@ const signIn = async (event: H3Event<EventHandlerRequest>, oauthPayload: any, pr
 }
 
 export const googleHandler = oauthGoogleEventHandler({
-  config: {
-    authorizationParams: import.meta.dev
-      ? {}
-      : {
-          redirect_uri: 'https://fume.bio/api/oauth/google',
-        },
-  },
   async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
     const dbUser = await signIn(event, user, 'google')
     await setUserSession(event, { user: dbUser })
@@ -132,13 +124,6 @@ export const microsoftHandler = oauthMicrosoftEventHandler({
 })
 
 export const githubHandler = oauthGitHubEventHandler({
-  config: {
-    authorizationParams: import.meta.dev
-      ? {}
-      : {
-          redirect_uri: 'https://fume.bio/api/oauth/github',
-        },
-  },
   async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
     const dbUser = await signIn(event, user, 'github')
     await setUserSession(event, { user: dbUser })
