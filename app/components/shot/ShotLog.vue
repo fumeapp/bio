@@ -13,8 +13,8 @@ const remove = async (id: bigint) =>
 
 <template>
   <div v-if="shots" class="border border-gray-300 dark:border-gray-800 rounded-lg flex flex-col divide-y divide-gray-300 dark:divide-gray-800">
-    <div v-for="shot in shots" :key="shot.id.toString()" class="py-1 px-4 flex items-center space-x-4">
-      <span> {{ shot.units }} units taken on {{ format(shot.date, 'eeee M/d/yy') }} </span>
+    <div v-for="shot in shots" :key="shot.id.toString()" class="py-1 px-4 flex items-center justify-between space-x-4 text-sm">
+      <span> {{ shot.units }} units {{ format(shot.date, 'eeee M/d/yy') }} </span>
       <u-button icon="i-mdi-trash-can" size="2xs" color="red" variant="link" @click="remove(shot.id)" />
     </div>
   </div>

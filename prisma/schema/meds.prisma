@@ -32,7 +32,7 @@ model Shot {
   cartridgeId BigInt
   cartridge    Cartridge    @relation(fields: [cartridgeId], references: [id], onDelete: Cascade, onUpdate: Cascade )
   units Int
-  date DateTime @db.Date
+  date DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("shots")

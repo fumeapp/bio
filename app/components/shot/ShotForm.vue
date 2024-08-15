@@ -28,7 +28,7 @@ const create = async () => useApi()
   .setForm(form?.value)
   .api<MetapiResponse<Shot>>(
     route.params.user ? `/api/user/${route.params.user}/shot` : '/api/shot',
-    { method: 'POST', body: state },
+    { method: 'POST', body: { ...state, date: toUtc(state.date) } },
   )
   .then(() => emit('created'))
 </script>

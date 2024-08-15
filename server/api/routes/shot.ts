@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { format } from 'date-fns'
 
 const index = defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event)
@@ -23,7 +24,7 @@ const create = defineEventHandler(async (event) => {
   const schema = z.object({
     cartridge: z.string(),
     units: z.number(),
-    date: z.string().date(),
+    date: z.string().datetime(),
   })
   const parsed = schema.safeParse(await readBody(event))
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
@@ -46,7 +47,7 @@ const remove = defineEventHandler(async (event) => {
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
   await prisma.shot.delete({
     where: {
-      id: parsed.data.id,
+      id: BigInt(parsed.data.id),
       userId: user.id,
     },
   })

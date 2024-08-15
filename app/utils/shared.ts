@@ -5,6 +5,8 @@ import type { CookieOptions } from '#app'
 
 export type HeaderIconLink = HeaderLink & { icon: string }
 
+export const toUtc = (date: string) => new Date((new Date(date)).getTime() + (new Date(date)).getTimezoneOffset() * 60000)
+
 export const links: HeaderIconLink[] = [
   {
     label: 'Home',
