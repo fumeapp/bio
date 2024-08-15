@@ -113,7 +113,7 @@ export const googleHandler = oauthGoogleEventHandler({
     authorizationParams: import.meta.dev
       ? {}
       : {
-          redirect_uri: 'https://fume.bio/api/oauth/google/callback',
+          redirect_uri: 'https://fume.bio/api/oauth/google',
         },
   },
   async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
@@ -136,7 +136,7 @@ export const githubHandler = oauthGitHubEventHandler({
     authorizationParams: import.meta.dev
       ? {}
       : {
-          redirect_uri: 'https://fume.bio/api/oauth/github/callback',
+          redirect_uri: 'https://fume.bio/api/oauth/github',
         },
   },
   async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
