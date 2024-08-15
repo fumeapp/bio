@@ -32,6 +32,8 @@ export default defineNuxtConfig({
       google: {
         clientId: '',
         clientSecret: '',
+        redirectUri: '',
+        redirectUrl: '',
       },
       microsoft: {
         clientId: '',
