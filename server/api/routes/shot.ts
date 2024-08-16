@@ -8,6 +8,9 @@ const index = defineEventHandler(async (event) => {
       where: {
         userId: user.id,
       },
+      orderBy: {
+        date: 'desc',
+      },
       include: {
         cartridge: {
           include: {

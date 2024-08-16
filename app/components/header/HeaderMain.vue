@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { links } from '~/utils/shared'
-
 const { crumbs, actions } = useCrumb()
 </script>
 
 <template>
-  <u-header :links="links">
+  <u-header>
     <template #logo>
       <div class="flex items-center">
         <logo-bio class="w-12 h-12" />

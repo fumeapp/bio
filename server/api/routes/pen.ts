@@ -11,7 +11,11 @@ const index = defineEventHandler(async (event) => {
       include: {
         cartridge: {
           include: {
-            shots: true,
+            shots: {
+              orderBy: {
+                date: 'asc',
+              },
+            },
           },
         },
       },
