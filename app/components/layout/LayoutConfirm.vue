@@ -1,9 +1,15 @@
 <script lang="ts" setup>
 const { confirming, params } = useConfirm()
+const primary = ref()
 function action(): void {
   confirming.value = false
   params.value.action()
 }
+
+watch(confirming, () => {
+  if (confirming.value)
+    setTimeout(() => primary.value?.$el.focus(), 500)
+})
 </script>
 
 <template>
@@ -18,7 +24,7 @@ function action(): void {
   >
     <template #footer>
       <div class="flex flex-row-reverse justify-start">
-        <u-button color="red" variant="solid" class="ml-2" @click="action"> {{ params.label }}</u-button>
+        <u-button ref="primary" color="red" variant="solid" class="ml-2" @click="action"> {{ params.label }}</u-button>
         <u-button color="white" @click="confirming = false"> Cancel </u-button>
       </div>
     </template>
