@@ -8,7 +8,7 @@ function action(): void {
 
 watch(confirming, () => {
   if (confirming.value)
-    setTimeout(() => primary.value?.$el.focus(), 500)
+    setTimeout(() => primary.value?.$el.focus(), 200)
 })
 </script>
 

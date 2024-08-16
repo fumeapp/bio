@@ -29,7 +29,7 @@ const create = defineEventHandler(async (event) => {
     user: z.string(),
     cartridge: z.string(),
     units: z.number(),
-    date: z.string().date(),
+    date: z.string().datetime(),
   })
   const parsed = schema.safeParse(await readBody(event))
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
