@@ -1,4 +1,6 @@
 import { z } from 'zod'
+import type { H3Event } from 'h3'
+import type { Pen } from '~/types/models'
 import { penColors } from '~/utils/shared'
 
 const index = authedHandler(async ({ user, event }) => {
@@ -20,7 +22,7 @@ const index = authedHandler(async ({ user, event }) => {
       },
     }),
   )
-})
+}, true)
 
 const create = defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event)
@@ -43,7 +45,6 @@ const create = defineEventHandler(async (event) => {
 })
 
 const update = authedHandler(async ({ user, event }) => {
-  if (!user.isAdmin) return metapi().notFound(event)
   const schema = z.object({
     id: z.number(),
     user: z.number(),
@@ -70,50 +71,24 @@ const update = authedHandler(async ({ user, event }) => {
   })
 
   return metapi().success('pen updated', pen)
-})
+}, true)
 
-const get = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  if (!user.isAdmin) return metapi().notFound(event)
-  const schema = z.object({ id: z.number(), user: z.number() })
-  const parsed = schema.safeParse({
-    id: event.context.params?.id,
-    user: Number.parseInt(event.context.params?.user as string),
-  })
-  if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
+const get = authedModelHandler(async ({ model }: { model: Pen }) => {
+  console.log('pens.get')
+  return metapi().render(model)
+}, { admin: true })
 
-  return metapi().renderNullError(event, await prisma.pen.findUnique({
-    where: {
-      id: parsed.data.id,
-      userId: BigInt(parsed.data.id),
-    },
-  }))
-})
-
-const remove = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  if (!user.isAdmin) return metapi().notFound(event)
-  const schema = z.object({ id: z.number(), user: z.number() })
-  const parsed = schema.safeParse({ id: event.context.params?.id, user: Number.parseInt(event.context.params?.user as string) })
-  if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
-  const pen = await prisma.pen.findFirst({
-    where: {
-      id: parsed.data.id,
-      userId: BigInt(parsed.data.id),
-    },
-  })
-
-  if (pen?.cartridgeId !== null)
+const remove = authedModelHandler(async ({ event, model }: { event: H3Event, model: Pen }) => {
+  if (model?.cartridgeId !== null)
     return metapi().error(event, 'Cannot delete pen with cartridge', 400)
 
   await prisma.pen.delete({
     where: {
-      id: parsed.data.id,
-      userId: BigInt(parsed.data.id),
+      id: model.id,
     },
   })
   return metapi().success('pen deleted')
-})
+}, { admin: true })
 
 export default {
   index,
