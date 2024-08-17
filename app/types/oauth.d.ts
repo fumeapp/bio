@@ -2,6 +2,7 @@ export interface UserInfo {
   name: string
   avatar: string
   email: string
+  payload?: UserPayload
 }
 
 export interface GoogleUserInfo {

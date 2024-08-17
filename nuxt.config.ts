@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxt/image',
     'nuxt-auth-utils',
+    "@nuxt/test-utils"
   ],
   eslint: {
     config: {
