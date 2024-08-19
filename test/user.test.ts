@@ -7,7 +7,7 @@ import type { User } from '~/types/models'
 
 const users = [
   {
-    session: {},
+    session: {} as User,
     email: 'test@test.com',
     name: 'Test User',
     avatar: 'https://avatars.githubusercontent.com/u/31337?v=4',
@@ -18,6 +18,7 @@ const users = [
     },
   },
   {
+    session: {} as User,
     email: 'admin@test.com',
     name: 'Admin User',
     avatar: 'https://avatars.githubusercontent.com/u/31337?v=4',
@@ -36,7 +37,7 @@ beforeAll(async () => {
 
 async function actingAs(email: string) {
   const user = users.find(user => user.email === email)
-  const { data } = await $fetch('/api/test/session', { method: 'POST', body: user?.session })
+  const { data } = await $fetch('/api/test/session', { method: 'POST', body: { id: user?.session?.id.toString(), hash: user?.session?.hash } })
   const cookie = data.headers[1].split(';')[0]
   const get = (url: string) => $fetch(url, { headers: { cookie } })
   return { get }
@@ -52,7 +53,7 @@ describe('/api/me', async () => {
 
   it('returns the currently loggeed in user', async () => {
     const response = await (await actingAs('test@test.com')).get('/api/me') as MetapiResponse<User>
-    expect(JSON.stringify(response.data)).toEqual(JSON.stringify(users[0]?.session))
+    expect(response.data.email).toEqual(users[0]?.session.email)
   })
 })
 
@@ -62,5 +63,10 @@ describe('/api/user', async () => {
     catch (error: any) {
       expect(error.response.status).toBe(404)
     }
+  })
+
+  it ('should return a list of all users if an admin accesses it', async () => {
+    const response = await (await actingAs('admin@test.com')).get('/api/user') as MetapiResponse<User[]>
+    expect(response.data.length).toBe(2)
   })
 })

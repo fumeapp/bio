@@ -56,7 +56,6 @@ type BaseModelOptions = Omit<ModelOptions, 'authed' | 'admin' | 'bindUser'>
 async function handleModelLookup(event: H3Event, options: ModelOptions, user?: User) {
   if (['PUT', 'DELETE'].includes(event.method) && event.context.params?._) {
     const parsed = event.context.params._.split('/')
-    console.log('matchedRoute', event.context.matchedRoute.path)
     event.context.params.id = parsed[parsed.length - 1]
   }
 
