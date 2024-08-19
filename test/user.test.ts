@@ -55,3 +55,12 @@ describe('/api/me', async () => {
     expect(JSON.stringify(response.data)).toEqual(JSON.stringify(users[0]?.session))
   })
 })
+
+describe('/api/user', async () => {
+  it ('should 404 if a non-admin accesses it', async () => {
+    try { await (await actingAs('test@test.com')).get('/api/user') }
+    catch (error: any) {
+      expect(error.response.status).toBe(404)
+    }
+  })
+})

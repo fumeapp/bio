@@ -1,4 +1,3 @@
-import { z } from 'zod'
 import type { User } from '~/types/models'
 
 const index = authedHandler(async () => {
