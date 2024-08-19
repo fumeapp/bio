@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxt/image',
     'nuxt-auth-utils',
-    "@nuxt/test-utils"
+    '@nuxt/test-utils',
   ],
   eslint: {
     config: {
@@ -25,6 +25,7 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2024-08-01',
   runtimeConfig: {
+    appEnv: '',
     session: {
       maxAge: 60 * 60 * 24 * 365, // 1 year
       name: 'fumebio-session',

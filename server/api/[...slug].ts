@@ -1,7 +1,6 @@
 import { createRouter, useBase } from 'h3'
 import { githubHandler, googleHandler } from '../utils/oauth'
 import logout from '../controllers/logout'
-import me from '../controllers/me'
 import token from '../controllers/token'
 import pen from '../controllers/pen'
 import pens from '../controllers/pens'
@@ -10,11 +9,15 @@ import cartridges from '../controllers/cartridges'
 import shots from '../controllers/shots'
 import shot from '../controllers/shot'
 import user from '../controllers/user'
+import test from '../controllers/test'
 
 const router = createRouter()
 
-router.get('/me', me)
+router.get('/me', authedHandler(async ({ user }) => metapi().render(user)))
 router.get('/**', defineEventHandler(event => metapi().notFound(event)))
+
+if (useRuntimeConfig().appEnv === 'test')
+  router.post('/test/session', test.create)
 
 router.get('/oauth/google', googleHandler)
 router.get('/oauth/github', githubHandler)
