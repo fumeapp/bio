@@ -48,6 +48,9 @@ jobs:
       - name: Install Dependencies
         run: pnpm i
 
+      - name: Generate Prisma deps
+        run: npx prisma generate
+
       - name: Build
         env:
           NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
@@ -62,4 +65,5 @@ jobs:
       - name: Run Vitest
         env:
           NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
+          NODE_ENV: test
         run: pnpm run test
