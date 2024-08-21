@@ -1,12 +1,12 @@
-import { beforeAll, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { $fetch, setup } from '@nuxt/test-utils/e2e'
 import { actingAs, setupUsers, users } from './auth'
 import { setupConfig } from './config'
 import type { MetapiResponse } from '~/types/metapi'
 import type { User } from '~/types/models'
 
-beforeAll(setupUsers)
 describe('/api/me and /api/user', async () => {
+  await setupUsers()
   await setup(setupConfig())
   it('/api/me should 401', async () => {
     try { await $fetch('/api/me') }

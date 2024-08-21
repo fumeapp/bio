@@ -1,11 +1,11 @@
 import { $fetch } from '@nuxt/test-utils/e2e'
-import type { User } from '~/types/models'
+import type { User, UserSession } from '~/types/models'
 import { createUser } from '~~/server/utils/user'
 
 const users = [
   {
     session: {} as User,
-    cookie: '',
+    cookie: undefined,
     email: 'test@test.com',
     name: 'Test User',
     avatar: 'https://avatars.githubusercontent.com/u/31337?v=4',
@@ -27,12 +27,12 @@ const users = [
       },
     },
   },
-]
+] as UserSession[]
 
 async function setupUsers() {
-  await Promise.all(users.map(async (userData) => {
-    if (userData.session?.id) return
-    userData.session = await createUser(userData, 'github', {})
+  await Promise.all(users.map(async (userData, index) => {
+    if (users[index].session?.id) return
+    users[index].session = await createUser(userData, 'github', {})
   }))
 }
 

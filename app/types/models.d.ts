@@ -25,6 +25,11 @@ export interface User extends PrismaUser {
   hash: string
 }
 
+export interface UserSession extends User {
+  session: User
+  cookie?: string
+}
+
 export interface Shot extends PrismaShot {
   cartridge?: Cartridge
 }

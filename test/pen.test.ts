@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { setup } from '@nuxt/test-utils'
 import { actingAs, setupUsers, userFromEmail } from './auth'
 import { setupConfig } from './config'
@@ -6,8 +6,8 @@ import { penColors } from '~/utils/shared'
 import type { MetapiResponse } from '~/types/metapi'
 import type { Pen } from '~/types/models'
 
-beforeAll(setupUsers)
 describe('/api/pen', async () => {
+  await setupUsers()
   await setup(setupConfig())
 
   const pens: Pen[] = []
