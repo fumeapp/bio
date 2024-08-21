@@ -4,7 +4,7 @@ on:
     types: [synchronize, ready_for_review]
 
 jobs:
-  eslint:
+  test:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +36,7 @@ jobs:
       - name: Set up MySQL
         run: |
           sudo service mysql restart
-          mysql -e 'CREATE DATABASE bio-test;' -uroot -proot
+          mysql -e 'CREATE DATABASE `bio-test`;' -uroot -proot
 
       - name: Run Migrations
         run: pnpm run db:test:reset
