@@ -59,7 +59,7 @@ async function actingAs(email: string) {
 }
 
 describe('/api/me', async () => {
-  await setupDev()
+  await setup()
   it('should 401', async () => {
     try { await $fetch('/api/me') }
     catch (error: any) {
@@ -75,7 +75,7 @@ describe('/api/me', async () => {
 })
 
 describe('/api/user', async () => {
-  await setupDev()
+  await setup()
   it ('should 404 if a non-admin accesses it', async () => {
     try {
       await (await actingAs('test@test.com')).get('/api/user')
