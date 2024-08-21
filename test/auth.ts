@@ -1,4 +1,5 @@
 import { $fetch } from '@nuxt/test-utils/e2e'
+import type { MetapiResponse } from '~/types/metapi'
 import type { User, UserSession } from '~/types/models'
 import { createUser } from '~~/server/utils/user'
 
@@ -42,10 +43,10 @@ async function actingAs(email: string) {
   const user = await userFromEmail(email)
   const { data } = await $fetch('/api/test/session', { method: 'POST', body: { id: user?.session?.id.toString(), hash: user?.session?.hash } })
   user.cookie = data.cookie[1].split(';')[0] as string
-  const get = (url: string) => $fetch(url, { headers: { cookie: user.cookie as string } })
-  const post = (url: string, params: object) => $fetch(url, { method: 'POST', body: params, headers: { cookie: user.cookie as string } })
-  const put = (url: string, params: object) => $fetch(url, { method: 'PUT', body: params, headers: { cookie: user.cookie as string } })
-  return { get, post, put }
+  const get = <T>(url: string) => $fetch<MetapiResponse<T>>(url, { headers: { cookie: user.cookie as string } })
+  const post = <T>(url: string, params: object) => $fetch<MetapiResponse<T>>(url, { method: 'POST', body: params, headers: { cookie: user.cookie as string } })
+  const put = <T>(url: string, params: object) => $fetch<MetapiResponse<T>>(url, { method: 'PUT', body: params, headers: { cookie: user.cookie as string } })
+  return { get, post, put, user }
 }
 
 export {
