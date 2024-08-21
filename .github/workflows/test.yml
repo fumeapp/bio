@@ -1,0 +1,45 @@
+name: Run Tests
+on:
+  pull_request:
+    types: [synchronize, ready_for_review]
+
+jobs:
+  eslint:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 9
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install Dependencies
+        run: pnpm i
+
+      - name: Set up MySQL
+        run: |
+          sudo service mysql restart
+          mysql -e 'CREATE DATABASE bio-test;' -uroot
+
+      - name: Run Migrations
+        run: pnpm run db:test:reset
+
+      - name: Run Vitest
+        run: pnpm run test
