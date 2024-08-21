@@ -9,7 +9,6 @@ const create = defineEventHandler(async (event) => {
   }) as unknown as User
 
   user.hash = hash
-  console.log('test.create', user)
   await setUserSession(event, { user })
   return metapi().success('test session created', { headers: event.node.res.getHeader('set-cookie') })
 })

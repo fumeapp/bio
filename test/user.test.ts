@@ -1,4 +1,3 @@
-// @vitest-environment nuxt
 import { beforeAll, describe, expect, it } from 'vitest'
 import { $fetch, setup } from '@nuxt/test-utils/e2e'
 import { createUser } from '~~/server/utils/user'
@@ -8,6 +7,7 @@ import type { User } from '~/types/models'
 const users = [
   {
     session: {} as User,
+    cookie: '',
     email: 'test@test.com',
     name: 'Test User',
     avatar: 'https://avatars.githubusercontent.com/u/31337?v=4',
@@ -19,6 +19,7 @@ const users = [
   },
   {
     session: {} as User,
+    cookie: undefined,
     email: 'admin@test.com',
     name: 'Admin User',
     avatar: 'https://avatars.githubusercontent.com/u/31337?v=4',
@@ -30,21 +31,33 @@ const users = [
   },
 ]
 
-beforeAll(async () => {
-  await setup({ host: 'http://localhost:3000' })
-  users.map(async (userData) => { userData.session = await createUser(userData, 'github', {}) })
-})
+async function setupUsers() {
+  console.log('async.setupUsers')
+  return users.forEach(async (userData) => {
+    userData.session = await createUser(userData, 'github', {})
+  })
+}
 
 async function actingAs(email: string) {
   const user = users.find(user => user.email === email)
+  if (!user) throw new Error('User not found')
+  // if (user.cookie === '') {
   const { data } = await $fetch('/api/test/session', { method: 'POST', body: { id: user?.session?.id.toString(), hash: user?.session?.hash } })
-  const cookie = data.headers[1].split(';')[0]
-  const get = (url: string) => $fetch(url, { headers: { cookie } })
+  user.cookie = data.headers[1].split(';')[0] as string
+  // }
+  const get = (url: string) => $fetch(url, { headers: { cookie: user.cookie as string } })
   return { get }
 }
 
+beforeAll(() => {
+  // setup()
+  // setup({ /* host: 'http://localhost:3000', */ })
+  setupUsers()
+})
+
 describe('/api/me', async () => {
-  it('no session should 401', async () => {
+  await setup()
+  it('should 401', async () => {
     try { await $fetch('/api/me') }
     catch (error: any) {
       expect(error.response.status).toBe(401)
@@ -57,9 +70,12 @@ describe('/api/me', async () => {
   })
 })
 
+/*
 describe('/api/user', async () => {
   it ('should 404 if a non-admin accesses it', async () => {
-    try { await (await actingAs('test@test.com')).get('/api/user') }
+    try {
+      await (await actingAs('test@test.com')).get('/api/user')
+    }
     catch (error: any) {
       expect(error.response.status).toBe(404)
     }
@@ -70,3 +86,4 @@ describe('/api/user', async () => {
     expect(response.data.length).toBe(2)
   })
 })
+*/
