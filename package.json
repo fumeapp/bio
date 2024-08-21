@@ -10,7 +10,7 @@
     "preview": "nuxt preview",
     "test": "vitest run",
     "test:dev": "DEVRUN=true vitest run",
-    "test:reset": "pnpm run test:db-reset; vitest run",
+    "test:reset": "pnpm run db:test:reset; vitest run",
     "db:test:reset": "dotenv -e .env.test -- npx prisma migrate reset --force",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

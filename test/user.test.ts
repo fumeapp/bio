@@ -37,9 +37,10 @@ beforeAll(async () => {
 
 async function setupDev() {
   if (process.env.DEVRUN === 'true')
-    setup({ host: 'http://localhost:3000' })
+    await setup({ host: 'http://localhost:3000' })
+
   else
-    setup()
+    await setup({ server: true })
 }
 
 async function setupUsers() {

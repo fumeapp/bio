@@ -7,9 +7,7 @@ export default defineVitestConfig({
     environmentOptions: {
       nuxt: {
         override: {
-          runtimeConfig: {
-            appEnv: 'test',
-          },
+          dotenv: '.env.test',
         },
       },
     },
