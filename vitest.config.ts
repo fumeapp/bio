@@ -11,5 +11,9 @@ export default defineVitestConfig({
         },
       },
     },
+    coverage: {
+      reporter: ['text', 'json-summary', 'json'],
+      reportOnFailure: true,
+    },
   },
 })

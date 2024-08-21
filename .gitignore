@@ -24,3 +24,7 @@ logs
 !.env.example
 !.env.test
 !.env.test-action
+
+
+# Coverage
+app/coverage

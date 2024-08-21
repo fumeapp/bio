@@ -66,4 +66,6 @@ jobs:
         env:
           NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
           NODE_ENV: test
-        run: pnpm run test
+        run: pnpm run test:coverage
+        if: always()
+        uses: davelosert/vitest-coverage-report-action@v2

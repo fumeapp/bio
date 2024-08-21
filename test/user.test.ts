@@ -31,16 +31,13 @@ const users = [
   },
 ]
 
-beforeAll(async () => {
-  await setupUsers()
-})
+beforeAll(setupUsers)
 
-async function setupDev() {
+function setupConfig() {
   if (process.env.DEVRUN === 'true' && !process.env.CI)
-    await setup({ host: 'http://localhost:3000' })
-
+    return { host: 'http://localhost:3000' }
   else
-    await setup()
+    return {}
 }
 
 async function setupUsers() {
@@ -59,7 +56,7 @@ async function actingAs(email: string) {
 }
 
 describe('/api/me', async () => {
-  await setupDev()
+  await setup(setupConfig())
   it('should 401', async () => {
     try { await $fetch('/api/me') }
     catch (error: any) {
@@ -72,10 +69,7 @@ describe('/api/me', async () => {
     const response = await get('/api/me') as MetapiResponse<User>
     expect(response.data.email).toEqual(users[0]?.session.email)
   })
-})
 
-describe('/api/user', async () => {
-  await setupDev()
   it ('should 404 if a non-admin accesses it', async () => {
     try {
       await (await actingAs('test@test.com')).get('/api/user')
