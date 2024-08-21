@@ -1,19 +1,11 @@
-import { beforeAll, describe, expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { $fetch, setup } from '@nuxt/test-utils/e2e'
-import { actingAs, setupUsers, users } from './auth'
+import { actingAs, users } from './auth'
+import { setupConfig } from './config'
 import type { MetapiResponse } from '~/types/metapi'
 import type { User } from '~/types/models'
 
-beforeAll(setupUsers)
-
-function setupConfig() {
-  if (process.env.DEVRUN === 'true' && !process.env.CI)
-    return { host: 'http://localhost:3000' }
-  else
-    return {}
-}
-
-describe('/api/me', async () => {
+describe('/api/me and /api/user', async () => {
   await setup(setupConfig())
   it('/api/me should 401', async () => {
     try { await $fetch('/api/me') }
@@ -22,13 +14,13 @@ describe('/api/me', async () => {
     }
   })
 
-  it('/api/me returns the currently logged in user', async () => {
+  it('get /api/me - current user session', async () => {
     const { get } = await actingAs('test@test.com')
     const response = await get('/api/me') as MetapiResponse<User>
     expect(response.data.email).toEqual(users[0]?.session.email)
   })
 
-  it ('/api/user should 404 if a non-admin accesses it', async () => {
+  it ('get /api/user isAdmin: false - 404', async () => {
     try {
       await (await actingAs('test@test.com')).get('/api/user')
     }
@@ -37,8 +29,13 @@ describe('/api/me', async () => {
     }
   })
 
-  it ('/api/use should return a list of all users if an admin accesses it', async () => {
+  it ('get /api/user GET', async () => {
     const response = await (await actingAs('admin@test.com')).get('/api/user') as MetapiResponse<User[]>
     expect(response.data.length).toBe(2)
+  })
+
+  it ('get /api/user/:id', async () => {
+    const response = await (await actingAs('admin@test.com')).get(`/api/user/${users[0]?.session.id}`) as MetapiResponse<User>
+    expect(response.data.id).toBe(users[0]?.session.id.toString())
   })
 })

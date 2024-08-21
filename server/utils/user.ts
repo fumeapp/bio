@@ -34,6 +34,7 @@ export const createUser = async (info: UserInfo, provider: string, oauthPayload:
         },
       },
     }) as unknown as User
+
   else
     await prisma.provider.upsert({
       where: {

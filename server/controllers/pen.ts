@@ -1,6 +1,18 @@
 import { z } from 'zod'
 import { penColors } from '~/utils/shared'
 
+const inc = {
+  cartridge: {
+    include: {
+      shots: {
+        orderBy: {
+          date: 'asc',
+        },
+      },
+    },
+  },
+}
+
 const index = defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event)
   return metapi().render(
@@ -8,24 +20,18 @@ const index = defineEventHandler(async (event) => {
       where: {
         userId: BigInt(user.id),
       },
-      include: {
-        cartridge: {
-          include: {
-            shots: {
-              orderBy: {
-                date: 'asc',
-              },
-            },
-          },
-        },
+      include: inc,
+      orderBy: {
+        updatedAt: 'desc',
       },
     }),
   )
 })
 
-const create = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  const schema = z.object({ color: z.enum(penColors as [string, ...string[]]) })
+const create = authedHandler(async ({ user, event }) => {
+  const schema = z.object({
+    color: z.enum(penColors as [string, ...string[]]),
+  })
   const parsed = schema.safeParse(await readBody(event))
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
   const pen = await prisma.pen.create({
@@ -34,20 +40,22 @@ const create = defineEventHandler(async (event) => {
       userId: user.id,
       cartridgeId: null,
     },
+    include: inc,
   })
 
   return metapi().success('pen created', pen)
 })
 
-const update = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
+const update = authedHandler(async ({ user, event }) => {
   const schema = z.object({
     id: z.number(),
+    color: z.enum(penColors as [string, ...string[]]),
     cartridgeId: z.number().optional(),
   })
   const parsed = schema.safeParse({
     id: Number.parseInt(event.context.params?.id as string),
     cartridgeId: Number.parseInt((await readBody(event))?.cartridgeId) || undefined,
+    color: (await readBody(event))?.color || penColors[0],
   })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
   const pen = await prisma.pen.update({
@@ -57,7 +65,9 @@ const update = defineEventHandler(async (event) => {
     },
     data: {
       cartridgeId: parsed.data.cartridgeId ? BigInt(parsed.data.cartridgeId) : null,
+      color: parsed.data.color,
     },
+    include: inc,
   })
 
   return metapi().success('pen updated', pen)
@@ -74,6 +84,7 @@ const get = defineEventHandler(async (event) => {
       id: parsed.data.id,
       userId: user.id,
     },
+    include: inc,
   }))
 })
 

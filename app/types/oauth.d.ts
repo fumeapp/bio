@@ -1,7 +1,7 @@
 export interface UserInfo {
+  email: string
   name: string
   avatar: string
-  email: string
   payload?: UserPayload
 }
 
