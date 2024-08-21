@@ -1,7 +1,6 @@
 name: Run Tests
 on:
-  pull_request:
-    types: [synchronize, ready_for_review]
+  pull_request
 
 jobs:
   test:
