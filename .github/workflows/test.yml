@@ -53,7 +53,7 @@ jobs:
           NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
         run: pnpm run build
 
-      - name: rename .env.test-action to .env.test
+      - name: Rename .env.test-action to .env.test
         run: mv .env.test-action .env.test
 
       - name: Run Migrations

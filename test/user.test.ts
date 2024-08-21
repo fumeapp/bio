@@ -36,7 +36,7 @@ beforeAll(async () => {
 })
 
 async function setupDev() {
-  if (process.env.DEVRUN === 'true')
+  if (process.env.DEVRUN === 'true' && !process.env.CI)
     await setup({ host: 'http://localhost:3000' })
 
   else
