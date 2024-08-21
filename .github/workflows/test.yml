@@ -71,5 +71,5 @@ jobs:
         if: always()
         uses: davelosert/vitest-coverage-report-action@v2
         with:
-          json-summary-path: './app/coverage/coverage-summary.json'
-          json-final-path: './app/coverage/coverage-final.json
+          json-summary-path: './server/coverage/coverage-summary.json'
+          json-final-path: './server/coverage/coverage-final.json
