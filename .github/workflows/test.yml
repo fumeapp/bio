@@ -78,3 +78,4 @@ jobs:
         with:
           name: coverage
           path: ./server/coverage/coverage-final.json
+          file-coverage-mode: all
