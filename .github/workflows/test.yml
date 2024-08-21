@@ -15,7 +15,7 @@ jobs:
           # so we can create and migrate the test database.
           # See: https://hub.docker.com/_/mysql
           MYSQL_DATABASE: bio-test
-          MYSQL_ROOT_PASSWORD: ''
+          MYSQL_ROOT_PASSWORD: root
         ports:
           # Opens port 3306 on service container and host
           # https://docs.github.com/en/actions/using-containerized-services/about-service-containers
@@ -47,6 +47,9 @@ jobs:
 
       - name: Install Dependencies
         run: pnpm i
+
+      - name: rename .env.test-action to .env.test
+        run: mv .env.test-action .env.test
 
       - name: Run Migrations
         run: pnpm run db:test:reset
