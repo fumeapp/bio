@@ -35,5 +35,5 @@ export interface Cartridge extends PrismaCartridge {
 }
 
 export interface Pen extends PrismaPen {
-  cartridge?: Cartridge
+  cartridge: Cartridge | null
 }

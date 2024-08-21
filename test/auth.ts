@@ -31,28 +31,31 @@ const users = [
 
 async function setupUsers() {
   await Promise.all(users.map(async (userData) => {
+    if (userData.session?.id) return
     userData.session = await createUser(userData, 'github', {})
   }))
 }
 
-async function userFromEmail(email: string) {
+function userFromEmail(email: string) {
   const user = users.find(user => user.email === email)
   if (!user) throw new Error('User not found')
   return user
 }
 
 async function actingAs(email: string) {
-  const user = users.find(user => user.email === email)
+  const user = userFromEmail(email)
   if (!user) throw new Error('User not found')
   const { data } = await $fetch('/api/test/session', { method: 'POST', body: { id: user?.session?.id.toString(), hash: user?.session?.hash } })
   user.cookie = data.cookie[1].split(';')[0] as string
   const get = (url: string) => $fetch(url, { headers: { cookie: user.cookie as string } })
   const post = (url: string, params: object) => $fetch(url, { method: 'POST', body: params, headers: { cookie: user.cookie as string } })
-  return { get, post }
+  const put = (url: string, params: object) => $fetch(url, { method: 'PUT', body: params, headers: { cookie: user.cookie as string } })
+  return { get, post, put }
 }
 
 export {
   users,
   setupUsers,
   actingAs,
+  userFromEmail,
 }
