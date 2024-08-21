@@ -16,7 +16,6 @@ const router = createRouter()
 router.get('/me', authedHandler(async ({ user }) => metapi().render(user)))
 router.get('/**', defineEventHandler(event => metapi().notFound(event)))
 
-console.log('appEnv', useRuntimeConfig().appEnv)
 if (useRuntimeConfig().appEnv === 'test')
   router.post('/test/session', test.create)
 

@@ -10,8 +10,9 @@
     "preview": "nuxt preview",
     "test": "vitest run",
     "test:dev": "DEVRUN=true vitest run",
-    "test:reset": "pnpm run test:db-reset; vitest run",
+    "test:reset": "pnpm run db:test:reset; vitest run",
     "db:test:reset": "dotenv -e .env.test -- npx prisma migrate reset --force",
+    "test:coverage": "vitest run --coverage.enabled true",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint:action": "pnpm run lint -f @jamesacarr/github-actions"
@@ -32,6 +33,7 @@
     "@prisma/client": "^5.18.0",
     "@prisma/nuxt": "^0.0.35",
     "@types/ua-parser-js": "^0.7.39",
+    "@vitest/coverage-v8": "^2.0.5",
     "dotenv-cli": "^7.4.2",
     "happy-dom": "^14.12.3",
     "nuxt": "^3.12.4",
