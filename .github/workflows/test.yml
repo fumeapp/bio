@@ -58,4 +58,6 @@ jobs:
         run: pnpm run db:test:reset
 
       - name: Run Vitest
+        env:
+          NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
         run: pnpm run test
