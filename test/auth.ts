@@ -29,22 +29,17 @@ const users = [
   },
 ] as UserSession[]
 
-async function setupUsers() {
-  await Promise.all(users.map(async (userData, index) => {
-    if (users[index].session?.id) return
-    users[index].session = await createUser(userData, 'github', {})
-  }))
-}
-
-function userFromEmail(email: string) {
-  const user = users.find(user => user.email === email)
-  if (!user) throw new Error('User not found')
-  return user
+async function userFromEmail(email: string): Promise<UserSession> {
+  const index = users.findIndex(user => user.email === email)
+  if (index === undefined) throw new Error(`User not found: ${email} - ${index}`)
+  if (!users[index]) throw new Error('User not found')
+  if (!users[index].session?.id)
+    users[index].session = await createUser(users[index], 'github', {})
+  return users[index]
 }
 
 async function actingAs(email: string) {
-  const user = userFromEmail(email)
-  if (!user) throw new Error('User not found')
+  const user = await userFromEmail(email)
   const { data } = await $fetch('/api/test/session', { method: 'POST', body: { id: user?.session?.id.toString(), hash: user?.session?.hash } })
   user.cookie = data.cookie[1].split(';')[0] as string
   const get = (url: string) => $fetch(url, { headers: { cookie: user.cookie as string } })
@@ -55,7 +50,6 @@ async function actingAs(email: string) {
 
 export {
   users,
-  setupUsers,
   actingAs,
   userFromEmail,
 }
