@@ -5,12 +5,13 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "dev-test": "nuxt dev --dotenv .env.test",
+    "dev:test": "nuxt dev --dotenv .env.test",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "test": "vitest run",
+    "test:dev": "DEVRUN=true vitest run",
     "test:reset": "pnpm run test:db-reset; vitest run",
-    "test:db-reset": "dotenv -e .env.test -- npx prisma migrate reset --force",
+    "db:test:reset": "dotenv -e .env.test -- npx prisma migrate reset --force",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint:action": "pnpm run lint -f @jamesacarr/github-actions"

@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from 'vitest'
-import { $fetch, setup } from '@nuxt/test-utils/e2e'
+import { $fetch, fetch, setup } from '@nuxt/test-utils/e2e'
 import { createUser } from '~~/server/utils/user'
 import type { MetapiResponse } from '~/types/metapi'
 import type { User } from '~/types/models'
@@ -31,32 +31,34 @@ const users = [
   },
 ]
 
+beforeAll(async () => {
+  await setupUsers()
+})
+
+async function setupDev() {
+  if (process.env.DEVRUN === 'true')
+    setup({ host: 'http://localhost:3000' })
+  else
+    setup()
+}
+
 async function setupUsers() {
-  console.log('async.setupUsers')
-  return users.forEach(async (userData) => {
+  await Promise.all(users.map(async (userData) => {
     userData.session = await createUser(userData, 'github', {})
-  })
+  }))
 }
 
 async function actingAs(email: string) {
   const user = users.find(user => user.email === email)
   if (!user) throw new Error('User not found')
-  // if (user.cookie === '') {
   const { data } = await $fetch('/api/test/session', { method: 'POST', body: { id: user?.session?.id.toString(), hash: user?.session?.hash } })
-  user.cookie = data.headers[1].split(';')[0] as string
-  // }
+  user.cookie = data.cookie[1].split(';')[0] as string
   const get = (url: string) => $fetch(url, { headers: { cookie: user.cookie as string } })
   return { get }
 }
 
-beforeAll(() => {
-  // setup()
-  // setup({ /* host: 'http://localhost:3000', */ })
-  setupUsers()
-})
-
 describe('/api/me', async () => {
-  await setup()
+  await setupDev()
   it('should 401', async () => {
     try { await $fetch('/api/me') }
     catch (error: any) {
@@ -65,13 +67,14 @@ describe('/api/me', async () => {
   })
 
   it('returns the currently loggeed in user', async () => {
-    const response = await (await actingAs('test@test.com')).get('/api/me') as MetapiResponse<User>
+    const { get } = await actingAs('test@test.com')
+    const response = await get('/api/me') as MetapiResponse<User>
     expect(response.data.email).toEqual(users[0]?.session.email)
   })
 })
 
-/*
 describe('/api/user', async () => {
+  await setupDev()
   it ('should 404 if a non-admin accesses it', async () => {
     try {
       await (await actingAs('test@test.com')).get('/api/user')
@@ -86,4 +89,3 @@ describe('/api/user', async () => {
     expect(response.data.length).toBe(2)
   })
 })
-*/
