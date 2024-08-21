@@ -49,6 +49,8 @@ jobs:
         run: pnpm i
 
       - name: Build
+        env:
+          NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
         run: pnpm run build
 
       - name: rename .env.test-action to .env.test
