@@ -57,3 +57,5 @@ export const shotUnits = [
   25,
   50,
 ]
+
+export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))

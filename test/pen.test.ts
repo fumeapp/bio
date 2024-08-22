@@ -35,4 +35,12 @@ describe('/api/pen', async () => {
     const { data: pen } = await put<Pen>(`/api/pen/${pens[0]?.id}`, { color: penColors[1] })
     expect(pen.color).toBe(penColors[1])
   })
+
+  it ('delete /api/pen/:id - delete a pen', async () => {
+    if (!pens[0]) throw new Error('Pen not found')
+    const { remove, get } = await actingAs('test@test.com')
+    await remove<Pen>(`/api/pen/${pens[0]?.id}`)
+    try { await get<Pen[]>(`/api/pen/${pens[0]?.id}`) }
+    catch (error: any) { expect(error.response.status).toBe(404) }
+  })
 })

@@ -125,7 +125,7 @@ export function authedModelHandler<T>(
 
   return authedHandler(async ({ user, event }) => {
     const model = await handleModelLookup(event, mergedOptions, user)
-    if (mergedOptions.admin && !user.isAdmin) return metapi().notFound(event)
+    if (model === null || (mergedOptions.admin && !user.isAdmin)) return metapi().notFound(event)
     return handler({ user, event, model })
   })
 }

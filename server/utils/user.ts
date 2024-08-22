@@ -8,52 +8,46 @@ import type { TokenLocation, UserInfo } from '~/types/oauth'
 export const createUser = async (info: UserInfo, provider: string, oauthPayload: any, event?: H3Event): Promise<User> => {
   let user: User | null = null
 
-  user = await prisma.user.findUnique({
-    where: {
+  user = await prisma.user.upsert({
+    where: { email: info.email },
+    create: {
       email: info.email,
+      name: info.name,
+      avatar: info.avatar,
+      payload: (info.payload ? info.payload : ({ roles: { admin: false } } as UserPayload)) as unknown as Prisma.JsonObject,
+      providers: {
+        create: [
+          {
+
+            name: provider,
+            avatar: info.avatar,
+            payload: oauthPayload as unknown as Prisma.JsonObject,
+          },
+
+        ],
+      },
     },
+    update: {},
   }) as unknown as User
 
-  if (!user)
-    user = await prisma.user.create({
-      data: {
-        email: info.email,
-        name: info.name,
-        avatar: info.avatar,
-        payload: (info.payload ? info.payload : ({ roles: { admin: false } } as UserPayload)) as unknown as Prisma.JsonObject,
-        providers: {
-          create: [
-            {
-
-              name: provider,
-              avatar: info.avatar,
-              payload: oauthPayload as unknown as Prisma.JsonObject,
-            },
-
-          ],
-        },
-      },
-    }) as unknown as User
-
-  else
-    await prisma.provider.upsert({
-      where: {
-        userId_name: {
-          userId: BigInt(user.id),
-          name: provider,
-        },
-      },
-      update: {
-        avatar: info.avatar,
-        payload: oauthPayload as unknown as Prisma.JsonObject,
-      },
-      create: {
+  await prisma.provider.upsert({
+    where: {
+      userId_name: {
         userId: BigInt(user.id),
         name: provider,
-        avatar: info.avatar,
-        payload: oauthPayload as unknown as Prisma.JsonObject,
       },
-    })
+    },
+    update: {
+      avatar: info.avatar,
+      payload: oauthPayload as unknown as Prisma.JsonObject,
+    },
+    create: {
+      userId: BigInt(user.id),
+      name: provider,
+      avatar: info.avatar,
+      payload: oauthPayload as unknown as Prisma.JsonObject,
+    },
+  })
 
   const coordinate = event
     ? `${event.node.req.headers['Cloudfront-Viewer-Latitude']} ${event.node.req.headers['Cloudfront-Viewer-Longitude']}`
