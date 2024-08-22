@@ -62,8 +62,6 @@ async function handleModelLookup(event: H3Event, options: ModelOptions, user?: U
   )
     throw createError({ statusCode: 400, statusMessage: 'Invalid model Binding attempt' })
 
-  console.log('handleModelLookup', event.method, event.context.params)
-
   const vals = event.context.matchedRoute.path.split('/')
   const modelName = vals[vals.length - 2] as keyof typeof prisma
 

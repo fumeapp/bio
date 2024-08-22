@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import type { Cartridge } from '~/types/models'
 import { cartridgeContents, cartridgeMgs, cartridgeMls } from '~/utils/shared'
 
 const index = defineEventHandler(async (event) => {
@@ -12,6 +13,9 @@ const index = defineEventHandler(async (event) => {
       where: {
         userId: parsed.data.id,
       },
+      orderBy: {
+        updatedAt: 'desc',
+      },
       include: {
         pen: true,
         shots: true,
@@ -20,16 +24,14 @@ const index = defineEventHandler(async (event) => {
   )
 })
 
-const create = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  if (!user.isAdmin) return metapi().notFound(event)
+const create = authedHandler(async ({ event }) => {
   const schema = z.object({
     user: z.string(),
     content: z.enum(cartridgeContents as [string, ...string[]]),
     ml: z.enum(cartridgeMls as [string, ...string[]]),
     mg: z.enum(cartridgeMgs as [string, ...string[]]),
   })
-  const parsed = schema.safeParse(await readBody(event))
+  const parsed = schema.safeParse({ user: event.context.params?.user, ...await readBody(event) })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
   const cartridge = await prisma.cartridge.create({
     data: {
@@ -38,43 +40,27 @@ const create = defineEventHandler(async (event) => {
       mg: parsed.data.mg,
       userId: BigInt(parsed.data.user),
     },
+    include: {
+      pen: true,
+      shots: true,
+    },
   })
 
   return metapi().success('cartridge created', cartridge)
-})
+}, true)
 
-const get = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  if (!user.isAdmin) return metapi().notFound(event)
-  const schema = z.object({ id: z.number(), user: z.number() })
-  const parsed = schema.safeParse({
-    id: event.context.params?.id,
-    user: Number.parseInt(event.context.params?.user as string),
-  })
-  if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
+const get = authedModelHandler<Cartridge>(async ({ model: cartridge }) => {
+  return metapi().render(cartridge)
+}, { admin: true, bindUser: false })
 
-  return metapi().renderNullError(event, await prisma.cartridge.findUnique({
-    where: {
-      id: parsed.data.id,
-      userId: BigInt(parsed.data.id),
-    },
-  }))
-})
-
-const remove = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  if (!user.isAdmin) return metapi().notFound(event)
-  const schema = z.object({ id: z.number(), user: z.number() })
-  const parsed = schema.safeParse({ id: event.context.params?.id, user: Number.parseInt(event.context.params?.user as string) })
-  if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
+const remove = authedModelHandler<Cartridge>(async ({ model: cartridge }) => {
   await prisma.cartridge.delete({
     where: {
-      id: parsed.data.id,
-      userId: BigInt(parsed.data.id),
+      id: cartridge.id,
     },
   })
   return metapi().success('cartridge deleted')
-})
+}, { admin: true, bindUser: false })
 
 export default {
   index,
