@@ -42,5 +42,6 @@ describe('/api/cartridge', async () => {
     await remove<Cartridge>(`/api/cartridge/${cartridges[0]?.id}`)
     try { await get<Cartridge[]>(`/api/cartridge/${cartridges[0]?.id}`) }
     catch (error: any) { expect(error.response.status).toBe(404) }
+    console.log(cartridges)
   })
 })
