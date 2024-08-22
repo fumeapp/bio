@@ -6,9 +6,8 @@ import { penColors } from '~/utils/shared'
 import type { Pen } from '~/types/models'
 
 describe('/api/pen', async () => {
-  await setup(setupConfig())
-
   const pens: Pen[] = []
+  await setup(setupConfig())
 
   it('post /api/pen - create a pen', async () => {
     const { post, user } = await actingAs('test@test.com')

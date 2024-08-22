@@ -54,11 +54,6 @@ interface ModelOptions {
 type BaseModelOptions = Omit<ModelOptions, 'authed' | 'admin' | 'bindUser'>
 
 async function handleModelLookup(event: H3Event, options: ModelOptions, user?: User) {
-  if (['PUT', 'DELETE'].includes(event.method) && event.context.params?._) {
-    const parsed = event.context.params._.split('/')
-    event.context.params.id = parsed[parsed.length - 1]
-  }
-
   if (
     !event.context?.params
     || !event.context.params.id
@@ -66,6 +61,8 @@ async function handleModelLookup(event: H3Event, options: ModelOptions, user?: U
     || !event.context.matchedRoute.path
   )
     throw createError({ statusCode: 400, statusMessage: 'Invalid model Binding attempt' })
+
+  console.log('handleModelLookup', event.method, event.context.params)
 
   const vals = event.context.matchedRoute.path.split('/')
   const modelName = vals[vals.length - 2] as keyof typeof prisma

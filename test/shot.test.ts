@@ -6,7 +6,6 @@ import type { Cartridge, Pen, Shot } from '~/types/models'
 
 describe('/api/shot', async () => {
   await setup(setupConfig())
-
   const pens: Pen[] = []
   const cartridges: Cartridge[] = []
   const shots: Shot[] = []
