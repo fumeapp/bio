@@ -13,12 +13,12 @@ const apiResource = (
   router: Router,
   routes: ApiRoutes,
 ) => {
-  if (routes.get) router.get(`/${name}/:id`, routes.get)
-  if (routes.index) router.get(`/${name}`, routes.index)
-  if (routes.create) router.post(`/${name}`, routes.create)
+  if (routes.index) router.get(name, routes.index)
+  if (routes.create) router.post(name, routes.create)
 
-  if (routes.update) router.put(`/${name}/:id`, routes.update)
-  if (routes.remove) router.delete(`/${name}/:id`, routes.remove)
+  if (routes.get) router.get(`${name}/:id`, routes.get)
+  if (routes.update) router.put(`${name}/:id`, routes.update)
+  if (routes.remove) router.delete(`${name}/:id`, routes.remove)
 }
 
 const routeParams = (event: H3Event, positions: any) => {

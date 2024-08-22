@@ -1,8 +1,8 @@
 import { z } from 'zod'
+import type { Cartridge } from '~/types/models'
 import { cartridgeContents, cartridgeMgs, cartridgeMls } from '~/utils/shared'
 
-const index = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
+const index = authedHandler(async ({ user, event }) => {
   return metapi().render(
     await prisma.cartridge.findMany({
       where: {
@@ -16,8 +16,7 @@ const index = defineEventHandler(async (event) => {
   )
 })
 
-const create = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
+const create = authedHandler(async ({ user, event }) => {
   const schema = z.object({
     content: z.enum(cartridgeContents as [string, ...string[]]),
     ml: z.enum(cartridgeMls as [string, ...string[]]),
@@ -37,26 +36,19 @@ const create = defineEventHandler(async (event) => {
   return metapi().success('cartridge created', cartridge)
 })
 
-const get = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  const schema = z.object({ id: z.number() })
-  const parsed = schema.safeParse({ id: event.context.params?.id })
-  if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
+const get = authedModelHandler<Cartridge>(async ({ event, user, model: cartridge }) => {
+  if (Number(cartridge.userId) !== Number(user.id))
+    return metapi().error(event, 'Unauthorized', 401)
 
-  return metapi().renderNullError(event, await prisma.cartridge.findUnique({
-    where: {
-      id: parsed.data.id,
-      userId: user.id,
-    },
-  }))
+  return metapi().render(cartridge)
 })
 
-const remove = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  const id = event.context.params?.id
+const remove = authedModelHandler<Cartridge>(async ({ event, user, model: cartridge }) => {
+  if (Number(cartridge.userId) !== Number(user.id))
+    return metapi().error(event, 'Unauthorized', 401)
   await prisma.cartridge.delete({
     where: {
-      id: Number.parseInt(id as string),
+      id: cartridge.id,
       userId: user.id,
     },
   })

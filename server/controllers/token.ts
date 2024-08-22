@@ -1,8 +1,7 @@
 import { z } from 'zod'
+import type { Token } from '~/types/models'
 
-const index = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  console.log('we are passed requireUserSession')
+const index = authedHandler(async ({ user, event }) => {
   return metapi().render(
     await prisma.$extends({
       result: {
@@ -21,26 +20,18 @@ const index = defineEventHandler(async (event) => {
   )
 })
 
-const get = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  const schema = z.object({ id: z.number() })
-  const parsed = schema.safeParse({ id: event.context.params?.id })
-  if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
-
-  return metapi().renderNullError(event, await prisma.token.findUnique({
-    where: {
-      id: parsed.data.id,
-      userId: user.id,
-    },
-  }))
+const get = authedModelHandler<Token>(async ({ user, event, model: token }) => {
+  if (Number(token.userId) !== Number(user.id))
+    return metapi().error(event, 'Unauthorized', 401)
+  return metapi().renderNullError(event, token)
 })
 
-const remove = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  const id = event.context.params?.id
+const remove = authedModelHandler<Token>(async ({ user, event, model: token }) => {
+  if (token.userId !== user.id)
+    return metapi().error(event, 'Unauthorized', 401)
   await prisma.token.delete({
     where: {
-      id: Number.parseInt(id as string),
+      id: token.id,
       userId: user.id,
     },
   })

@@ -30,7 +30,7 @@ CREATE TABLE `shots` (
     `userId` BIGINT NOT NULL,
     `cartridgeId` BIGINT NOT NULL,
     `units` INTEGER NOT NULL,
-    `date` DATE NOT NULL,
+    `date` DATETIME(3) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 

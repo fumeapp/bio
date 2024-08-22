@@ -2,8 +2,6 @@
 const colorMode = useColorMode()
 const color = computed(() => colorMode.value === 'dark' ? '#111827' : 'white')
 
-console.log('we are in app.vue')
-
 useHead({
   meta: [
     { charset: 'utf-8' },

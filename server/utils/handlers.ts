@@ -54,11 +54,6 @@ interface ModelOptions {
 type BaseModelOptions = Omit<ModelOptions, 'authed' | 'admin' | 'bindUser'>
 
 async function handleModelLookup(event: H3Event, options: ModelOptions, user?: User) {
-  if (['PUT', 'DELETE'].includes(event.method) && event.context.params?._) {
-    const parsed = event.context.params._.split('/')
-    event.context.params.id = parsed[parsed.length - 1]
-  }
-
   if (
     !event.context?.params
     || !event.context.params.id
@@ -125,7 +120,7 @@ export function authedModelHandler<T>(
 
   return authedHandler(async ({ user, event }) => {
     const model = await handleModelLookup(event, mergedOptions, user)
-    if (mergedOptions.admin && !user.isAdmin) return metapi().notFound(event)
+    if (model === null || (mergedOptions.admin && !user.isAdmin)) return metapi().notFound(event)
     return handler({ user, event, model })
   })
 }

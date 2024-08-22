@@ -28,7 +28,7 @@ const columns = [
   },
 ]
 
-const { data: users } = await useFetch<MetapiResponse<User>>('/api/user')
+const { data: users } = await useFetch<MetapiResponse<User>>('/api/users')
 </script>
 
 <template>

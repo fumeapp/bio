@@ -6,9 +6,8 @@ import { penColors } from '~/utils/shared'
 import type { Pen } from '~/types/models'
 
 describe('/api/pen', async () => {
-  await setup(setupConfig())
-
   const pens: Pen[] = []
+  await setup(setupConfig())
 
   it('post /api/pen - create a pen', async () => {
     const { post, user } = await actingAs('test@test.com')
@@ -34,5 +33,13 @@ describe('/api/pen', async () => {
     const { put } = await actingAs('test@test.com')
     const { data: pen } = await put<Pen>(`/api/pen/${pens[0]?.id}`, { color: penColors[1] })
     expect(pen.color).toBe(penColors[1])
+  })
+
+  it ('delete /api/pen/:id - delete a pen', async () => {
+    if (!pens[0]) throw new Error('Pen not found')
+    const { remove, get } = await actingAs('test@test.com')
+    await remove<Pen>(`/api/pen/${pens[0]?.id}`)
+    try { await get<Pen[]>(`/api/pen/${pens[0]?.id}`) }
+    catch (error: any) { expect(error.response.status).toBe(404) }
   })
 })

@@ -36,6 +36,7 @@ async function userFromEmail(email: string): Promise<UserSession> {
   if (!users[index]) throw new Error('User not found')
   if (!users[index].session?.id)
     users[index].session = await createUser(users[index], 'github', {})
+
   return users[index]
 }
 
@@ -46,7 +47,8 @@ async function actingAs(email: string) {
   const get = <T>(url: string) => $fetch<MetapiResponse<T>>(url, { headers: { cookie: user.cookie as string } })
   const post = <T>(url: string, params: object) => $fetch<MetapiResponse<T>>(url, { method: 'POST', body: params, headers: { cookie: user.cookie as string } })
   const put = <T>(url: string, params: object) => $fetch<MetapiResponse<T>>(url, { method: 'PUT', body: params, headers: { cookie: user.cookie as string } })
-  return { get, post, put, user }
+  const remove = <T>(url: string, params?: object) => $fetch<MetapiResponse<T>>(url, { method: 'DELETE', body: params, headers: { cookie: user.cookie as string } })
+  return { get, post, put, remove, user }
 }
 
 export {

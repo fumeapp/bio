@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest'
 import { $fetch, setup } from '@nuxt/test-utils/e2e'
 import { actingAs } from './auth'
 import { setupConfig } from './config'
-import type { MetapiResponse } from '~/types/metapi'
 import type { User } from '~/types/models'
 
 describe('/api/me and /api/user', async () => {
@@ -19,18 +18,18 @@ describe('/api/me and /api/user', async () => {
   })
 
   it ('get /api/user isAdmin: false - 404', async () => {
-    try { await (await actingAs('test@test.com')).get('/api/user') }
+    try { await (await actingAs('test@test.com')).get('/api/resource/user') }
     catch (error: any) { expect(error.response.status).toBe(404) }
   })
 
   it ('get /api/user GET', async () => {
-    const response = await (await actingAs('admin@test.com')).get<User[]>('/api/user')
+    const response = await (await actingAs('admin@test.com')).get<User[]>('/api/resource/user')
     expect(response.data.length).toBe(2)
   })
 
   it ('get /api/user/:id', async () => {
     const { user, get } = await actingAs('admin@test.com')
-    const response = await get<User>(`/api/user/${user.session.id}`)
+    const response = await get<User>(`/api/resource/user/${user.session.id}`)
     expect(response.data.id).toBe(user.session.id.toString())
   })
 })

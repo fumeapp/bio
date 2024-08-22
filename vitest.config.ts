@@ -4,6 +4,12 @@ import { defineVitestConfig } from '@nuxt/test-utils/config'
 export default defineVitestConfig({
   root: './server',
   test: {
+    poolOptions: {
+      forks: {
+        minForks: 1,
+        maxForks: 1,
+      },
+    },
     environment: 'nuxt',
     environmentOptions: {
       nuxt: {
