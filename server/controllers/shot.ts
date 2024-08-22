@@ -22,8 +22,7 @@ const index = defineEventHandler(async (event) => {
   )
 })
 
-const create = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
+const create = authedHandler(async ({ user, event }) => {
   const schema = z.object({
     cartridge: z.string(),
     units: z.number(),
