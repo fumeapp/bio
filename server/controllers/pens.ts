@@ -59,8 +59,6 @@ const update = authedHandler(async ({ event }) => {
     cartridgeId: z.number().optional(),
   })
 
-  event = routing.routeParams(event, { user: 1, id: 3 })
-
   const parsed = schema.safeParse({
     id: Number.parseInt(event.context.params?.id as string),
     user: Number.parseInt(event.context.params?.user as string),
