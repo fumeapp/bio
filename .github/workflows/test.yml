@@ -2,8 +2,6 @@ name: Run Tests
 on:
   pull_request
 
-env:
-  DEVRUN: true
 jobs:
   test:
     if: github.event.pull_request.draft == false
@@ -61,7 +59,7 @@ jobs:
         run: pnpm run build
 
       - name: Start Server
-        run: pnpm run dev:test &
+        run: pnpm run test &
 
       - name: Run Migrations
         run: pnpm run db:test:reset
@@ -73,7 +71,7 @@ jobs:
         env:
           NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
           NODE_ENV: test
-        run: pnpm run test:dev:coverage
+        run: pnpm run test:coverage
 
       - name: Report Coverage
         if: always()
