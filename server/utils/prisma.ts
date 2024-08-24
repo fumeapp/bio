@@ -24,7 +24,6 @@ const prisma = import.meta.client
 for (const key in mutators)
   if (Object.prototype.hasOwnProperty.call(mutators, key))
     if (typeof mutators[key] === 'function')
-      console.log(mutators[key]
 */
 
 export type CustomPrismaClient = ReturnType<typeof prismaClientSingleton>

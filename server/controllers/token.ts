@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import type { Token } from '~/types/models'
 
-const index = authedHandler(async ({ user, event }) => {
+const index = authedHandler(async ({ user }) => {
   return metapi().render(
     await prisma.$extends({
       result: {

@@ -37,23 +37,10 @@ interface ModelOptions {
    * Require the user to have user.isAdmin set to true
    * @default false
    */
-  admin?: boolean
-  /**
-   * Bind the user to the model
-   * @default true
-   */
-  bindUser?: boolean
-
-  /**
-   * Additional props to pass into findUnique
-   * @default {}
-   */
-  props?: object
+  requireAdmin?: boolean
 }
 
-type BaseModelOptions = Omit<ModelOptions, 'authed' | 'admin' | 'bindUser'>
-
-async function handleModelLookup(event: H3Event, options: ModelOptions, user?: User) {
+async function handleModelLookup(event: H3Event) {
   if (
     !event.context?.params
     || !event.context.params.id
@@ -70,31 +57,15 @@ async function handleModelLookup(event: H3Event, options: ModelOptions, user?: U
   if (!modelDelegate?.findUnique)
     throw createError({ statusCode: 400, statusMessage: `Unable to find Prisma model: ${String(modelName)}` })
 
-  let model
-
-  if (user && options.bindUser)
-    model = await modelDelegate.findUnique({
-      where: {
-        id: BigInt(event.context.params.id),
-        userId: user.id,
-        ...options.props,
-      },
-    })
-  else
-    model = await modelDelegate.findUnique({
-      where: {
-        id: BigInt(event.context.params.id),
-        ...options.props,
-      },
-    })
-
-  return model
+  return await modelDelegate.findUnique({
+    where: { id: BigInt(event.context.params.id) },
+  })
 }
 
 function mergeOptions(options?: ModelOptions) {
   const defaultOptions = {
     authed: true,
-    admin: false,
+    requireAdmin: false,
     bindUser: true,
     props: {},
   }
@@ -102,25 +73,21 @@ function mergeOptions(options?: ModelOptions) {
   return { ...defaultOptions, ...options }
 }
 
-export function modelHandler<T>(
-  handler: ({ event, model }: { user?: User, event: H3Event, model: T }) => Promise<any>,
-  options?: BaseModelOptions,
-) {
+export function modelHandler<T>(handler: ({ event, model }: { user?: User, event: H3Event, model: T }) => Promise<any>) {
   return defineEventHandler(async (event: H3Event) => {
-    const model = await handleModelLookup(event, mergeOptions(options))
+    const model = await handleModelLookup(event)
     return handler({ event, model })
   })
 }
 
 export function authedModelHandler<T>(
   handler: ({ user, event, model }: { user: User, event: H3Event, model: T }) => Promise<any>,
-  options?: ModelOptions,
+  requireAdmin = false,
 ) {
-  const mergedOptions = mergeOptions(options)
-
+  const mergedOptions = mergeOptions({ requireAdmin })
   return authedHandler(async ({ user, event }) => {
-    const model = await handleModelLookup(event, mergedOptions, user)
-    if (model === null || (mergedOptions.admin && !user.isAdmin)) return metapi().notFound(event)
+    const model = await handleModelLookup(event)
+    if (model === null || (mergedOptions.requireAdmin && !user.isAdmin)) return metapi().notFound(event)
     return handler({ user, event, model })
   })
 }

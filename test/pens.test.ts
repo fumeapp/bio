@@ -9,15 +9,11 @@ describe ('/api/user/:user/pen admin-only apiResource', async () => {
 
   const pens: Pen[] = []
   it ('all routes should 404 for non-admin ', async () => {
-    const { get, post, put, remove } = await actingAs('test@test.com')
-    try { await get('/api/user/1/pen') }
-    catch (error: any) { expect(error.response.status).toBe(404) }
-    try { await post('/api/user/1/pen', { color: penColors[0] }) }
-    catch (error: any) { expect(error.response.status).toBe(404) }
-    try { await put('/api/user/1/pen/1', { cartridgeId: null }) }
-    catch (error: any) { expect(error.response.status).toBe(404) }
-    try { await remove('/api/user/1/pen/1') }
-    catch (error: any) { expect(error.response.status).toBe(404) }
+    const { notFound } = await actingAs('test@test.com')
+    expect(await notFound('GET', '/api/user/1/pen')).toBe(404)
+    expect(await notFound('POST', '/api/user/1/pen', { color: penColors[0] })).toBe(404)
+    expect(await notFound('PUT', '/api/user/1/pen/1', { cartridgeId: null })).toBe(404)
+    expect(await notFound('DELETE', '/api/user/1/pen/1')).toBe(404)
   })
 
   it ('post /api/user/:user/pen - create a pen', async () => {
