@@ -15,6 +15,7 @@
     "test:dev:reset": "pnpm run db:test:reset; DEVRUN=true vitest run",
     "db:test:reset": "dotenv -e .env.test -- npx prisma migrate reset --force",
     "test:coverage": "vitest run --coverage.enabled true",
+    "test:dev:coverage": "DEVRUN=true vitest run --coverage.enabled true",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint:action": "pnpm run lint -f @jamesacarr/github-actions"

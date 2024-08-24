@@ -2,6 +2,8 @@ name: Run Tests
 on:
   pull_request
 
+env:
+  DEVRUN: true
 jobs:
   test:
     if: github.event.pull_request.draft == false
@@ -50,22 +52,29 @@ jobs:
       - name: Generate Prisma deps
         run: npx prisma generate
 
+      - name: Copy .env.test-action to .env.test
+        run: cp .env.test-action .env.test
+
       - name: Build
         env:
           NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
         run: pnpm run build
 
-      - name: Rename .env.test-action to .env.test
-        run: mv .env.test-action .env.test
+      - name: Start Server
+        run: pnpm run dev:test &
 
       - name: Run Migrations
         run: pnpm run db:test:reset
+
+      - name: Sleep for 10 seconds
+        run: sleep 10
 
       - name: Run Vitest
         env:
           NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
           NODE_ENV: test
-        run: pnpm run test:coverage
+        run: pnpm run test:dev:coverage
+
       - name: Report Coverage
         if: always()
         uses: davelosert/vitest-coverage-report-action@v2
