@@ -52,7 +52,7 @@ jobs:
       - name: Generate Prisma deps
         run: npx prisma generate
 
-      - name: Copy .env.test-action to .env.test and .env
+      - name: Copy .env.test-action to .env.test
         run: cp .env.test-action .env.test
 
       - name: Build
