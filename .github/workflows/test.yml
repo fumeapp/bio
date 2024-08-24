@@ -57,7 +57,7 @@ jobs:
           NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
         run: |
           pnpm run build
-          node .output/server/index.mjs
+          node .output/server/index.mjs &
 
       - name: Rename .env.test-action to .env.test
         run: mv .env.test-action .env.test
