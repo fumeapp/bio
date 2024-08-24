@@ -55,7 +55,7 @@ jobs:
           node .output/server/index.mjs
 
       - name: Start Server
-        run: pnpm run build:test:start &
+        run: pnpm run build:test:start:bg
 
       - name: Run Migrations
         run: pnpm run db:test:reset

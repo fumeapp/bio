@@ -5,6 +5,7 @@
   "scripts": {
     "build": "nuxt build",
     "build:test:start": "nuxt build --dotenv .env.test ; node --env-file=.env.test .output/server/index.mjs",
+    "build:test:start:bg": "nuxt build --dotenv .env.test ; node --env-file=.env.test .output/server/index.mjs &",
     "dev": "nuxt dev",
     "dev:test": "nuxt dev --dotenv .env.test",
     "generate": "nuxt generate",
