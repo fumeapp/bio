@@ -61,11 +61,16 @@ jobs:
       - name: Run Migrations
         run: pnpm run db:test:reset
 
+      - uses: JarvusInnovations/background-action@v1
+        with:
+          run: pnpm run dev:test
+          wait-on: http://localhost:3000
+
       - name: Run Vitest
         env:
           NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
           NODE_ENV: test
-        run: pnpm run test:coverage
+        run: pnpm run test:dev:coverage
       - name: Report Coverage
         if: always()
         uses: davelosert/vitest-coverage-report-action@v2
