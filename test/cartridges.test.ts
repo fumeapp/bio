@@ -30,8 +30,8 @@ describe ('/api/user/:user/cartridge admin-only apiResource', async () => {
   })
 
   it ('get /api/user/:user/cartridge - list all cartridges', async () => {
-    const { get } = await actingAs('admin@test.com')
-    const response = await get<Cartridge[]>('/api/user/1/cartridge')
+    const { get, user } = await actingAs('admin@test.com')
+    const response = await get<Cartridge[]>(`/api/user/${user.session.id}/cartridge`)
     expect(response.data[0]).toStrictEqual(cartridges[0])
   })
 
