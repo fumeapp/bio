@@ -52,11 +52,6 @@ jobs:
       - name: Generate Prisma deps
         run: npx prisma generate
 
-      - name: Build
-        env:
-          NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
-        run: pnpm run build
-
       - name: Rename .env.test-action to .env.test
         run: mv .env.test-action .env.test
 
