@@ -27,6 +27,7 @@ const create = authedHandler(async ({ event }) => {
   })
   const parsed = schema.safeParse({ userId: event.context.params?.user as string, ...await readBody(event) })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
+  console.log('creating shot', parsed.data)
   return metapi().success('shot logged', await prisma.shot.create({
     data: {
       cartridgeId: BigInt(parsed.data.cartridge),
