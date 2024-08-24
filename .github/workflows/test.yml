@@ -2,6 +2,8 @@ name: Run Tests
 on:
   pull_request
 
+env:
+  DEVRUN: true
 jobs:
   test:
     if: github.event.pull_request.draft == false
@@ -71,6 +73,7 @@ jobs:
           NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
           NODE_ENV: test
         run: pnpm run test:dev:coverage
+
       - name: Report Coverage
         if: always()
         uses: davelosert/vitest-coverage-report-action@v2
