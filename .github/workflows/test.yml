@@ -60,10 +60,8 @@ jobs:
       - name: Rename .env.test-action to .env.test
         run: mv .env.test-action .env.test
 
-      - uses: JarvusInnovations/background-action@v1
-        with:
-          run: pnpm run dev:test
-          wait-on: http://localhost:3000
+      - name: Run dev:test in the background
+        run: pnpm run dev:test &
 
       - name: Run Migrations
         run: pnpm run db:test:reset
