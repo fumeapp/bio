@@ -59,8 +59,8 @@ jobs:
           pnpm run build
           node .output/server/index.mjs &
 
-      - name: Rename .env.test-action to .env.test
-        run: mv .env.test-action .env.test
+      - name: Rename .env.test-action to .env
+        run: mv .env.test-action .env
 
       - name: Run Migrations
         run: pnpm run db:test:reset
