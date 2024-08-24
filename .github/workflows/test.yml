@@ -67,6 +67,7 @@ jobs:
         with:
           run: pnpm run dev:test
           wait-on: http://localhost:3000
+          tail: true
 
       - name: Run Vitest
         env:
