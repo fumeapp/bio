@@ -9,21 +9,17 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "test": "vitest run",
-    "test:dev": "DEVRUN=true vitest run",
-    "test:dev:ui": "DEVRUN=true vitest --ui",
+    "test::ui": "vitest --ui",
     "test:reset": "pnpm run db:test:reset; vitest run",
-    "test:dev:reset": "pnpm run db:test:reset; DEVRUN=true vitest run",
     "db:test:reset": "dotenv -e .env.test -- npx prisma migrate reset --force",
     "test:coverage": "vitest run --coverage.enabled true",
-    "test:dev:coverage": "DEVRUN=true vitest run --coverage.enabled true",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint:action": "pnpm run lint -f @jamesacarr/github-actions"
   },
   "dependencies": {
     "@nuxt/ui-pro": "^1.4.1",
-    "date-fns": "^3.6.0",
-    "h3": "npm:h3-nightly@latest"
+    "date-fns": "^3.6.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.26.0",
@@ -47,8 +43,5 @@
     "ua-parser-js": "^1.0.38",
     "vitest": "^2.0.5",
     "zod": "^3.23.8"
-  },
-  "resolutions": {
-    "h3": "npm:h3-nightly@latest"
   }
 }

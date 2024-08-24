@@ -48,7 +48,19 @@ async function actingAs(email: string) {
   const post = <T>(url: string, params: object) => $fetch<MetapiResponse<T>>(url, { method: 'POST', body: params, headers: { cookie: user.cookie as string } })
   const put = <T>(url: string, params: object) => $fetch<MetapiResponse<T>>(url, { method: 'PUT', body: params, headers: { cookie: user.cookie as string } })
   const remove = <T>(url: string, params?: object) => $fetch<MetapiResponse<T>>(url, { method: 'DELETE', body: params, headers: { cookie: user.cookie as string } })
-  return { get, post, put, remove, user }
+  const notFound = async (method: string, url: string, params?: object): Promise<number> => {
+    try {
+      await $fetch(url, { method, body: params, headers: { cookie: user.cookie as string } })
+      throw new Error(`Expected 404 status for ${method}: ${url}, but request succeeded`)
+    }
+    catch (error) {
+      if (error.response && error.response.status === 404)
+        return 404
+      throw error
+    }
+  }
+
+  return { get, post, put, remove, notFound, user }
 }
 
 export {

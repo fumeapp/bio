@@ -52,23 +52,21 @@ const create = authedHandler(async ({ event }) => {
   return metapi().success('pen created', pen)
 }, true)
 
-const update = authedHandler(async ({ event }) => {
+const update = authedModelHandler<Pen>(async ({ event, model: pen }) => {
   const schema = z.object({
-    id: z.number(),
     user: z.number(),
     cartridgeId: z.number().optional(),
   })
 
   const parsed = schema.safeParse({
-    id: Number.parseInt(event.context.params?.id as string),
     user: Number.parseInt(event.context.params?.user as string),
     cartridgeId: Number.parseInt((await readBody(event))?.cartridgeId) || undefined,
   })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
 
-  const pen = await prisma.pen.update({
+  const updatedPen = await prisma.pen.update({
     where: {
-      id: parsed.data.id,
+      id: pen.id,
       userId: parsed.data.user,
     },
     data: {
@@ -76,7 +74,7 @@ const update = authedHandler(async ({ event }) => {
     },
   })
 
-  return metapi().success('pen updated', pen)
+  return metapi().success('pen updated', updatedPen)
 }, true)
 
 const get = authedModelHandler<Pen>(async ({ model: pen }) => {
