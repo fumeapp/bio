@@ -11,7 +11,7 @@ describe ('/api/user/:user/cartridge admin-only apiResource', async () => {
   it ('all routes should 404 for non-admin ', async () => {
     const { notFound } = await actingAs('test@test.com')
     expect(await notFound('GET', '/api/user/1/cartridge')).toBe(404)
-    expect(await notFound('POST', '/api/user/1/cartridge', { content: cartridgeContents[0], ml: cartridgeMls[0], mg: cartridgeMgs[0] })).toBe(404)
+    expect(await notFound('POST', '/api/user/1/cartridge')).toBe(404)
     expect(await notFound('DELETE', '/api/user/1/cartridge/1')).toBe(404)
   })
 
