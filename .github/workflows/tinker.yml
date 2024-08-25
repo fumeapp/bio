@@ -1,0 +1,10 @@
+name: Tinker with mysql
+on:
+  pull_request
+
+jobs:
+  tinker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: see if mysql is running
+        run: sudo systemctl status mysql
