@@ -61,7 +61,7 @@ const { data: users } = await useFetch<MetapiResponse<User>>('/api/all/user')
       <template #pens-data="{ row }">
         <div class="flex flex-col space-y-1">
           <pen-model v-for="pen in row.pens" :key="pen.id" :color="pen.color">
-            <cartridge-model v-if="pen.cartridge" :cartridge="pen.cartridge" label />
+            <cartridge-model v-if="pen.cartridge" :cartridge="pen.cartridge" :shot-day="pen.shotDay" label />
             <div v-else>
               No Cartridge
             </div>

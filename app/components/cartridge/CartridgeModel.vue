@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { Cartridge } from '~/types/models'
 
-const props = defineProps<{ cartridge?: Cartridge, label?: boolean }>()
+const props = defineProps<{ cartridge?: Cartridge, label?: boolean, shotDay?: string }>()
 
 const { remainingUnits } = useShot()
 const units = computed(() =>
@@ -20,6 +20,12 @@ const units = computed(() =>
       <div class="absolute text-xs left-2 top-1 text-black">
         <span v-if="cartridge && label" class="shadow">
           {{ cartridge.content }} {{ cartridge.mg }}mg
+        </span>
+      </div>
+
+      <div class="absolute text-xs right-2 top-1 text-black">
+        <span v-if="shotDay" class="shadow">
+          {{ weekdayToFull(shotDay) }}
         </span>
       </div>
 

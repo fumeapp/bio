@@ -82,7 +82,7 @@ const items = computed(() => {
 
         <shot-form :pen="pen" :cartridge="pen.cartridge" @created="reload" />
 
-        <shot-day-form :pen="pen" @created="reload" />
+        <shot-day-form :pen="pen" @updated="reload" />
       </div>
     </u-card>
     <u-dashboard-modal v-model="attachModal" title="Attach a Cartridge" description="Choose an available cartridge">
