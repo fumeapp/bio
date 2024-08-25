@@ -10,3 +10,20 @@ jobs:
         run: sudo service mysql start
       - name: lets just try to create a db
         run: mysql -e 'CREATE DATABASE `bio-test`;' -uroot -proot
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 9
+          run_install: false
+      - name: Install Dependencies
+        run: pnpm i
+
+      - name: Generate prisma deps
+        run: npx prisma generate
+
+      - name: Copy .env.test-action to .env.test and .env
+        run: cp .env.test-action .env.test
+      - name: Run Migrations
+        run: pnpm run db:test:reset
