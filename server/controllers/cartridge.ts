@@ -2,7 +2,7 @@ import { z } from 'zod'
 import type { Cartridge } from '~/types/models'
 import { cartridgeContents, cartridgeMgs, cartridgeMls } from '~/utils/shared'
 
-const index = authedHandler(async ({ user, event }) => {
+const index = authedHandler(async ({ user }) => {
   return metapi().render(
     await prisma.cartridge.findMany({
       where: {

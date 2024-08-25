@@ -1,17 +1,7 @@
 import { z } from 'zod'
 import { penColors } from '~/utils/shared'
 
-const inc = {
-  cartridge: {
-    include: {
-      shots: {
-        orderBy: {
-          date: 'asc',
-        },
-      },
-    },
-  },
-}
+const inc = { cartridge: { include: { shots: { orderBy: { date: 'asc' } } } } }
 
 const index = defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event)
@@ -61,8 +51,7 @@ const update = authedHandler(async ({ user, event }) => {
     shotDay: body?.shotDay || undefined,
   })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
-  console.log(parsed.data)
-  const update = {
+  return metapi().success('pen updated', await prisma.pen.update({
     where: {
       id: parsed.data.id,
       userId: user.id,
@@ -73,11 +62,7 @@ const update = authedHandler(async ({ user, event }) => {
       shotDay: parsed.data.shotDay || null,
     },
     include: inc,
-  }
-  console.log(update)
-  const pen = await prisma.pen.update(update)
-
-  return metapi().success('pen updated', pen)
+  }))
 })
 
 const get = defineEventHandler(async (event) => {

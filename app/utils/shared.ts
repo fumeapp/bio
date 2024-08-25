@@ -1,7 +1,9 @@
 import type { HeaderLink } from '@nuxt/ui-pro/types'
 import type { CookieOptions } from '#app'
 
-(BigInt.prototype as any).toJSON = function () { return this.toString() }
+(BigInt.prototype as any).toJSON = function () {
+  return this.toString()
+}
 
 export const weekDays = [...Array(7)].map((_, i) =>
   new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(new Date(1970, 0, 4 + i)),

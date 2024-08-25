@@ -48,19 +48,22 @@ async function actingAs(email: string) {
   const post = <T>(url: string, params: object) => $fetch<MetapiResponse<T>>(url, { method: 'POST', body: params, headers: { cookie: user.cookie as string } })
   const put = <T>(url: string, params: object) => $fetch<MetapiResponse<T>>(url, { method: 'PUT', body: params, headers: { cookie: user.cookie as string } })
   const remove = <T>(url: string, params?: object) => $fetch<MetapiResponse<T>>(url, { method: 'DELETE', body: params, headers: { cookie: user.cookie as string } })
-  const notFound = async (method: string, url: string, params?: object): Promise<number> => {
+  const expectStatus = async (expectedStatus: number, method: string, url: string, params?: object): Promise<number> => {
     try {
       await $fetch(url, { method, body: params, headers: { cookie: user.cookie as string } })
-      throw new Error(`Expected 404 status for ${method}: ${url}, but request succeeded`)
+      throw new Error(`Expected ${expectedStatus} status for ${method}: ${url}, but request succeeded`)
     }
     catch (error) {
-      if (error.response && error.response.status === 404)
-        return 404
+      if (error.response && error.response.status === expectedStatus)
+        return expectedStatus
       throw error
     }
   }
 
-  return { get, post, put, remove, notFound, user }
+  const notFound = (method: string, url: string, params?: object) => expectStatus(404, method, url, params)
+  const unAuth = (method: string, url: string, params?: object) => expectStatus(401, method, url, params)
+
+  return { get, post, put, remove, notFound, unAuth, user }
 }
 
 export {

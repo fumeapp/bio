@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { format } from 'date-fns'
 
 const index = defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event)
