@@ -51,14 +51,18 @@ const update = authedHandler(async ({ user, event }) => {
     id: z.number(),
     color: z.enum(penColors as [string, ...string[]]),
     cartridgeId: z.number().optional(),
+    shotDay: z.string().optional(),
   })
+  const body = await readBody(event)
   const parsed = schema.safeParse({
     id: Number.parseInt(event.context.params?.id as string),
-    cartridgeId: Number.parseInt((await readBody(event))?.cartridgeId) || undefined,
-    color: (await readBody(event))?.color || penColors[0],
+    cartridgeId: Number.parseInt(body?.cartridgeId) || undefined,
+    color: body?.color || penColors[0],
+    shotDay: body?.shotDay || undefined,
   })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
-  const pen = await prisma.pen.update({
+  console.log(parsed.data)
+  const update = {
     where: {
       id: parsed.data.id,
       userId: user.id,
@@ -66,9 +70,12 @@ const update = authedHandler(async ({ user, event }) => {
     data: {
       cartridgeId: parsed.data.cartridgeId ? BigInt(parsed.data.cartridgeId) : null,
       color: parsed.data.color,
+      shotDay: parsed.data.shotDay || null,
     },
     include: inc,
-  })
+  }
+  console.log(update)
+  const pen = await prisma.pen.update(update)
 
   return metapi().success('pen updated', pen)
 })

@@ -56,11 +56,14 @@ const update = authedModelHandler<Pen>(async ({ event, model: pen }) => {
   const schema = z.object({
     user: z.number(),
     cartridgeId: z.number().optional(),
+    shotDay: z.string().optional(),
   })
 
+  const body = await readBody(event)
   const parsed = schema.safeParse({
     user: Number.parseInt(event.context.params?.user as string),
-    cartridgeId: Number.parseInt((await readBody(event))?.cartridgeId) || undefined,
+    cartridgeId: Number.parseInt(body?.cartridgeId) || undefined,
+    shotDay: body?.shotDay || undefined,
   })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
 
@@ -71,6 +74,7 @@ const update = authedModelHandler<Pen>(async ({ event, model: pen }) => {
     },
     data: {
       cartridgeId: parsed.data.cartridgeId ? BigInt(parsed.data.cartridgeId) : null,
+      shotDay: parsed.data.shotDay || null,
     },
   })
 

@@ -17,6 +17,7 @@ CREATE TABLE `pens` (
     `userId` BIGINT NOT NULL,
     `cartridgeId` BIGINT NULL,
     `color` VARCHAR(191) NOT NULL,
+    `shotDay` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
