@@ -9,4 +9,4 @@ jobs:
       - name: start mysql
         run: sudo service mysql start
       - name: lets just try to create a db
-        run: mysql -e 'CREATE DATABASE bio-test;' -uroot -proot
+        run: mysql -e 'CREATE DATABASE `bio-test`;' -uroot -proot
