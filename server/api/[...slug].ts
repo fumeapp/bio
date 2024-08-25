@@ -30,7 +30,7 @@ routing.apiResource('/pen', router, pen)
 routing.apiResource('/cartridge', router, cartridge)
 routing.apiResource('/shot', router, shot)
 
-routing.apiResource('/resource/user', router, user)
+routing.apiResource('/all/user', router, user)
 routing.apiResource('/user/:user/pen', router, pens)
 routing.apiResource('/user/:user/cartridge', router, cartridges)
 routing.apiResource('/user/:user/shot', router, shots)

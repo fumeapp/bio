@@ -6,25 +6,20 @@ import type { User } from '~/types/models'
 const route = useRoute()
 const penModal = ref(false)
 const cartridgeModal = ref(false)
-const { data: user } = await useFetch<MetapiResponse<User>>(`/api/user/${route.params.user}`)
+const { data: user } = await useFetch<MetapiResponse<User>>(`/api/all/user/${route.params.user}`)
 
-useCrumb()
-  .custom({
-    label: 'Users',
-    icon: 'i-mdi-account-multiple',
-    to: '/users',
-  },
-  )
-  .custom({
-    label: user.value?.data.name as string,
-    icon: 'i-mdi-account',
-  })
-  .custom({
-    label: 'Equipment',
-    icon: 'i-mdi-medical-bag',
-  })
-  .action({ label: 'Add a Pen', click: () => penModal.value = true })
-  .action({ label: 'Add a Cartridge', click: () => cartridgeModal.value = true })
+const { set, fromLink, action } = useCrumb()
+
+set(
+  fromLink('Home'),
+  fromLink('Users'),
+  { label: user.value?.data.name as string, icon: 'i-mdi-account' },
+  { label: 'Equipment', icon: 'i-mdi-medical-bag' },
+)
+action(
+  { label: 'Add a Pen', click: () => penModal.value = true },
+  { label: 'Add a Cartridge', click: () => cartridgeModal.value = true },
+)
 
 const { data: pens, refresh: penRefresh } = await useFetch<MetapiResponse<Pen[]>>(`/api/user/${route.params.user}/pen`)
 const { data: cartridges, refresh: cartRefresh } = await useFetch<MetapiResponse<Cartridge[]>>(`/api/user/${route.params.user}/cartridge`)

@@ -6,16 +6,9 @@ jobs:
   test:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_DATABASE: bio-test
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
+      - name: start mysql
+        run: sudo service mysql start
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:

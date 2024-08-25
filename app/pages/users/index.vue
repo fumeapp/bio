@@ -3,7 +3,16 @@ import { formatDistance } from 'date-fns'
 import type { MetapiResponse } from '~/types/metapi'
 import type { User } from '~/types/models'
 
-useCrumb().add('Users')
+const { set, fromLink } = useCrumb()
+
+set(
+  fromLink('Home'),
+  {
+    label: 'Users',
+    icon: 'i-mdi-account-multiple',
+    to: '/users',
+  },
+)
 
 const columns = [
   {
@@ -28,7 +37,7 @@ const columns = [
   },
 ]
 
-const { data: users } = await useFetch<MetapiResponse<User>>('/api/resource/user')
+const { data: users } = await useFetch<MetapiResponse<User>>('/api/all/user')
 </script>
 
 <template>
