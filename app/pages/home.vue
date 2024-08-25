@@ -2,6 +2,8 @@
 import type { Cartridge, Pen } from '@prisma/client'
 import type { MetapiResponse } from '~/types/metapi'
 
+useCrumb().clear()
+
 const { data: page } = await useAsyncData('index', () => queryContent('/').findOne())
 
 if (!page.value)

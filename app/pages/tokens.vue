@@ -14,6 +14,12 @@ useSeoMeta({
   ogDescription: page.value.description,
 })
 
+const { set, fromLink } = useCrumb()
+set(
+  fromLink('Home'),
+  fromLink('Tokens'),
+)
+
 const { data: tokens, refresh } = await useFetch<MetapiResponse<Token[]>>('/api/token')
 </script>
 

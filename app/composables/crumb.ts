@@ -1,6 +1,6 @@
 import type { ButtonColor, ButtonSize } from '#ui/types'
 
-import { links } from '~/utils/shared'
+import { type HeaderIconLink, links } from '~/utils/shared'
 
 interface Button {
   label?: string
@@ -22,47 +22,20 @@ const crumbs = ref<HeaderIconLink[]>([])
 const actions = ref<Button[]>([])
 
 export const useCrumb = () => {
-  const action = (button: Button) => {
-    actions.value.push({ ...defaultAction, ...button })
-    return {
-      action,
-    }
-  }
-
-  const add = (label: string) => {
-    links.find(link => link.label === label ? crumbs.value.push(link) : null)
-    return {
-      add,
-      action,
-      // eslint-disable-next-line ts/no-use-before-define
-      custom,
-    }
-  }
-
-  const custom = (link: HeaderIconLink) => {
-    crumbs.value.push(link)
-    return {
-      add,
-      custom,
-      action,
-    }
-  }
-  const init = () => {
+  const set = (...crumbsArg: HeaderIconLink[]) => crumbs.value = crumbsArg
+  const action = (...actionsArg: Button[]) => actions.value = actionsArg.map(action => ({ ...defaultAction, ...action }))
+  const fromLink = (label: string): HeaderIconLink => links.find(link => label === link.label) as HeaderIconLink
+  const clear = () => {
     crumbs.value = []
     actions.value = []
-    return {
-      add,
-      action,
-      custom,
-    }
   }
 
   return {
-    crumbs,
-    actions,
+    set,
     action,
-    add,
-    custom,
-    init,
+    fromLink,
+    actions,
+    crumbs,
+    clear,
   }
 }

@@ -4,22 +4,16 @@ import type { Shot, User } from '~/types/models'
 import type { MetapiResponse } from '~/types/metapi'
 
 const route = useRoute()
-const { data: user } = await useFetch<MetapiResponse<User>>(`/api/user/${route.params.user}`)
+const { data: user } = await useFetch<MetapiResponse<User>>(`/api/all/user/${route.params.user}`)
 
-useCrumb()
-  .custom({
-    label: 'Users',
-    icon: 'i-mdi-account-multiple',
-    to: '/users',
-  })
-  .custom({
-    label: user.value?.data.name as string,
-    icon: 'i-mdi-account',
-  })
-  .custom({
-    label: 'Shots',
-    icon: 'i-mdi-syringe',
-  })
+const { set, fromLink } = useCrumb()
+
+set(
+  fromLink('Home'),
+  fromLink('Users'),
+  { label: user.value?.data.name as string, icon: 'i-mdi-account' },
+  fromLink('Shots'),
+)
 
 const columns = [
   { label: 'Cartridge', key: 'cartridge' },
