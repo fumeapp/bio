@@ -20,6 +20,7 @@ model Pen {
   cartridge   Cartridge? @relation(fields: [cartridgeId], references: [id], onDelete: Restrict)
   cartridgeId BigInt?    @unique
   color       String
+  shotDay     String?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
