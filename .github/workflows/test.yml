@@ -17,6 +17,9 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         id: pnpm-install
@@ -41,26 +44,19 @@ jobs:
       - name: Install Dependencies
         run: pnpm i
 
-      - name: Generate Prisma deps
+      - name: Generate prisma deps
         run: npx prisma generate
 
-      - name: Copy .env.test-action to .env.test
+      - name: Copy .env.test-action to .env.test and .env
         run: cp .env.test-action .env.test
 
-      - name: Build
+      - name: Build and start server in the background
         env:
           NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
-        run: pnpm run build
-
-      - name: Start Server
-        run: pnpm run dev:test &
+        run: pnpm run build:test:start:bg
 
       - name: Run Migrations
         run: pnpm run db:test:reset
-
-      - name: Sleep for 10 seconds
-        run: sleep 10
-
       - name: Run Vitest
         env:
           NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
