@@ -6,5 +6,7 @@ jobs:
   tinker:
     runs-on: ubuntu-latest
     steps:
+      - name: start mysql
+        run: sudo service mysql start
       - name: lets just try to create a db
         run: mysql -e 'CREATE DATABASE bio-test;' -uroot
