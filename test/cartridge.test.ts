@@ -37,9 +37,8 @@ describe('/api/cartridge', async () => {
 
   it('delete /api/cartridge/:id - delete a cartridge', async () => {
     if (!cartridges[0]) throw new Error('Cartridge not found')
-    const { remove, get } = await actingAs('test@test.com')
+    const { remove, notFound } = await actingAs('test@test.com')
     await remove<Cartridge>(`/api/cartridge/${cartridges[0]?.id}`)
-    try { await get<Cartridge[]>(`/api/cartridge/${cartridges[0]?.id}`) }
-    catch (error: any) { expect(error.response.status).toBe(404) }
+    expect(await notFound('GET', `/api/cartridge/${cartridges[0]?.id}`)).toBe(404)
   })
 })

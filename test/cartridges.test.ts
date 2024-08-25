@@ -43,10 +43,8 @@ describe ('/api/user/:user/cartridge admin-only apiResource', async () => {
 
   it ('delete /api/user/:user/cartridge/:id - delete a cartridge', async () => {
     if (!cartridges[0]) throw new Error('Cartridge not found')
-    const { remove, get } = await actingAs('admin@test.com')
-
+    const { remove, notFound } = await actingAs('admin@test.com')
     await remove<Cartridge>(`/api/user/1/cartridge/${cartridges[0]?.id}`)
-    try { await get<Cartridge[]>(`/api/user/1/cartridge/${cartridges[0]?.id}`) }
-    catch (error: any) { expect(error.response.status).toBe(404) }
+    expect(await notFound('GET', `/api/user/1/cartridge/${cartridges[0]?.id}`)).toBe(404)
   })
 })

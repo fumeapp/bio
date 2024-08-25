@@ -42,9 +42,8 @@ describe('/api/shot', async () => {
 
   it ('delete /api/shot/:id - delete a shot', async () => {
     if (!shots[0]) throw new Error('Shot not found')
-    const { remove, get } = await actingAs('test@test.com')
+    const { remove, notFound } = await actingAs('test@test.com')
     await remove<Shot>(`/api/shot/${shots[0]?.id}`)
-    try { await get<Shot[]>(`/api/shot/${shots[0]?.id}`) }
-    catch (error: any) { expect(error.response.status).toBe(404) }
+    expect(await notFound('GET', `/api/shot/${shots[0]?.id}`)).toBe(404)
   })
 })

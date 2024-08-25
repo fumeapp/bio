@@ -7,7 +7,9 @@ import type { User } from '~/types/models'
 describe('/api/me and /api/user', async () => {
   await setup(setupConfig())
   it('/api/me should 401', async () => {
-    try { await $fetch('/api/me') }
+    try {
+      await $fetch('/api/me')
+    }
     catch (error: any) { expect(error.response.status).toBe(401) }
   })
 
@@ -17,9 +19,9 @@ describe('/api/me and /api/user', async () => {
     expect(response.data.email).toEqual(user.session.email)
   })
 
-  it ('get /api/user isAdmin: false - 404', async () => {
-    try { await (await actingAs('test@test.com')).get('/api/all/user') }
-    catch (error: any) { expect(error.response.status).toBe(404) }
+  it ('get /api/all/user isAdmin: false - 404', async () => {
+    const { notFound } = await actingAs('test@test.com')
+    expect(await notFound('GET', '/api/all/user')).toBe(404)
   })
 
   it ('get /api/user GET', async () => {

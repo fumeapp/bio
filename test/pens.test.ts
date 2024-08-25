@@ -38,10 +38,8 @@ describe ('/api/user/:user/pen admin-only apiResource', async () => {
 
   it ('remove /api/user/:user/pen/:id - delete a pen', async () => {
     if (!pens[0]) throw new Error('Pen not found')
-    const { remove, get } = await actingAs('admin@test.com')
-
+    const { remove, notFound } = await actingAs('admin@test.com')
     await remove<Pen>(`/api/user/1/pen/${pens[0]?.id}`)
-    try { await get<Pen[]>(`/api/user/1/pen/${pens[0]?.id}`) }
-    catch (error: any) { expect(error.response.status).toBe(404) }
+    expect(await notFound('GET', `/api/user/1/pen/${pens[0]?.id}`)).toBe(404)
   })
 })

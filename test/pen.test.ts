@@ -37,9 +37,8 @@ describe('/api/pen', async () => {
 
   it ('delete /api/pen/:id - delete a pen', async () => {
     if (!pens[0]) throw new Error('Pen not found')
-    const { remove, get } = await actingAs('test@test.com')
+    const { remove, notFound } = await actingAs('test@test.com')
     await remove<Pen>(`/api/pen/${pens[0]?.id}`)
-    try { await get<Pen[]>(`/api/pen/${pens[0]?.id}`) }
-    catch (error: any) { expect(error.response.status).toBe(404) }
+    expect(await notFound('GET', `/api/pen/${pens[0]?.id}`)).toBe(404)
   })
 })
