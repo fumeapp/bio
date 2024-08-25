@@ -41,20 +41,15 @@ jobs:
       - name: Install Dependencies
         run: pnpm i
 
-      - name: Generate Prisma deps
+      - name: Generate prisma deps
         run: npx prisma generate
 
       - name: Copy .env.test-action to .env.test and .env
         run: cp .env.test-action .env.test
 
-      - name: Build
+      - name: Build and start server in the background
         env:
           NUXT_UI_PRO_LICENSE: ${{ secrets.NUXT_UI_PRO_LICENSE }}
-        run: |
-          pnpm run build
-          node .output/server/index.mjs
-
-      - name: Start Server
         run: pnpm run build:test:start:bg
 
       - name: Run Migrations
