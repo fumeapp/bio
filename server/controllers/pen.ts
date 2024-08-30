@@ -1,11 +1,14 @@
 import { z } from 'zod'
+import { Prisma } from '@prisma/client'
+import { penPolicy } from '../policies/pen'
+import type { Pen } from '~/types/models'
 import { penColors } from '~/utils/shared'
 
-const inc = {
+const include = {
   cartridge: {
     include: {
       shots: {
-        orderBy: { date: 'asc' },
+        orderBy: { date: Prisma.SortOrder.asc },
       },
     },
   },
@@ -18,7 +21,7 @@ const index = defineEventHandler(async (event) => {
       where: {
         userId: BigInt(user.id),
       },
-      include: inc,
+      include,
       orderBy: {
         updatedAt: 'desc',
       },
@@ -38,19 +41,22 @@ const create = authedHandler(async ({ user, event }) => {
       userId: user.id,
       cartridgeId: null,
     },
-    include: inc,
+    include,
   })
 
   return metapi().success('pen created', pen)
 })
 
-const update = authedHandler(async ({ user, event }) => {
+const update = authedModelHandler<Pen>(async ({ user, event, model: pen }) => {
+  authorize(penPolicy.update, { user, pen })
+
   const schema = z.object({
     id: z.number(),
     color: z.enum(penColors as [string, ...string[]]),
     cartridgeId: z.number().optional(),
     shotDay: z.string().optional(),
   })
+
   const body = await readBody(event)
   const parsed = schema.safeParse({
     id: Number.parseInt(event.context.params?.id as string),
@@ -69,41 +75,24 @@ const update = authedHandler(async ({ user, event }) => {
       color: parsed.data.color,
       shotDay: parsed.data.shotDay || null,
     },
-    include: inc,
+    include,
   }))
 })
 
-const get = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  const schema = z.object({ id: z.number() })
-  const parsed = schema.safeParse({ id: Number.parseInt(event.context.params?.id as string) })
-  if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
+const get = authedModelHandler<Pen>(async ({ user, model: pen }) => {
+  authorize(penPolicy.get, { user, pen })
+  return metapi().render(pen)
+}, { include })
 
-  return metapi().renderNullError(event, await prisma.pen.findUnique({
-    where: {
-      id: parsed.data.id,
-      userId: user.id,
-    },
-    include: inc,
-  }))
-})
-
-const remove = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  const id = event.context.params?.id
-  const pen = await prisma.pen.findFirst({
-    where: {
-      id: Number.parseInt(id as string),
-      userId: user.id,
-    },
-  })
+const remove = authedModelHandler<Pen>(async ({ user, event, model: pen }) => {
+  authorize(penPolicy.remove, { user, pen })
 
   if (pen?.cartridgeId !== null)
     return metapi().error(event, 'Cannot delete pen with cartridge', 400)
 
   await prisma.pen.delete({
     where: {
-      id: Number.parseInt(id as string),
+      id: pen.id,
       userId: user.id,
     },
   })

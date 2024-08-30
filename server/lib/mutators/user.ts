@@ -18,6 +18,6 @@ const admin = {
   },
 }
 
-export default {
+export const userExtends = {
   admin,
 }

@@ -2,8 +2,7 @@ import { z } from 'zod'
 import type { Pen } from '~/types/models'
 import { penColors } from '~/utils/shared'
 
-const index = authedHandler(async ({ user, event }) => {
-  if (!user.isAdmin) return metapi().notFound(event)
+const index = authedHandler(async ({ event }) => {
   const schema = z.object({ id: z.number() })
   const parsed = schema.safeParse({ id: Number.parseInt(event.context.params?.user as string) })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
@@ -79,11 +78,11 @@ const update = authedModelHandler<Pen>(async ({ event, model: pen }) => {
   })
 
   return metapi().success('pen updated', updatedPen)
-}, true)
+}, { requireAdmin: true })
 
 const get = authedModelHandler<Pen>(async ({ model: pen }) => {
   return metapi().render(pen)
-}, { admin: true, bindUser: false })
+}, { requireAdmin: true })
 
 const remove = authedModelHandler<Pen>(async ({ event, model: pen }) => {
   if (pen.cartridgeId !== null)
@@ -95,7 +94,7 @@ const remove = authedModelHandler<Pen>(async ({ event, model: pen }) => {
     },
   })
   return metapi().success('pen deleted')
-}, { admin: true, bindUser: false })
+}, { requireAdmin: true })
 
 export default {
   index,

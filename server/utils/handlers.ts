@@ -1,4 +1,5 @@
 import type { H3Event } from 'h3'
+import { GlobalIncludes } from '../lib/includes'
 import type { User } from '~/types/models'
 
 /**
@@ -38,9 +39,14 @@ interface ModelOptions {
    * @default false
    */
   requireAdmin?: boolean
+
+  /**
+   * Includes optional includes to the model lookup
+   */
+  include?: object
 }
 
-async function handleModelLookup(event: H3Event) {
+async function handleModelLookup(event: H3Event, include = {}) {
   if (
     !event.context?.params
     || !event.context.params.id
@@ -54,39 +60,26 @@ async function handleModelLookup(event: H3Event) {
 
   const modelDelegate = prisma[modelName as keyof typeof prisma] as any
 
-  if (!modelDelegate?.findUnique)
-    throw createError({ statusCode: 400, statusMessage: `Unable to find Prisma model: ${String(modelName)}` })
-
-  return await modelDelegate.findUnique({
-    where: { id: BigInt(event.context.params.id) },
-  })
+  return await modelDelegate.findUnique({ where: { id: BigInt(event.context.params.id) }, include })
 }
 
 function mergeOptions(options?: ModelOptions) {
-  const defaultOptions = {
+  const defaultOptions: ModelOptions = {
     authed: true,
     requireAdmin: false,
-    bindUser: true,
-    props: {},
+    include: {},
   }
 
   return { ...defaultOptions, ...options }
 }
 
-export function modelHandler<T>(handler: ({ event, model }: { user?: User, event: H3Event, model: T }) => Promise<any>) {
-  return defineEventHandler(async (event: H3Event) => {
-    const model = await handleModelLookup(event)
-    return handler({ event, model })
-  })
-}
-
 export function authedModelHandler<T>(
   handler: ({ user, event, model }: { user: User, event: H3Event, model: T }) => Promise<any>,
-  requireAdmin = false,
+  options?: ModelOptions,
 ) {
-  const mergedOptions = mergeOptions({ requireAdmin })
+  const mergedOptions = mergeOptions(options)
   return authedHandler(async ({ user, event }) => {
-    const model = await handleModelLookup(event)
+    const model = await handleModelLookup(event, mergedOptions.include)
     if (model === null || (mergedOptions.requireAdmin && !user.isAdmin)) return metapi().notFound(event)
     return handler({ user, event, model })
   })
