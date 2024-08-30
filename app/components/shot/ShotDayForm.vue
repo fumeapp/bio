@@ -38,6 +38,7 @@ const update = (day?: string) => {
     <u-badge :label="weekdayToFull(pen.shotDay)" variant="soft" size="lg" />
     <u-button :ui="{ rounded: 'rounded-full' }" icon="i-mdi-close" size="xs" variant="ghost" square @click="update()" />
   </div>
+  {{ pen.cartridge.shots }}
   <u-alert
     v-if="isShotDayToday"
     icon="i-mdi-alert"
