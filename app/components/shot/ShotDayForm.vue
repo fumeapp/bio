@@ -10,6 +10,22 @@ const isShotDayToday = computed((): boolean =>
   weekDays[new Date().getDay()]?.toLowerCase() === props.pen.shotDay?.toLowerCase(),
 )
 
+const lastShot = computed(() => props.pen?.cartridge?.shots?.at(-1) ?? null)
+
+const hasTakenShotOnShotDay = computed((): boolean => {
+  if (!isShotDayToday.value) return false
+
+  if (!lastShot.value) return false
+
+  const today = new Date()
+  const lastShotDate = new Date(lastShot.value.date)
+
+  return (
+    today.getDate() === lastShotDate.getDate()
+    && today.getMonth() === lastShotDate.getMonth()
+    && today.getFullYear() === lastShotDate.getFullYear()
+  )
+})
 const update = (day?: string) => {
   useApi()
     .api(
@@ -39,11 +55,16 @@ const update = (day?: string) => {
     <u-button :ui="{ rounded: 'rounded-full' }" icon="i-mdi-close" size="xs" variant="ghost" square @click="update()" />
   </div>
   <u-alert
-    v-if="isShotDayToday"
+    v-if="hasTakenShotOnShotDay"
+    icon="i-mdi-check"
+    title="You've taken your shot today!" color="emerald"
+  />
+  <u-alert
+    v-else-if="isShotDayToday"
     icon="i-mdi-alert"
     title="Shot day is today"
     description="Don't forget to take your shot and log it!"
-    color="emerald"
+    color="sky"
   />
 </template>
 

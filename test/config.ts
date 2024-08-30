@@ -1,5 +1,5 @@
 function setupConfig() {
-  return { host: 'http://[::]:3000' }
+  return { host: 'http://localhost:3000' }
 }
 
 export {
