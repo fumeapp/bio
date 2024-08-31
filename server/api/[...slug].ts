@@ -3,7 +3,7 @@ import { githubHandler, googleHandler } from '../utils/oauth'
 import logout from '../controllers/logout'
 import token from '../controllers/token'
 import pen from '../controllers/pen'
-import pens from '../controllers/pens'
+/// import pens from '../controllers/pens'
 import cartridge from '../controllers/cartridge'
 import cartridges from '../controllers/cartridges'
 import shots from '../controllers/shots'
@@ -12,6 +12,12 @@ import user from '../controllers/user'
 import test from '../controllers/test'
 
 const router = createRouter()
+
+/*
+modelBind(router).get('/user/{user}/pen/{pen}', boundHandler(({ event, user, pen }) => {
+  console.log('we got into the function')
+}))
+*/
 
 router.get('/**', defineEventHandler(event => metapi().notFound(event)))
 router.get('/me', authedHandler(async ({ user }) => metapi().render(user)))
@@ -26,12 +32,12 @@ router.get('/oauth/microsoft', microsoftHandler)
 router.get('/logout', logout)
 
 routing.apiResource('/token', router, token)
-routing.apiResource('/pen', router, pen)
+// routing.apiResource('/pen', router, pen)
 routing.apiResource('/cartridge', router, cartridge)
 routing.apiResource('/shot', router, shot)
 
 routing.apiResource('/all/user', router, user)
-routing.apiResource('/user/:user/pen', router, pens)
+routing.apiResource('/user/:user/pen', router, pen)
 routing.apiResource('/user/:user/cartridge', router, cartridges)
 routing.apiResource('/user/:user/shot', router, shots)
 

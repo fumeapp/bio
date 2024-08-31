@@ -1,14 +1,29 @@
-import type { H3Event } from 'h3'
-import { GlobalIncludes } from '../lib/includes'
+import type { H3Event, Router } from 'h3'
 import type { User } from '~/types/models'
+
+export function modelBind(router: Router) {
+  return {
+    get: (route: string, handler: Function) => {
+      const parsedRoute = route.replace(/\{(\w+)\}/g, ':$1')
+      const foundModels = route.match(/\{(\w+)\}/g)?.map(m => m.slice(1, -1)) || []
+
+      console.log(parsedRoute, foundModels)
+
+      router.get(parsedRoute, async (event: H3Event) => {
+        const params = event.context.params
+        const query = event.context.query
+        return { params, query }
+      })
+    },
+  }
+}
 
 /**
  * eventHandler wrapper that requires the user to be authenticated with an option to also require user.isAdmin
  * @param handler
- * @param requireAdmin
  * @returns ({ user, event }: { user: User, event: H3Event }) => Promise<T>
  */
-export function authedHandler<T>(handler: ({ user, event }: { user: User, event: H3Event }) => Promise<T>, requireAdmin = false) {
+export function authedHandler<T>(handler: ({ user, event }: { user: User, event: H3Event }) => Promise<T>) {
   return defineEventHandler(async (event: H3Event) => {
     const { user } = await requireUserSession(event)
     try {
@@ -22,7 +37,6 @@ export function authedHandler<T>(handler: ({ user, event }: { user: User, event:
       clearUserSession(event)
       throw createError({ statusCode: 401, statusMessage: 'Unauthorized' })
     }
-    if (requireAdmin && !user.isAdmin) return metapi().notFound(event)
     return handler({ user, event })
   })
 }
@@ -33,13 +47,6 @@ interface ModelOptions {
    * @default true
    */
   authed?: boolean
-
-  /**
-   * Require the user to have user.isAdmin set to true
-   * @default false
-   */
-  requireAdmin?: boolean
-
   /**
    * Includes optional includes to the model lookup
    */
