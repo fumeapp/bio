@@ -1,4 +1,4 @@
-import pen from './pen'
+import * as pen from './pen'
 
 export default {
   pen,

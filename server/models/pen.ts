@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client'
 
-const include = {
+export const include = {
   cartridge: {
     include: {
       shots: {
@@ -9,11 +9,6 @@ const include = {
     },
   },
 }
-const orderBy = {
+export const orderBy = {
   updatedAt: Prisma.SortOrder.asc,
-}
-
-export default {
-  include,
-  orderBy,
 }

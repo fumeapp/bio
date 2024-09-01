@@ -1,22 +1,9 @@
 import type { H3Event } from 'h3'
 import { z } from 'zod'
-import { Prisma } from '@prisma/client'
 import { pen as policies } from '../policies/pen'
+import { include, orderBy } from '../models/pen'
 import type { Pen, User } from '~/types/models'
 import { penColors } from '~/utils/shared'
-
-const include = {
-  cartridge: {
-    include: {
-      shots: {
-        orderBy: { date: Prisma.SortOrder.asc },
-      },
-    },
-  },
-}
-const orderBy = {
-  updatedAt: Prisma.SortOrder.asc,
-}
 
 const index = async ({ user }: { user: User }, event: H3Event) => {
   const { user: authed } = await requireUserSession(event)
