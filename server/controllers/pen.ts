@@ -10,9 +10,7 @@ const index = async ({ user }: { user: User }, event: H3Event) => {
   authorize(policies.index, { authed, user })
   return metapi().render(
     await prisma.pen.findMany({
-      where: {
-        userId: user.id,
-      },
+      where: { userId: user.id },
       include,
       orderBy,
     }),

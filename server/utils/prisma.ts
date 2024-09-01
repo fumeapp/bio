@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import token from '../lib/mutators/token'
-import { userExtends } from '../lib/mutators/user'
+import models from '../models/index'
 
 const prismaClientSingleton = () => {
   // return new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
@@ -10,21 +9,35 @@ const prismaClientSingleton = () => {
 declare const globalThis: {
   prismaGlobal: ReturnType<typeof prismaClientSingleton>
 }
-const prisma = globalThis.prismaGlobal ?? prismaClientSingleton()
-  .$extends(userExtends.admin)
-  .$extends(token.client)
-/*
-const prisma = import.meta.client
-  ? undefined
-  : globalThis.prismaGlobal ?? prismaClientSingleton()
-    .$extends(user.admin)
-    .$extends(token.client)
-/
 
-for (const key in mutators)
-  if (Object.prototype.hasOwnProperty.call(mutators, key))
-    if (typeof mutators[key] === 'function')
+/*
+type ModelExtensions = {
+  [ModelName in Lowercase<keyof PrismaClient>]?: {
+    [MethodName: string]: (...args: any[]) => any
+  };
+}
+
+function createExtendedPrismaClient(extensions: ModelExtensions = {}) {
+  const prisma = new PrismaClient().$extends({
+    model: Object.fromEntries(
+      Object.entries(extensions).map(([modelName, modelExtension]) => [
+        modelName,
+        {
+          ...modelExtension,
+        },
+      ]),
+    ),
+  })
+
+  return prisma
+}
+
+const prisma = createExtendedPrismaClient();
 */
+
+const prisma = globalThis.prismaGlobal ?? prismaClientSingleton()
+  .$extends(models.user.extend.admin)
+  .$extends(models.token.extend.client)
 
 export type CustomPrismaClient = ReturnType<typeof prismaClientSingleton>
 

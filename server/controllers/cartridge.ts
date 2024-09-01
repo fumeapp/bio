@@ -1,22 +1,27 @@
+// /Users/k/fumeapp/bio/server/controllers/cartridge.ts
+
+import type { H3Event } from 'h3'
 import { z } from 'zod'
-import type { Cartridge } from '~/types/models'
+import { cartridge as policies } from '../policies/cartridge'
+import { include, orderBy } from '../models/cartridge'
+import type { Cartridge, User } from '~/types/models'
 import { cartridgeContents, cartridgeMgs, cartridgeMls } from '~/utils/shared'
 
-const index = authedHandler(async ({ user }) => {
+const index = async ({ user }: { user: User }, event: H3Event) => {
+  const { user: authed } = await requireUserSession(event)
+  authorize(policies.index, { authed, user })
   return metapi().render(
     await prisma.cartridge.findMany({
-      where: {
-        userId: user.id,
-      },
-      include: {
-        pen: true,
-        shots: true,
-      },
+      where: { userId: user.id },
+      include,
+      orderBy,
     }),
   )
-})
+}
 
-const create = authedHandler(async ({ user, event }) => {
+const create = async ({ user }: { user: User }, event: H3Event) => {
+  const { user: authed } = await requireUserSession(event)
+  authorize(policies.create, { authed, user })
   const schema = z.object({
     content: z.enum(cartridgeContents as [string, ...string[]]),
     ml: z.enum(cartridgeMls as [string, ...string[]]),
@@ -24,28 +29,47 @@ const create = authedHandler(async ({ user, event }) => {
   })
   const parsed = schema.safeParse(await readBody(event))
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
-  const cartridge = await prisma.cartridge.create({
+  return metapi().success('cartridge created', await prisma.cartridge.create({
     data: {
       content: parsed.data.content,
       ml: parsed.data.ml,
       mg: parsed.data.mg,
       userId: user.id,
     },
+    include,
+  }))
+}
+
+const get = async ({ user, cartridge }: { user: User, cartridge: Cartridge }, event: H3Event) => {
+  const { user: authed } = await requireUserSession(event)
+  authorize(policies.get, { authed, user, cartridge })
+  return metapi().render(cartridge)
+}
+
+const update = async ({ user, cartridge }: { user: User, cartridge: Cartridge }, event: H3Event) => {
+  authorize(policies.update, { user, cartridge })
+
+  const schema = z.object({
+    content: z.enum(cartridgeContents as [string, ...string[]]).optional(),
+    ml: z.enum(cartridgeMls as [string, ...string[]]).optional(),
+    mg: z.enum(cartridgeMgs as [string, ...string[]]).optional(),
   })
 
-  return metapi().success('cartridge created', cartridge)
-})
+  const parsed = schema.safeParse(await readBody(event))
+  if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
+  return metapi().success('cartridge updated', await prisma.cartridge.update({
+    where: {
+      id: cartridge.id,
+      userId: user.id,
+    },
+    data: parsed.data,
+    include,
+  }))
+}
 
-const get = authedModelHandler<Cartridge>(async ({ event, user, model: cartridge }) => {
-  if (Number(cartridge.userId) !== Number(user.id))
-    return metapi().error(event, 'Unauthorized', 401)
+const remove = async ({ user, cartridge }: { user: User, cartridge: Cartridge }, event: H3Event) => {
+  authorize(policies.remove, { user, cartridge })
 
-  return metapi().render(cartridge)
-})
-
-const remove = authedModelHandler<Cartridge>(async ({ event, user, model: cartridge }) => {
-  if (Number(cartridge.userId) !== Number(user.id))
-    return metapi().error(event, 'Unauthorized', 401)
   await prisma.cartridge.delete({
     where: {
       id: cartridge.id,
@@ -53,11 +77,12 @@ const remove = authedModelHandler<Cartridge>(async ({ event, user, model: cartri
     },
   })
   return metapi().success('cartridge deleted')
-})
+}
 
 export default {
   index,
   create,
   get,
+  update,
   remove,
 }
