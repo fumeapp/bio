@@ -1,4 +1,8 @@
 import { createRouter, useBase } from 'h3'
+import pen from '../controllers/pen'
+import { withApiUtils } from '../lib/api'
+import type { Pen, User } from '~/types/models'
+/*
 import { githubHandler, googleHandler } from '../utils/oauth'
 import logout from '../controllers/logout'
 import token from '../controllers/token'
@@ -10,7 +14,15 @@ import shots from '../controllers/shots'
 import shot from '../controllers/shot'
 import user from '../controllers/user'
 import test from '../controllers/test'
+*/
 
+const router = withApiUtils(createRouter())
+
+router.apiResource<{ user: User, pen: Pen }>('/user/{user}/pen', pen)
+
+export default useBase('/api', router.handler)
+
+/*
 const router = createRouter()
 
 router.get('/**', defineEventHandler(event => metapi().notFound(event)))
@@ -36,3 +48,4 @@ routing.apiResource('/user/:user/cartridge', router, cartridges)
 routing.apiResource('/user/:user/shot', router, shots)
 
 export default useBase('/api', router.handler)
+*/

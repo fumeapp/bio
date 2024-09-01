@@ -1,5 +1,4 @@
 import type { H3Event } from 'h3'
-import { GlobalIncludes } from '../lib/includes'
 import type { User } from '~/types/models'
 
 /**
