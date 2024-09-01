@@ -1,7 +1,7 @@
 import type { H3Event } from 'h3'
 import { z } from 'zod'
 import { Prisma } from '@prisma/client'
-import { policies } from '../policies/pen'
+import { pen as policies } from '../policies/pen'
 import type { Pen, User } from '~/types/models'
 import { penColors } from '~/utils/shared'
 
@@ -20,7 +20,7 @@ const orderBy = {
 
 const index = async ({ user }: { user: User }, event: H3Event) => {
   const { user: authed } = await requireUserSession(event)
-  authorize(policies.pen.index, { authed, user })
+  authorize(policies.index, { authed, user })
   return metapi().render(
     await prisma.pen.findMany({
       where: {
@@ -34,7 +34,7 @@ const index = async ({ user }: { user: User }, event: H3Event) => {
 
 const create = async ({ user }: { user: User }, event: H3Event) => {
   const { user: authed } = await requireUserSession(event)
-  authorize(policies.pen.create, { authed, user })
+  authorize(policies.create, { authed, user })
   const schema = z.object({
     color: z.enum(penColors as [string, ...string[]]),
   })
@@ -52,15 +52,14 @@ const create = async ({ user }: { user: User }, event: H3Event) => {
 
 const get = async ({ user, pen }: { user: User, pen: Pen }, event: H3Event) => {
   const { user: authed } = await requireUserSession(event)
-  authorize(policies.pen.get, { authed, user, pen })
+  authorize(policies.get, { authed, user, pen })
   return metapi().render(pen)
 }
 
 const update = async ({ user, pen }: { user: User, pen: Pen }, event: H3Event) => {
-  authorize(policies.pen.update, { user, pen })
+  authorize(policies.update, { user, pen })
 
   const schema = z.object({
-    id: z.number(),
     color: z.enum(penColors as [string, ...string[]]),
     cartridgeId: z.number().optional(),
     shotDay: z.string().optional(),
@@ -68,7 +67,6 @@ const update = async ({ user, pen }: { user: User, pen: Pen }, event: H3Event) =
 
   const body = await readBody(event)
   const parsed = schema.safeParse({
-    id: Number.parseInt(event.context.params?.id as string),
     cartridgeId: Number.parseInt(body?.cartridgeId) || undefined,
     color: body?.color || penColors[0],
     shotDay: body?.shotDay || undefined,
@@ -76,7 +74,7 @@ const update = async ({ user, pen }: { user: User, pen: Pen }, event: H3Event) =
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
   return metapi().success('pen updated', await prisma.pen.update({
     where: {
-      id: parsed.data.id,
+      id: pen.id,
       userId: user.id,
     },
     data: {
@@ -87,55 +85,8 @@ const update = async ({ user, pen }: { user: User, pen: Pen }, event: H3Event) =
     include,
   }))
 }
-
-export default {
-  index,
-  create,
-  get,
-  update,
-}
-
-/*
-
-const update = authedModelHandler<Pen>(async ({ user, event, model: pen }) => {
-  authorize(penPolicy.update, { user, pen })
-
-  const schema = z.object({
-    id: z.number(),
-    color: z.enum(penColors as [string, ...string[]]),
-    cartridgeId: z.number().optional(),
-    shotDay: z.string().optional(),
-  })
-
-  const body = await readBody(event)
-  const parsed = schema.safeParse({
-    id: Number.parseInt(event.context.params?.id as string),
-    cartridgeId: Number.parseInt(body?.cartridgeId) || undefined,
-    color: body?.color || penColors[0],
-    shotDay: body?.shotDay || undefined,
-  })
-  if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
-  return metapi().success('pen updated', await prisma.pen.update({
-    where: {
-      id: parsed.data.id,
-      userId: user.id,
-    },
-    data: {
-      cartridgeId: parsed.data.cartridgeId ? BigInt(parsed.data.cartridgeId) : null,
-      color: parsed.data.color,
-      shotDay: parsed.data.shotDay || null,
-    },
-    include,
-  }))
-})
-
-const get = authedModelHandler<Pen>(async ({ user, model: pen }) => {
-  authorize(penPolicy.get, { user, pen })
-  return metapi().render(pen)
-}, { include })
-
-const remove = authedModelHandler<Pen>(async ({ user, event, model: pen }) => {
-  authorize(penPolicy.remove, { user, pen })
+const remove = async ({ user, pen }: { user: User, pen: Pen }, event: H3Event) => {
+  authorize(policies.remove, { user, pen })
 
   if (pen?.cartridgeId !== null)
     return metapi().error(event, 'Cannot delete pen with cartridge', 400)
@@ -147,7 +98,7 @@ const remove = authedModelHandler<Pen>(async ({ user, event, model: pen }) => {
     },
   })
   return metapi().success('pen deleted')
-})
+}
 
 export default {
   index,
@@ -156,4 +107,3 @@ export default {
   update,
   remove,
 }
-*/

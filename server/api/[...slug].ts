@@ -1,7 +1,9 @@
 import { createRouter, useBase } from 'h3'
 import pen from '../controllers/pen'
 import { withApiUtils } from '../lib/api'
+import test from '../controllers/test'
 import type { Pen, User } from '~/types/models'
+
 /*
 import { githubHandler, googleHandler } from '../utils/oauth'
 import logout from '../controllers/logout'
@@ -13,10 +15,19 @@ import cartridges from '../controllers/cartridges'
 import shots from '../controllers/shots'
 import shot from '../controllers/shot'
 import user from '../controllers/user'
-import test from '../controllers/test'
 */
 
 const router = withApiUtils(createRouter())
+
+router.get('/**', defineEventHandler(event => metapi().notFound(event)))
+router.get('/me', authedHandler(async ({ user }) => metapi().render(user)))
+
+if (useRuntimeConfig().appEnv === 'test')
+  router.post('/test/session', test.create)
+
+router.get('/oauth/google', googleHandler)
+router.get('/oauth/github', githubHandler)
+router.get('/oauth/microsoft', microsoftHandler)
 
 router.apiResource<{ user: User, pen: Pen }>('/user/{user}/pen', pen)
 
@@ -24,9 +35,6 @@ export default useBase('/api', router.handler)
 
 /*
 const router = createRouter()
-
-router.get('/**', defineEventHandler(event => metapi().notFound(event)))
-router.get('/me', authedHandler(async ({ user }) => metapi().render(user)))
 
 if (useRuntimeConfig().appEnv === 'test')
   router.post('/test/session', test.create)

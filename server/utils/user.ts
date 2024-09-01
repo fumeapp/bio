@@ -33,7 +33,7 @@ export const createUser = async (info: UserInfo, provider: string, oauthPayload:
   await prisma.provider.upsert({
     where: {
       userId_name: {
-        userId: BigInt(user.id),
+        userId: user.id,
         name: provider,
       },
     },
@@ -42,7 +42,7 @@ export const createUser = async (info: UserInfo, provider: string, oauthPayload:
       payload: oauthPayload as unknown as Prisma.JsonObject,
     },
     create: {
-      userId: BigInt(user.id),
+      userId: user.id,
       name: provider,
       avatar: info.avatar,
       payload: oauthPayload as unknown as Prisma.JsonObject,
@@ -65,7 +65,7 @@ export const createUser = async (info: UserInfo, provider: string, oauthPayload:
 
   const token = await prisma.token.create({
     data: {
-      userId: BigInt(user.id),
+      userId: user.id,
       hash: `${cfg.public.prefix}_${crypto.createHash('sha256').update(crypto.randomBytes(20).toString('hex')).digest('hex')}`,
       source: `oauth:${provider}`,
       ip: event?.node.req.headers['x-forwarded-for'] as string || '127.0.0.1',

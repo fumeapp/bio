@@ -1,4 +1,5 @@
 import type { H3Event, Router } from 'h3'
+import models from '../models/index'
 
 async function lookupModels<T extends Record<string, any>>(modelNames: (keyof T)[], event: H3Event): Promise<T> {
   const result = {} as T
@@ -13,10 +14,9 @@ async function lookupModels<T extends Record<string, any>>(modelNames: (keyof T)
       throw createError({ statusCode: 404, statusMessage: 'Not Found' })
 
     const record = await modelDelegate.findUnique({
-      where: { id: Number.parseInt(id) },
-      include: {}, // TODO: global includes
+      where: { id: Number.parseInt(id, 10) },
+      include: models[key as keyof typeof models]?.include || {},
     })
-
     if (!record)
       throw createError({ statusCode: 404, statusMessage: 'Not Found' })
 
@@ -84,12 +84,12 @@ function apiResource<T extends Record<string, any>>(
   }
   if (handlers.update) {
     const { url: boundUrl, modelNames } = bindModel(`${route}/{${modelName}}`)
-    router.put(`${boundUrl}/{${modelName}}`, modelBoundHandler<T>([...modelNames, modelName] as (keyof T)[], handlers.update))
+    router.put(boundUrl, modelBoundHandler<T>([...modelNames, modelName] as (keyof T)[], handlers.update))
   }
 
   if (handlers.remove) {
     const { url: boundUrl, modelNames } = bindModel(`${route}/{${modelName}}`)
-    router.delete(`${boundUrl}/{${modelName}}`, modelBoundHandler<T>([...modelNames, modelName] as (keyof T)[], handlers.remove))
+    router.delete(boundUrl, modelBoundHandler<T>([...modelNames, modelName] as (keyof T)[], handlers.remove))
   }
 }
 

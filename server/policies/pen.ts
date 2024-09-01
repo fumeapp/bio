@@ -20,12 +20,10 @@ function remove({ user, pen }: { user: User, pen: Pen }) {
   return user.isAdmin || user.id.toString() === pen.userId.toString()
 }
 
-export const policies = {
-  pen: {
-    index,
-    create,
-    get,
-    update,
-    remove,
-  },
+export const pen = {
+  index,
+  create,
+  get,
+  update,
+  remove,
 }
