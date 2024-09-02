@@ -60,7 +60,7 @@ export default defineNuxtConfig({
   vite: {
     resolve: {
       alias: {
-        '.prisma/client/index-browser': './node_modules/.pnpm/@prisma+client@5.19.1_prisma@5.19.1/node_modules/.prisma/client/index-browser.js',
+        '.prisma/client/index-browser': './node_modules/.pnpm/@prisma+client@5.19.0_prisma@5.19.0/node_modules/.prisma/client/index-browser.js',
       },
     },
   },
