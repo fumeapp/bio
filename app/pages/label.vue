@@ -2,11 +2,12 @@
 definePageMeta({
   layout: 'bare',
 })
+const dims = { width: 45, height: 20 }
 </script>
 
 <template>
   <div class="w-screen h-screen flex items-center justify-center">
-    <div class="flex items-start bg-red-500" style="width: 80mm; height: 80mm; ">
+    <div class="flex items-center border border-white" :style="`width: ${dims.width * 4}mm; height: ${dims.height * 4}mm;` ">
       <logo-bio class="w-52 h-52" />
       <div class="flex flex-col space-y-3 my-3">
         <logo-text class="text-5xl" />
