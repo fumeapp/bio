@@ -6,10 +6,10 @@ definePageMeta({
 
 <template>
   <div class="w-screen h-screen flex items-center justify-center">
-    <div class="flex items-start">
+    <div class="flex items-start bg-red-500" style="width: 80mm; height: 80mm; ">
       <logo-bio class="w-52 h-52" />
       <div class="flex flex-col space-y-3 my-3">
-        <logo-text class="text-8xl" />
+        <logo-text class="text-5xl" />
         <div class="bg-sky-300 text-right w-full py-2 px-6 text-3xl font-extrabold">
           <span class="text-sky-700"> tirz </span>
           <span class="text-sky-900"> 20mg </span>
