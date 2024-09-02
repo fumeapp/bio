@@ -1,13 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { setup } from '@nuxt/test-utils'
 import { actingAs } from './auth'
-import { setupConfig } from './config'
 import { cartridgeContents, cartridgeMgs, cartridgeMls } from '~/utils/shared'
 import type { Cartridge } from '~/types/models'
 
 describe('/api/user/{user}/cartridge', async () => {
   const cartridges: Cartridge[] = []
-  await setup(setupConfig())
+  await setup({ host: 'http://localhost:3000' })
 
   it('post /api/user/{user}/cartridge - create a cartridge', async () => {
     const { post, user } = await actingAs('test@test.com')

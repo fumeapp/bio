@@ -1,13 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { setup } from '@nuxt/test-utils'
 import { actingAs } from './auth'
-import { setupConfig } from './config'
 import { penColors } from '~/utils/shared'
 import type { Pen } from '~/types/models'
 
 describe('/api/user/{user}/pen', async () => {
+  await setup({ host: 'http://localhost:3000' })
   const pens: Pen[] = []
-  await setup(setupConfig())
 
   it('post /api/user/{user}/pen - create a pen', async () => {
     const { post, user } = await actingAs('test@test.com')

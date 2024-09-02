@@ -1,11 +1,10 @@
 import { describe, expect, it } from 'vitest'
 import { $fetch, setup } from '@nuxt/test-utils/e2e'
 import { actingAs } from './auth'
-import { setupConfig } from './config'
 import type { User } from '~/types/models'
 
 describe('/api/me and /api/user', async () => {
-  await setup(setupConfig())
+  await setup({ host: 'http://localhost:3000' })
   it('/api/me should 401', async () => {
     try {
       await $fetch('/api/me')

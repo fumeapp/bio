@@ -13,7 +13,10 @@ import type { Cartridge, Pen, Shot, Token, User } from '~/types/models'
 const router = withApiUtils(createRouter())
 
 router.get('/**', defineEventHandler(event => metapi().notFound(event)))
-router.get('/me', authedHandler(async ({ user }) => metapi().render(user)))
+router.get('/me', defineEventHandler(async (event) => {
+  const { user } = await requireUserSession(event)
+  return metapi().render(user)
+}))
 
 if (useRuntimeConfig().appEnv === 'test')
   router.post('/test/session', test.create)
