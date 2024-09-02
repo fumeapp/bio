@@ -17,10 +17,10 @@ useSeoMeta({
   ogDescription: page.value.description,
 })
 
-const { loggedIn } = useUserSession()
+const { loggedIn, user } = useUserSession()
 
-const { data: pens, refresh: pensRefresh } = await useFetch<MetapiResponse<Pen[]>>('/api/pen')
-const { data: cartridges, refresh: cartridgesRefresh } = await useFetch<MetapiResponse<Cartridge[]>>('/api/cartridge')
+const { data: pens, refresh: pensRefresh } = await useFetch<MetapiResponse<Pen[]>>(`/api/user/${user.value.id}/pen`)
+const { data: cartridges, refresh: cartridgesRefresh } = await useFetch<MetapiResponse<Cartridge[]>>(`/api/user/${user.value.id}/cartridge`)
 
 const reload = async () => {
   await pensRefresh()

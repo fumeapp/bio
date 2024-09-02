@@ -1,20 +1,22 @@
 import { createRouter, useBase } from 'h3'
-import { githubHandler, googleHandler } from '../utils/oauth'
-import logout from '../controllers/logout'
 import token from '../controllers/token'
 import pen from '../controllers/pen'
-import pens from '../controllers/pens'
 import cartridge from '../controllers/cartridge'
-import cartridges from '../controllers/cartridges'
-import shots from '../controllers/shots'
 import shot from '../controllers/shot'
 import user from '../controllers/user'
+import { withApiUtils } from '../lib/api'
 import test from '../controllers/test'
+import logout from '../controllers/logout'
+import { githubHandler, googleHandler, microsoftHandler } from '../controllers/oauth'
+import type { Cartridge, Pen, Shot, Token, User } from '~/types/models'
 
-const router = createRouter()
+const router = withApiUtils(createRouter())
 
 router.get('/**', defineEventHandler(event => metapi().notFound(event)))
-router.get('/me', authedHandler(async ({ user }) => metapi().render(user)))
+router.get('/me', defineEventHandler(async (event) => {
+  const { user } = await requireUserSession(event)
+  return metapi().render(user)
+}))
 
 if (useRuntimeConfig().appEnv === 'test')
   router.post('/test/session', test.create)
@@ -22,17 +24,13 @@ if (useRuntimeConfig().appEnv === 'test')
 router.get('/oauth/google', googleHandler)
 router.get('/oauth/github', githubHandler)
 router.get('/oauth/microsoft', microsoftHandler)
-
 router.get('/logout', logout)
 
-routing.apiResource('/token', router, token)
-routing.apiResource('/pen', router, pen)
-routing.apiResource('/cartridge', router, cartridge)
-routing.apiResource('/shot', router, shot)
+router.apiResource<{ token: Token }>('/token', token)
 
-routing.apiResource('/all/user', router, user)
-routing.apiResource('/user/:user/pen', router, pens)
-routing.apiResource('/user/:user/cartridge', router, cartridges)
-routing.apiResource('/user/:user/shot', router, shots)
+router.apiResource<{ user: User, pen: Pen }>('/user/{user}/pen', pen)
+router.apiResource<{ user: User, cartridge: Cartridge }>('/user/{user}/cartridge', cartridge)
+router.apiResource<{ user: User, shot: Shot }>('/user/{user}/shot', shot)
+router.apiResource<{ user: User }>('/all/user', user)
 
 export default useBase('/api', router.handler)

@@ -1,29 +1,29 @@
+import type { H3Event } from 'h3'
 import { z } from 'zod'
+import { shot as policies } from '../policies/shot'
+import { include, orderBy } from '../models/pen'
+import type { Shot, User } from '~/types/models'
 
-const index = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
+const index = async ({ user }: { user: User }, event: H3Event) => {
+  const { user: authed } = await requireUserSession(event)
+  authorize(policies.index, { authed, user })
   return metapi().render(
     await prisma.shot.findMany({
       where: {
         userId: user.id,
       },
-      orderBy: {
-        date: 'desc',
-      },
-      include: {
-        cartridge: {
-          include: {
-            pen: true,
-          },
-        },
-      },
-    }),
+      orderBy,
+      include,
+    },
+    ),
   )
-})
+}
 
-const create = authedHandler(async ({ user, event }) => {
+const create = async ({ user }: { user: User }, event: H3Event) => {
+  const { user: authed } = await requireUserSession(event)
+  authorize(policies.create, { authed, user })
   const schema = z.object({
-    cartridge: z.string(),
+    cartridgeId: z.number(),
     units: z.number(),
     date: z.string().datetime(),
   })
@@ -31,29 +31,25 @@ const create = authedHandler(async ({ user, event }) => {
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
   const shot = await prisma.shot.create({
     data: {
-      cartridgeId: BigInt(parsed.data.cartridge),
+      cartridgeId: parsed.data.cartridgeId,
       userId: user.id,
       units: parsed.data.units,
       date: new Date(parsed.data.date),
     },
+    include,
   })
 
   return metapi().success('shot logged', shot)
-})
+}
 
-const remove = defineEventHandler(async (event) => {
-  const { user } = await requireUserSession(event)
-  const schema = z.object({ id: z.string() })
-  const parsed = schema.safeParse({ id: event.context.params?.id })
-  if (!parsed.success) return metapi().error(event, parsed.error.issues, 403)
+const remove = async ({ user, shot }: { user: User, shot: Shot }, event: H3Event) => {
+  const { user: authed } = await requireUserSession(event)
+  authorize(policies.remove, { authed, shot })
   await prisma.shot.delete({
-    where: {
-      id: BigInt(parsed.data.id),
-      userId: user.id,
-    },
+    where: { id: shot.id, userId: user.id },
   })
   return metapi().success('shot deleted')
-})
+}
 
 export default {
   index,

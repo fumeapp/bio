@@ -16,6 +16,6 @@ const client = {
   },
 }
 
-export default {
+export const extend = {
   client,
 }

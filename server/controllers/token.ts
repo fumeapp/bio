@@ -1,42 +1,44 @@
-import { z } from 'zod'
+import type { H3Event } from 'h3'
+import { token as policies } from '../policies/token'
 import type { Token } from '~/types/models'
 
-const index = authedHandler(async ({ user }) => {
+const index = async (_: any, event: H3Event) => {
+  const { user: authed } = await requireUserSession(event)
   return metapi().render(
     await prisma.$extends({
       result: {
         token: {
           isCurrent: {
             needs: { hash: true },
-            compute({ hash }) { return hash === user.hash },
+            compute({ hash }) { return hash === authed.hash },
           },
         },
       },
     }).token.findMany({
       where: {
-        userId: user.id,
+        userId: authed.id,
       },
     }),
   )
-})
+}
 
-const get = authedModelHandler<Token>(async ({ user, event, model: token }) => {
-  if (Number(token.userId) !== Number(user.id))
-    return metapi().error(event, 'Unauthorized', 401)
-  return metapi().renderNullError(event, token)
-})
+const get = async ({ token }: { token: Token }, event: H3Event) => {
+  const { user: authed } = await requireUserSession(event)
+  authorize(policies.get, { authed, token })
+  return metapi().render(token)
+}
 
-const remove = authedModelHandler<Token>(async ({ user, event, model: token }) => {
-  if (token.userId !== user.id)
-    return metapi().error(event, 'Unauthorized', 401)
+const remove = async ({ token }: { token: Token }, event: H3Event) => {
+  const { user: authed } = await requireUserSession(event)
+  authorize(policies.remove, { authed, token })
   await prisma.token.delete({
     where: {
       id: token.id,
-      userId: user.id,
+      userId: authed.id,
     },
   })
   return metapi().success('token deleted')
-})
+}
 
 export default {
   index,

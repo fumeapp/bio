@@ -1,4 +1,5 @@
-export default authedHandler(async ({ user, event }) => {
+export default defineEventHandler(async (event) => {
+  const { user } = await requireUserSession(event)
   await prisma.token.delete({
     where: {
       userId: user.id,

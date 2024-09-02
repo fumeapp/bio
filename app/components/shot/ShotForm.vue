@@ -12,8 +12,7 @@ const route = useRoute()
 const { user } = useUserSession()
 const form = ref<Form<any>>()
 const state = reactive({
-  user: route.params.user ? route.params.user : user.id,
-  cartridge: props.pen.cartridge?.id,
+  cartridgeId: props.pen.cartridge?.id,
   units: shotUnits[1],
   date: format(new Date(), 'yyyy-MM-dd'),
 })
@@ -27,7 +26,7 @@ const options = computed(() =>
 const create = async () => useApi()
   .setForm(form?.value)
   .api<MetapiResponse<Shot>>(
-    route.params.user ? `/api/user/${route.params.user}/shot` : '/api/shot',
+    `/api/user/${route.params.user ? route.params.user : user.value.id}/shot`,
     { method: 'POST', body: { ...state, date: new Date(`${state.date}T00:00:00`).toISOString() } },
   )
   .then(() => emit('created'))

@@ -18,6 +18,22 @@ const admin = {
   },
 }
 
-export default {
+export const include = {
+  pens: {
+    include: {
+      cartridge: {
+        include: {
+          shots: {
+            include: {
+              cartridge: true,
+            },
+          },
+        },
+      },
+    },
+  },
+}
+
+export const extend = {
   admin,
 }
