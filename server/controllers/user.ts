@@ -1,30 +1,20 @@
+import type { H3Event } from 'h3'
+import { include } from '../models/user'
+import { user as policies } from '../policies/user'
 import type { User } from '~/types/models'
 
-const index = authedHandler(async () => {
-  return metapi().render(
-    await prisma.user.findMany({
-      include: {
-        pens: {
-          include: {
-            cartridge: {
-              include: {
-                shots: {
-                  include: {
-                    cartridge: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    }),
+const index = async (_: any, event: H3Event) => {
+  const { user: authed } = await requireUserSession(event)
+  authorize(policies.index, { authed })
+  return metapi().render(await prisma.user.findMany({ include }),
   )
-}, true)
+}
 
-const get = authedModelHandler<User>(async ({ event, model }) => {
-  return metapi().renderNullError(event, model)
-}, { admin: true, bindUser: false })
+const get = async ({ user }: { user: User }, event: H3Event) => {
+  const { user: authed } = await requireUserSession(event)
+  authorize(policies.index, { authed })
+  return metapi().render(user)
+}
 
 export default {
   index,

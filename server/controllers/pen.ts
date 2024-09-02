@@ -42,7 +42,8 @@ const get = async ({ user, pen }: { user: User, pen: Pen }, event: H3Event) => {
 }
 
 const update = async ({ user, pen }: { user: User, pen: Pen }, event: H3Event) => {
-  authorize(policies.update, { user, pen })
+  const { user: authed } = await requireUserSession(event)
+  authorize(policies.update, { authed, pen })
 
   const schema = z.object({
     color: z.enum(penColors as [string, ...string[]]),
@@ -56,7 +57,7 @@ const update = async ({ user, pen }: { user: User, pen: Pen }, event: H3Event) =
     color: body?.color || penColors[0],
     shotDay: body?.shotDay || undefined,
   })
-  if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
+  if (!parsed.success) return metapi().error(event, parsed.error.issues, 402)
   return metapi().success('pen updated', await prisma.pen.update({
     where: {
       id: pen.id,
@@ -71,7 +72,8 @@ const update = async ({ user, pen }: { user: User, pen: Pen }, event: H3Event) =
   }))
 }
 const remove = async ({ user, pen }: { user: User, pen: Pen }, event: H3Event) => {
-  authorize(policies.remove, { user, pen })
+  const { user: authed } = await requireUserSession(event)
+  authorize(policies.remove, { authed, pen })
 
   if (pen?.cartridgeId !== null)
     return metapi().error(event, 'Cannot delete pen with cartridge', 400)

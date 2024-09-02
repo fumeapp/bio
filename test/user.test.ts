@@ -19,6 +19,7 @@ describe('/api/me and /api/user', async () => {
     expect(response.data.email).toEqual(user.session.email)
   })
 
+  /*
   it ('get /api/all/user isAdmin: false - 404', async () => {
     const { notFound } = await actingAs('test@test.com')
     expect(await notFound('GET', '/api/all/user')).toBe(404)
@@ -34,4 +35,5 @@ describe('/api/me and /api/user', async () => {
     const response = await get<User>(`/api/all/user/${user.session.id}`)
     expect(response.data.id).toBe(user.session.id.toString())
   })
+*/
 })

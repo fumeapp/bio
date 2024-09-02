@@ -2,11 +2,13 @@ import { createRouter, useBase } from 'h3'
 import token from '../controllers/token'
 import pen from '../controllers/pen'
 import cartridge from '../controllers/cartridge'
+import shot from '../controllers/shot'
+import user from '../controllers/user'
 import { withApiUtils } from '../lib/api'
 import test from '../controllers/test'
 import logout from '../controllers/logout'
 import { githubHandler, googleHandler, microsoftHandler } from '../controllers/oauth'
-import type { Cartridge, Pen, Token, User } from '~/types/models'
+import type { Cartridge, Pen, Shot, Token, User } from '~/types/models'
 
 const router = withApiUtils(createRouter())
 
@@ -25,10 +27,7 @@ router.apiResource<{ token: Token }>('/token', token)
 
 router.apiResource<{ user: User, pen: Pen }>('/user/{user}/pen', pen)
 router.apiResource<{ user: User, cartridge: Cartridge }>('/user/{user}/cartridge', cartridge)
+router.apiResource<{ user: User, shot: Shot }>('/user/{user}/shot', shot)
+router.apiResource<{ user: User }>('/all/user', user)
 
 export default useBase('/api', router.handler)
-
-/*
-routing.apiResource('/shot', router, shot)
-routing.apiResource('/all/user', router, user)
-*/

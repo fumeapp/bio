@@ -12,12 +12,12 @@ function get({ user, pen }: { user: User, pen: Pen }) {
   return user.isAdmin || user.id === pen.userId
 }
 
-function update({ user, pen }: { user: User, pen: Pen }) {
-  return user.isAdmin || user.id.toString() === pen.userId.toString()
+function update({ authed, pen }: { authed: User, pen: Pen }) {
+  return authed.isAdmin || authed.id === pen.userId
 }
 
-function remove({ user, pen }: { user: User, pen: Pen }) {
-  return user.isAdmin || user.id.toString() === pen.userId.toString()
+function remove({ authed, pen }: { authed: User, pen: Pen }) {
+  return authed.isAdmin || authed.id === pen.userId
 }
 
 export const pen = {

@@ -1,5 +1,3 @@
-// /Users/k/fumeapp/bio/server/controllers/cartridge.ts
-
 import type { H3Event } from 'h3'
 import { z } from 'zod'
 import { cartridge as policies } from '../policies/cartridge'
