@@ -5,11 +5,13 @@ import { format } from 'date-fns'
 defineProps<{ shots?: Shot[] }>()
 const emit = defineEmits(['reload'])
 const route = useRoute()
+const { user } = useUserSession()
 
-const remove = async (id: bigint) =>
-  await useApi().api(route.params.user
-    ? `/api/user/${route.params.user}/shot/${id.toString()}`
-    : `/api/shot/${id.toString()}`, { method: 'DELETE' }).then(() => emit('reload'))
+const remove = async (id: number) =>
+  await useApi().api(
+    `/api/user/${route.params.user ? route.params.user : user.value.id}/shot/${id}`,
+    { method: 'DELETE' },
+  ).then(() => emit('reload'))
 
 const confirm = (shot: Shot) =>
   useConfirm()

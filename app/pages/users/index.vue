@@ -15,26 +15,11 @@ set(
 )
 
 const columns = [
-  {
-    label: 'User',
-    key: 'user',
-  },
-  {
-    label: 'Created At',
-    key: 'createdAt',
-  },
-  {
-    label: 'Updated At',
-    key: 'updatedAt',
-  },
-  {
-    label: 'Pens',
-    key: 'pens',
-  },
-  {
-    label: 'Actions',
-    key: 'actions',
-  },
+  { label: 'User', key: 'user' },
+  { label: 'Created At', key: 'createdAt' },
+  { label: 'Updated At', key: 'updatedAt' },
+  { label: 'Pens', key: 'pens' },
+  { label: 'Actions', key: 'actions' },
 ]
 
 const { data: users } = await useFetch<MetapiResponse<User>>('/api/all/user')
