@@ -5,7 +5,7 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
+  <div class="w-screen h-screen flex items-center justify-center">
     <div class="flex items-start">
       <logo-bio class="w-52 h-52" />
       <div class="flex flex-col space-y-3 my-3">
