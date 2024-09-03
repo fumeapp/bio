@@ -11,6 +11,9 @@ export default defineNuxtConfig({
       standalone: false,
     },
   },
+  build: {
+    transpile: ['shiki'],
+  },
   prisma: {
     installCLI: false,
     installClient: false,
