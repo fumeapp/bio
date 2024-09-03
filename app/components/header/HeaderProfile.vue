@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const { user, clear } = await useUserSession()
-const { fromLink } = useCrumb()
 
 const logout = async () => {
   clear()

@@ -1,5 +1,5 @@
 import { createRouter, useBase } from 'h3'
-import { githubHandler, googleHandler, microsoftHandler } from '../controllers/oauth'
+import { facebookHandler, githubHandler, googleHandler, microsoftHandler } from '../controllers/oauth'
 import { withApiUtils } from '../lib/api'
 import token from '../controllers/token'
 import pen from '../controllers/pen'
@@ -22,6 +22,7 @@ if (useRuntimeConfig().appEnv === 'test')
   router.post('/test/session', test.create)
 
 router.get('/oauth/google', googleHandler)
+router.get('/oauth/facebook', facebookHandler)
 router.get('/oauth/github', githubHandler)
 router.get('/oauth/microsoft', microsoftHandler)
 router.get('/logout', logout)
