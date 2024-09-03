@@ -2,6 +2,7 @@
 headline: terms
 title: terms of service
 description: fume.bio terms of service agreement last updated September 02, 2024
+to: '/terms'
 ---
 
 #  Terms of Service

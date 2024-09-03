@@ -16,9 +16,9 @@ const description = computed(() => (props.description || '').slice(0, 200))
 
 <template>
   <div class="w-full h-full bg-black">
-    <div class="w-full h-full flex flex-col justify-center bg-sky-950/30">
+    <div class="w-full h-full flex flex-col justify-center bg-sky-950/50">
       <svg
-        class="absolute right-0 top-0"
+        class="absolute right-0 bottom-0"
         width="629"
         height="593"
         viewBox="0 0 629 593"

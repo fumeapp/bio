@@ -8,7 +8,7 @@ navigation: false
   ::card
   ---
   title: Tirzepatide
-  to: /peptides/tirzepatide
+  to: /research/peptides/tirzepatide
   ---
   Explore the benefits of Tirzepatide
   ::

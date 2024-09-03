@@ -2,6 +2,8 @@
 const { crumbs, actions } = useCrumb()
 const { loggedIn } = useUserSession()
 
+const { toggleContentSearch } = useUIState()
+
 const links = [
   {
     label: 'Research',
@@ -20,8 +22,12 @@ const links = [
       </div>
     </template>
     <template #right>
+      <!--
+      <UContentSearchButton class="hidden lg:flex w-12 bg-red-500" />
+      -->
+      <u-button icon="i-mdi-magnify" variant="ghost" @click="toggleContentSearch" />
       <div class="flex items-center space-x-2">
-        <u-color-mode-button />
+        <u-color-mode-button color="primary" />
         <header-profile v-if="loggedIn" />
         <header-sign-in v-else />
       </div>

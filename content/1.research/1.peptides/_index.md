@@ -7,7 +7,7 @@ description: Learn about peptides, their structure, and their role in the body.
   ::card
   ---
   title: Tirzepatide
-  to: /peptides/tirzepatide
+  to: /research/peptides/tirzepatide
   ---
   Explore the benefits of Tirzepatide
   ::
