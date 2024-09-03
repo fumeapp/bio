@@ -1,10 +1,18 @@
 <script setup lang="ts">
 const { crumbs, actions } = useCrumb()
 const { loggedIn } = useUserSession()
+
+const links = [
+  {
+    label: 'Research',
+    ico: 'i-heroicons-academic-cap',
+    to: '/research',
+  },
+]
 </script>
 
 <template>
-  <u-header>
+  <u-header :links="links">
     <template #logo>
       <div class="flex items-center space-x-2">
         <logo-bio class="w-10 h-10" />

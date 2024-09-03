@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data: page } = await useAsyncData('privacy', () => queryContent('/privacy').findOne())
+const { data: page } = await useAsyncData('privacy', () => queryContent('/.pages/privacy').findOne())
 if (!page.value)
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 
@@ -11,7 +11,10 @@ useSeoMeta({
   ogDescription: page.value.description,
 })
 
-console.log(page)
+defineOgImageComponent('OgTitleDesc', {
+  title: page.value.title,
+  description: page.value.description,
+})
 </script>
 
 <template>

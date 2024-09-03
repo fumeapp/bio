@@ -4,7 +4,7 @@ import type { MetapiResponse } from '~/types/metapi'
 
 useCrumb().clear()
 
-const { data: page } = await useAsyncData('index', () => queryContent('/').findOne())
+const { data: page } = await useAsyncData('index', () => queryContent('.page/').findOne())
 
 if (!page.value)
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
