@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { crumbs, actions } = useCrumb()
+const { loggedIn } = useUserSession()
 </script>
 
 <template>
@@ -12,7 +13,7 @@ const { crumbs, actions } = useCrumb()
     </template>
     <template #right>
       <div class="flex items-center space-x-2">
-        <header-profile />
+        <header-profile v-if="loggedIn" />
         <u-color-mode-button />
       </div>
     </template>
