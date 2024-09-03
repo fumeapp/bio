@@ -6,14 +6,15 @@ const { loggedIn } = useUserSession()
 <template>
   <u-header>
     <template #logo>
-      <div class="flex items-center">
-        <logo-bio class="w-12 h-12" />
+      <div class="flex items-center space-x-2">
+        <logo-bio class="w-10 h-10" />
         <logo-text class="text-3xl" />
       </div>
     </template>
     <template #right>
       <div class="flex items-center space-x-2">
         <header-profile v-if="loggedIn" />
+        <header-sign-in v-else />
         <u-color-mode-button />
       </div>
     </template>

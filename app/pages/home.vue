@@ -29,13 +29,15 @@ const reload = async () => {
 </script>
 
 <template>
-  <div v-if="loggedIn && pens?.data.length === 0" class="w-full max-w-md mx-auto">
-    <u-alert
-      icon="i-mdi-clock"
-      title="Awaiting Implementation"
-      description="We are still setting up your account, check back soon!"
-      :actions="[{ label: 'Refresh', icon: 'i-mdi-refresh', onClick: reload, variant: 'solid' }]"
-    />
+  <div>
+    <div v-if="loggedIn && pens?.data.length === 0" class="w-full max-w-md mx-auto">
+      <u-alert
+        icon="i-mdi-clock"
+        title="Awaiting Implementation"
+        description="We are still setting up your account, check back soon!"
+        :actions="[{ label: 'Refresh', icon: 'i-mdi-refresh', onClick: reload, variant: 'solid' }]"
+      />
+    </div>
+    <pen-list v-else-if="pens && cartridges" :pens="pens?.data" :cartridges="cartridges?.data" readonly @reload="reload" />
   </div>
-  <pen-list v-else-if="pens && cartridges" :pens="pens?.data" :cartridges="cartridges?.data" readonly @reload="reload" />
 </template>

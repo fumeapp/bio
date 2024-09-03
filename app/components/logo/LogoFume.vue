@@ -1,6 +1,6 @@
 <template>
   <div class="logo">
-    <svg viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <svg viewBox="2 2 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <g id="Icon-F" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <path
           id="container"

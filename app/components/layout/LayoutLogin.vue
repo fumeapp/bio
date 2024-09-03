@@ -18,6 +18,14 @@ const providers = reactive<Provider[]>([
     click: async () => await navigateTo('/api/oauth/google', { external: true }),
   },
   {
+    name: 'facebook',
+    label: 'Facebook',
+    icon: 'i-mdi-facebook',
+    color: 'white',
+    click: async () => await navigateTo('/api/oauth/facebook', { external: true }),
+  },
+
+  {
     name: 'microsoft',
     label: 'Microsoft',
     color: 'white',
@@ -35,7 +43,14 @@ const providers = reactive<Provider[]>([
 </script>
 
 <template>
-  <u-button-group>
-    <u-button v-for="provider in providers" :key="provider.name" v-bind="provider" @click="provider.click" />
-  </u-button-group>
+  <div class="flex flex-col space-y-4">
+    <u-button
+      v-for="provider in providers"
+      :key="provider.name"
+      v-bind="provider"
+      block
+      size="lg"
+      @click="provider.click"
+    />
+  </div>
 </template>
