@@ -1,16 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  // devtools: { enabled: true },
+  devtools: { enabled: true },
   extends: ['@nuxt/ui-pro'],
-  modules: [
-    '@nuxt/ui',
-    '@prisma/nuxt',
-    '@nuxt/eslint',
-    '@nuxt/content',
-    '@nuxt/image',
-    'nuxt-auth-utils',
-    '@nuxt/test-utils',
-  ],
+  modules: ['@nuxt/ui', '@prisma/nuxt', '@nuxt/eslint', '@nuxt/content', '@nuxt/image', 'nuxt-auth-utils', '@nuxt/test-utils', 'nuxt-og-image'],
+  site: {
+    url: 'https://fume.bio',
+  },
   eslint: {
     config: {
       standalone: false,
