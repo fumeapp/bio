@@ -1,16 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  // devtools: { enabled: true },
+  devtools: { enabled: true },
   extends: ['@nuxt/ui-pro'],
-  modules: [
-    '@nuxt/ui',
-    '@prisma/nuxt',
-    '@nuxt/eslint',
-    '@nuxt/content',
-    '@nuxt/image',
-    'nuxt-auth-utils',
-    '@nuxt/test-utils',
-  ],
+  modules: ['@nuxt/ui', '@prisma/nuxt', '@nuxt/eslint', '@nuxt/content', '@nuxt/image', 'nuxt-auth-utils', '@nuxt/test-utils', 'nuxt-og-image'],
+  site: {
+    url: 'https://fume.bio',
+  },
   eslint: {
     config: {
       standalone: false,
@@ -60,7 +55,7 @@ export default defineNuxtConfig({
   vite: {
     resolve: {
       alias: {
-        '.prisma/client/index-browser': './node_modules/.pnpm/@prisma+client@5.19.0_prisma@5.19.0/node_modules/.prisma/client/index-browser.js',
+        '.prisma/client/index-browser': './node_modules/.pnpm/@prisma+client@5.19.1_prisma@5.19.1/node_modules/.prisma/client/index-browser.js',
       },
     },
   },

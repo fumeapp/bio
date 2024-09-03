@@ -1,10 +1,11 @@
 ---
-title: Terms of Service | fume.bio
-description: TERMS AND CONDITIONS  Last updated September 02, 2023
+headline: terms
+title: terms of service
+description: fume.bio terms of service agreement last updated September 02, 2024
 ---
 
 #  Terms of Service
-##  Last updated September 02, 2023
+##  Last updated September 02, 2024
 
 AGREEMENT TO OUR LEGAL TERMS   We are fume.bio (“Company,” “we,” “us,” “our”).   We operate the website https://fume.bio (the “Site”), as well as any other related products and services that refer or link to these legal terms (the “Legal Terms”) (collectively, the “Services”).   You can contact us by email at admin@fume.bio.   These Legal Terms constitute a legally binding agreement made between you, whether personally or on behalf of an entity (“you”), and eropeptides.com, concerning your access to and use of the Services. You agree that by accessing the Services, you have read, understood, and agreed to be bound by all of these Legal Terms. IF YOU DO NOT AGREE WITH ALL OF THESE LEGAL TERMS, THEN YOU ARE EXPRESSLY PROHIBITED FROM USING THE SERVICES AND YOU MUST DISCONTINUE USE IMMEDIATELY.   We will provide you with prior notice of any scheduled changes to the Services you are using. The modified Legal Terms will become effective upon posting or notifying you by admin@fume.bio, as stated in the email message. By continuing to use the Services after the effective date of any changes, you agree to be bound by the modified terms.     We recommend that you print a copy of these Legal Terms for your records.
 

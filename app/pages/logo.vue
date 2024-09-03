@@ -5,10 +5,9 @@ definePageMeta({
 </script>
 
 <template>
-  <div>
-    <div class="relative w-[800px] h-[800px]">
-      <header-logo />
-      <u-icon name="i-mdi-test-tube" class="w-1/2 h-1/2 text-primary-100 absolute bottom-0 right-0 mb-[10%]" />
+  <div class="w-screen h-screen flex items-center justify-center bg-black">
+    <div class="flex justify-center items-center space-x-6 bg-green-500 p-6">
+      <logo-bio class="w-52 h-52" />
     </div>
   </div>
 </template>
