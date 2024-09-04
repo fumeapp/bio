@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import type { NavItem } from '@nuxt/content'
+
 const { crumbs, actions } = useCrumb()
 const { loggedIn } = useUserSession()
 
 const { toggleContentSearch } = useUIState()
+
+const navigation = inject<NavItem[]>('navigation', [])
 
 const links = [
   {
@@ -31,6 +35,9 @@ const links = [
         <header-profile v-if="loggedIn" />
         <header-sign-in v-else />
       </div>
+    </template>
+    <template #panel>
+      <UNavigationTree :links="mapContentNavigation(navigation)" />
     </template>
   </u-header>
   <div class="bg-gray-100 dark:bg-gray-950">
