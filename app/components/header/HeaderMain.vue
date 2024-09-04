@@ -10,6 +10,11 @@ const navigation = inject<NavItem[]>('navigation', [])
 
 const links = [
   {
+    label: 'Home',
+    ico: 'i-heroicons-home',
+    to: '/',
+  },
+  {
     label: 'Research',
     ico: 'i-heroicons-academic-cap',
     to: '/research',

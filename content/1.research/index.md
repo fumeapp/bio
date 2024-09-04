@@ -1,6 +1,7 @@
 ---
 title: Peptide Research
 description: Explore cutting-edge peptide therapeutics for metabolic disorders, including GLP-1 agonists, dual and triple receptor agonists, and innovative treatments for obesity and diabetes.
+navigation: false
 ---
 
 ::card-group

@@ -4,6 +4,8 @@ const { data: page } = await useAsyncData('index', () => queryContent('_pages').
 if (!page.value)
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 
+const { loggedIn } = useUserSession()
+
 useSeoMeta({
   titleTemplate: '',
   title: page.value.title,
@@ -11,15 +13,15 @@ useSeoMeta({
   description: page.value.description,
   ogDescription: page.value.description,
 })
+
 defineOgImageComponent('OgLogo')
 </script>
 
 <template>
-  <div class="w-full h-full flex-1 flex items-center justify-center">
-    <u-icon
-      name="i-mdi-construction"
-      class="w-24 h-24"
-    />
+  <div>
+    <div v-if="loggedIn">
+      <pen-user />
+    </div>
   </div>
 </template>
 
