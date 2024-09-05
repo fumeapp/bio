@@ -16,6 +16,23 @@ const client = {
   },
 }
 
+const location = {
+  name: 'token.location',
+  result: {
+    token: {
+      location: {
+        needs: {
+          location: true,
+        },
+        compute({ location }: { location: string }) {
+          return JSON.parse(location)
+        },
+      },
+    },
+  },
+}
+
 export const extend = {
   client,
+  location,
 }

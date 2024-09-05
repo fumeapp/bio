@@ -2,7 +2,7 @@
 import type { Token } from '~/types/models'
 import type { MetapiResponse } from '~/types/metapi'
 
-const { data: page } = await useAsyncData('index', () => queryContent('/token').findOne())
+const { data: page } = await useAsyncData('index', () => queryContent('_pages/token').findOne())
 
 if (!page.value)
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })

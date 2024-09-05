@@ -2,10 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   extends: ['@nuxt/ui-pro'],
-  modules: ['@nuxt/ui', '@prisma/nuxt', '@nuxt/eslint', '@nuxt/content', '@nuxt/image', 'nuxt-auth-utils', '@nuxt/test-utils', 'nuxt-og-image'],
-  site: {
-    url: 'https://fume.bio',
-  },
+  modules: ['@nuxt/ui', '@prisma/nuxt', '@nuxt/eslint', '@nuxt/content', '@nuxt/image', 'nuxt-auth-utils', '@nuxt/test-utils', 'nuxt-og-image', 'nitro-cloudflare-dev'],
   eslint: {
     config: {
       standalone: false,

@@ -29,3 +29,7 @@ logs
 # Coverage
 app/coverage
 server/coverage
+
+
+# cloudflare
+.wrangler

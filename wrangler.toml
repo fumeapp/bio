@@ -1,0 +1,7 @@
+name = "my-worker"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bio"
+database_id = "c020574a-5623-407b-be0c-cd192bab9545"
+migrations_dir = "./prisma/migrations/20240905080600_init"

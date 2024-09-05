@@ -5,7 +5,7 @@ import type { CookieOptions } from '#app'
   return this.toString()
 }
 
-export const weekDays = [...Array(7)].map((_, i) =>
+export const weekDays = [...Array.from({ length: 7 })].map((_, i) =>
   new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(new Date(1970, 0, 4 + i)),
 )
 
@@ -22,7 +22,7 @@ export const links: HeaderIconLink[] = [
   {
     label: 'Home',
     icon: 'i-heroicons-home',
-    to: '/home',
+    to: '/',
   },
   {
     label: 'Tokens',

@@ -38,6 +38,7 @@ const prisma = createExtendedPrismaClient();
 const prisma = globalThis.prismaGlobal ?? prismaClientSingleton()
   .$extends(models.user.extend.admin)
   .$extends(models.token.extend.client)
+  .$extends(models.token.extend.location)
 
 export type CustomPrismaClient = ReturnType<typeof prismaClientSingleton>
 

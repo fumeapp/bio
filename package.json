@@ -21,10 +21,12 @@
   },
   "dependencies": {
     "@nuxt/ui-pro": "^1.4.1",
+    "@prisma/adapter-d1": "^5.19.1",
     "date-fns": "^3.6.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^3.0.0",
+    "@cloudflare/workers-types": "^4.20240903.0",
     "@iconify-json/logos": "^1.2.0",
     "@iconify-json/mdi": "^1.2.0",
     "@nuxt/content": "^2.13.2",
@@ -39,12 +41,14 @@
     "@vitest/ui": "^2.0.5",
     "dotenv-cli": "^7.4.2",
     "happy-dom": "^15.7.3",
+    "nitro-cloudflare-dev": "^0.1.6",
     "nuxt": "^3.13.0",
     "nuxt-auth-utils": "^0.3.5",
     "nuxt-og-image": "3.0.0-rc.66",
     "prisma": "^5.19.1",
     "ua-parser-js": "^1.0.38",
     "vitest": "^2.0.5",
+    "wrangler": "^3.74.0",
     "zod": "^3.23.8"
   }
 }

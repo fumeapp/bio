@@ -2,7 +2,6 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
   const { loggedIn } = useUserSession()
 
   const gatedRoutes = [
-    '/home',
     '/token',
     '/users',
   ]

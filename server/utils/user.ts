@@ -14,14 +14,14 @@ export const createUser = async (info: UserInfo, provider: string, oauthPayload:
       email: info.email,
       name: info.name,
       avatar: info.avatar,
-      payload: (info.payload ? info.payload : ({ roles: { admin: false } } as UserPayload)) as unknown as Prisma.JsonObject,
+      payload: (info.payload ? JSON.stringify(info.payload) : JSON.stringify({ roles: { admin: false } })),
       providers: {
         create: [
           {
 
             name: provider,
             avatar: info.avatar,
-            payload: oauthPayload as unknown as Prisma.JsonObject,
+            payload: JSON.stringify(oauthPayload),
           },
 
         ],
@@ -39,13 +39,13 @@ export const createUser = async (info: UserInfo, provider: string, oauthPayload:
     },
     update: {
       avatar: info.avatar,
-      payload: oauthPayload as unknown as Prisma.JsonObject,
+      payload: JSON.stringify(oauthPayload),
     },
     create: {
       userId: user.id,
       name: provider,
       avatar: info.avatar,
-      payload: oauthPayload as unknown as Prisma.JsonObject,
+      payload: JSON.stringify(oauthPayload),
     },
   })
 
@@ -70,7 +70,7 @@ export const createUser = async (info: UserInfo, provider: string, oauthPayload:
       source: `oauth:${provider}`,
       ip: event?.node.req.headers['x-forwarded-for'] as string || '127.0.0.1',
       agent: event?.node.req.headers['user-agent'] as string || 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
-      location: location as unknown as Prisma.JsonObject,
+      location: JSON.stringify(location),
       coordinate,
     },
   })
