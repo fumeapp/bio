@@ -9,4 +9,7 @@ export default defineAppConfig({
       background: 'bg-red-100 dark:bg-red-900',
     },
   },
+  seo: {
+    siteName: 'fume.bio',
+  },
 })

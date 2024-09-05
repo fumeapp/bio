@@ -1,10 +1,29 @@
 <script setup lang="ts">
+import type { NavItem } from '@nuxt/content'
+
 const { crumbs, actions } = useCrumb()
 const { loggedIn } = useUserSession()
+
+const { toggleContentSearch } = useUIState()
+
+const navigation = inject<NavItem[]>('navigation', [])
+
+const links = [
+  {
+    label: 'Home',
+    ico: 'i-heroicons-home',
+    to: '/',
+  },
+  {
+    label: 'Research',
+    ico: 'i-heroicons-academic-cap',
+    to: '/research',
+  },
+]
 </script>
 
 <template>
-  <u-header>
+  <u-header :links="links">
     <template #logo>
       <div class="flex items-center space-x-2">
         <logo-bio class="w-10 h-10" />
@@ -12,11 +31,18 @@ const { loggedIn } = useUserSession()
       </div>
     </template>
     <template #right>
+      <!--
+      <UContentSearchButton class="hidden lg:flex w-12 bg-red-500" />
+      -->
+      <u-button icon="i-mdi-magnify" variant="ghost" @click="toggleContentSearch" />
       <div class="flex items-center space-x-2">
-        <u-color-mode-button />
+        <u-color-mode-button color="primary" />
         <header-profile v-if="loggedIn" />
         <header-sign-in v-else />
       </div>
+    </template>
+    <template #panel>
+      <UNavigationTree :links="mapContentNavigation(navigation)" />
     </template>
   </u-header>
   <div class="bg-gray-100 dark:bg-gray-950">

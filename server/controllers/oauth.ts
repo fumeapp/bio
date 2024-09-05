@@ -36,7 +36,7 @@ export const googleHandler = oauthGoogleEventHandler({
   async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
     const dbUser = await signIn(event, user, 'google')
     await setUserSession(event, { user: dbUser })
-    return sendRedirect(event, '/home')
+    return sendRedirect(event, '/')
   },
 })
 
@@ -44,7 +44,7 @@ export const microsoftHandler = oauthMicrosoftEventHandler({
   async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
     const dbUser = await signIn(event, user, 'microsoft')
     await setUserSession(event, { user: dbUser })
-    return sendRedirect(event, '/home')
+    return sendRedirect(event, '/')
   },
 })
 
@@ -52,7 +52,7 @@ export const githubHandler = oauthGitHubEventHandler({
   async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
     const dbUser = await signIn(event, user, 'github')
     await setUserSession(event, { user: dbUser })
-    return sendRedirect(event, '/home')
+    return sendRedirect(event, '/')
   },
 })
 
@@ -61,6 +61,6 @@ export const facebookHandler = oauthFacebookEventHandler({
     console.log('facebook', user)
     const dbUser = await signIn(event, user, 'facebook')
     await setUserSession(event, { user: dbUser })
-    return sendRedirect(event, '/home')
+    return sendRedirect(event, '/')
   },
 })
