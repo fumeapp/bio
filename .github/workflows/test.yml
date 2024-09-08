@@ -6,8 +6,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: start mysql
-        run: sudo service mysql start
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -38,9 +36,6 @@ jobs:
 
       - name: Generate prisma deps
         run: npx prisma generate
-
-      - name: Copy .env.test-action to .env.test and .env
-        run: cp .env.test-action .env.test
 
       - name: Build and start server in the background
         env:
