@@ -1,14 +1,12 @@
 import crypto from 'node:crypto'
-import type { Prisma } from '@prisma/client'
 import type { H3Event } from 'h3'
 import type { User, UserPayload } from '~/types/models'
 import type { TokenLocation, UserInfo } from '~/types/oauth'
-import prisma from './prisma'
 
-export const createUser = async (info: UserInfo, provider: string, oauthPayload: any, event?: H3Event): Promise<User> => {
+export const createUser = async (info: UserInfo, provider: string, oauthPayload: any, event: H3Event): Promise<User> => {
   let user: User | null = null
 
-  user = await prisma.user.upsert({
+  user = await usePrisma(event).user.upsert({
     where: { email: info.email },
     create: {
       email: info.email,
@@ -30,7 +28,7 @@ export const createUser = async (info: UserInfo, provider: string, oauthPayload:
     update: {},
   }) as unknown as User
 
-  await prisma.provider.upsert({
+  await usePrisma(event).provider.upsert({
     where: {
       userId_name: {
         userId: user.id,
@@ -63,7 +61,7 @@ export const createUser = async (info: UserInfo, provider: string, oauthPayload:
 
   const cfg = useRuntimeConfig(event)
 
-  const token = await prisma.token.create({
+  const token = await usePrisma(event).token.create({
     data: {
       userId: user.id,
       hash: `${cfg.public.prefix}_${crypto.createHash('sha256').update(crypto.randomBytes(20).toString('hex')).digest('hex')}`,

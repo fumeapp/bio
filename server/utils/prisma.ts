@@ -1,47 +1,22 @@
+import { PrismaD1 } from '@prisma/adapter-d1'
 import { PrismaClient } from '@prisma/client'
+import type { D1Database } from '@nuxthub/core'
+import type { EventHandlerRequest, H3Event } from 'h3'
 import models from '../models/index'
 
-const prismaClientSingleton = () => {
-  // return new PrismaClient({ log: ['query', 'info', 'warn', 'error'] })
-  return new PrismaClient()
+export function useDB(event: H3Event<EventHandlerRequest>): D1Database {
+  return event.context.cloudflare.env.DB as D1Database
 }
 
-declare const globalThis: {
-  prismaGlobal: ReturnType<typeof prismaClientSingleton>
+let prismaClient: PrismaClient
+export function usePrisma(event: H3Event<EventHandlerRequest>) {
+  if (!prismaClient) {
+    const adapter = new PrismaD1(useDB(event))
+    prismaClient = new PrismaClient({ adapter })
+  }
+  return prismaClient
+    .$extends(models.user.extend.payload)
+    .$extends(models.user.extend.admin)
+    .$extends(models.token.extend.client)
+    .$extends(models.token.extend.location)
 }
-
-/*
-type ModelExtensions = {
-  [ModelName in Lowercase<keyof PrismaClient>]?: {
-    [MethodName: string]: (...args: any[]) => any
-  };
-}
-
-function createExtendedPrismaClient(extensions: ModelExtensions = {}) {
-  const prisma = new PrismaClient().$extends({
-    model: Object.fromEntries(
-      Object.entries(extensions).map(([modelName, modelExtension]) => [
-        modelName,
-        {
-          ...modelExtension,
-        },
-      ]),
-    ),
-  })
-
-  return prisma
-}
-
-const prisma = createExtendedPrismaClient();
-*/
-
-const prisma = globalThis.prismaGlobal ?? prismaClientSingleton()
-  .$extends(models.user.extend.admin)
-  .$extends(models.token.extend.client)
-  .$extends(models.token.extend.location)
-
-export type CustomPrismaClient = ReturnType<typeof prismaClientSingleton>
-
-export default prisma
-
-if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma

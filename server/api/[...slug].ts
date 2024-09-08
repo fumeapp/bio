@@ -17,21 +17,9 @@ const router = withApiUtils(createRouter())
 router.get('/**', defineEventHandler(event => metapi().notFound(event)))
 router.get('/me', defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event)
-  const dbUser = await prisma.user.update({ where: { id: user.id }, data: { updatedAt: new Date() } }) as unknown as User
+  const dbUser = await usePrisma(event).user.update({ where: { id: user.id }, data: { updatedAt: new Date() } }) as unknown as User
   dbUser.hash = user.hash
   await replaceUserSession(event, { user: dbUser })
-  const { cloudflare } = event.context
-  console.log('cf', cloudflare.env.DB)
-  const adapter = new PrismaD1(cloudflare.env.DB)
-  console.log('adapter', adapter)
-  /*
-  const pma = new PrismaClient({ adapter })
-  const users = await pma.user.findMany()
-  console.log('users', users)
-  const db = hubDatabase()
-  const statement = db.prepare('SELECT * FROM users').all()
-  console.log('db is', statement)
-  */
   return metapi().render(user)
 }))
 
