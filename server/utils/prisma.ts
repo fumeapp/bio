@@ -10,7 +10,7 @@ export function useDB(event: H3Event<EventHandlerRequest>): D1Database {
 
 let prismaClient: PrismaClient
 export function usePrisma(event?: H3Event<EventHandlerRequest>) {
-  if (!event) {
+  if (!event || useRuntimeConfig().appEnv === 'test') {
     if (!prismaClient)
       prismaClient = new PrismaClient()
     return prismaClient
