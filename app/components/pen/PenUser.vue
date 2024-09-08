@@ -12,12 +12,12 @@ const reload = async () => {
 </script>
 
 <template>
-  <div v-if="pens?.data.length === 0" class="w-full max-w-md mx-auto">
+  <div v-if="pens?.data.length === 0" class="w-full max-w-md">
     <u-alert
       icon="i-mdi-clock"
-      title="Awaiting Implementation"
-      description="We are still setting up your account, check back soon!"
-      :actions="[{ label: 'Refresh', icon: 'i-mdi-refresh', onClick: reload, variant: 'solid' }]"
+      title="Awaiting Pen Assignment"
+      description="We are still setting up your injection pen, check back soon!"
+      :actions="[{ label: 'Refresh', icon: 'i-mdi-refresh', click: reload, variant: 'solid' }]"
     />
   </div>
   <pen-list

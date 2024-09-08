@@ -8,7 +8,7 @@ const index = async ({ user }: { user: User }, event: H3Event) => {
   const { user: authed } = await requireUserSession(event)
   authorize(policies.index, { authed, user })
   return metapi().render(
-    await prisma.shot.findMany({
+    await usePrisma(event).shot.findMany({
       where: {
         userId: user.id,
       },
@@ -29,7 +29,7 @@ const create = async ({ user }: { user: User }, event: H3Event) => {
   })
   const parsed = schema.safeParse(await readBody(event))
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
-  const shot = await prisma.shot.create({
+  const shot = await usePrisma(event).shot.create({
     data: {
       cartridgeId: parsed.data.cartridgeId,
       userId: user.id,
@@ -45,7 +45,7 @@ const create = async ({ user }: { user: User }, event: H3Event) => {
 const remove = async ({ user, shot }: { user: User, shot: Shot }, event: H3Event) => {
   const { user: authed } = await requireUserSession(event)
   authorize(policies.remove, { authed, shot })
-  await prisma.shot.delete({
+  await usePrisma(event).shot.delete({
     where: { id: shot.id, userId: user.id },
   })
   return metapi().success('shot deleted')

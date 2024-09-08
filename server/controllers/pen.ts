@@ -9,7 +9,7 @@ const index = async ({ user }: { user: User }, event: H3Event) => {
   const { user: authed } = await requireUserSession(event)
   authorize(policies.index, { authed, user })
   return metapi().render(
-    await prisma.pen.findMany({
+    await usePrisma(event).pen.findMany({
       where: { userId: user.id },
       include,
       orderBy,
@@ -25,7 +25,7 @@ const create = async ({ user }: { user: User }, event: H3Event) => {
   })
   const parsed = schema.safeParse(await readBody(event))
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
-  return metapi().success('pen created', await prisma.pen.create({
+  return metapi().success('pen created', await usePrisma(event).pen.create({
     data: {
       color: parsed.data.color,
       userId: user.id,
@@ -58,7 +58,7 @@ const update = async ({ user, pen }: { user: User, pen: Pen }, event: H3Event) =
     shotDay: body?.shotDay || undefined,
   })
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 402)
-  return metapi().success('pen updated', await prisma.pen.update({
+  return metapi().success('pen updated', await usePrisma(event).pen.update({
     where: {
       id: pen.id,
       userId: user.id,
@@ -78,7 +78,7 @@ const remove = async ({ user, pen }: { user: User, pen: Pen }, event: H3Event) =
   if (pen?.cartridgeId !== null)
     return metapi().error(event, 'Cannot delete pen with cartridge', 400)
 
-  await prisma.pen.delete({
+  await usePrisma(event).pen.delete({
     where: {
       id: pen.id,
       userId: user.id,

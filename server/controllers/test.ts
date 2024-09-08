@@ -2,7 +2,7 @@ import type { User } from '~/types/models'
 
 const create = defineEventHandler(async (event) => {
   const { id, hash } = await readBody(event)
-  const user = await prisma.user.findUnique({ where: { id: Number.parseInt(id) } }) as unknown as User
+  const user = await usePrisma().user.findUnique({ where: { id: Number.parseInt(id) } }) as unknown as User
 
   user.hash = hash
   await setUserSession(event, { user })

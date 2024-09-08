@@ -4,6 +4,8 @@ const { data: page } = await useAsyncData('index', () => queryContent('_pages').
 if (!page.value)
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 
+useCrumb().clear()
+
 const { loggedIn } = useUserSession()
 
 useSeoMeta({

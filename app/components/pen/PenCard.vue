@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Cartridge, Pen } from '~/types/models'
 import type { MetapiResponse } from '~/types/metapi'
+import type { Cartridge, Pen } from '~/types/models'
 
 const props = defineProps<{ pen: Pen, cartridges: Cartridge[], readonly?: boolean }>()
 
@@ -13,8 +13,7 @@ const reload = () => {
   emit('reload')
 }
 
-const options = computed(() => props.cartridges.filter(c => c.pen === null || c.pen?.id === props.pen.id)
-  .map(c => ({ label: `${c.content} ${c.ml}ml ${c.mg}mg`, value: c.id })))
+const options = computed(() => props.cartridges.filter(c => c.pen === null || c.pen?.id === props.pen.id).map(c => ({ label: `${c.content} ${c.ml}ml ${c.mg}mg`, value: c.id })))
 
 const cartridgeId = ref(props.pen.cartridgeId)
 const dirty = computed(() => props.pen.cartridgeId !== cartridgeId.value)

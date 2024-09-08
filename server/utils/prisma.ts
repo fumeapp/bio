@@ -9,7 +9,16 @@ export function useDB(event: H3Event<EventHandlerRequest>): D1Database {
 }
 
 let prismaClient: PrismaClient
-export function usePrisma(event: H3Event<EventHandlerRequest>) {
+export function usePrisma(event?: H3Event<EventHandlerRequest>) {
+  if (!event) {
+    if (!prismaClient)
+      prismaClient = new PrismaClient()
+    return prismaClient
+      .$extends(models.user.extend.payload)
+      .$extends(models.user.extend.admin)
+      .$extends(models.token.extend.client)
+      .$extends(models.token.extend.location)
+  }
   if (!prismaClient) {
     const adapter = new PrismaD1(useDB(event))
     prismaClient = new PrismaClient({ adapter })

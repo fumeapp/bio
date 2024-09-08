@@ -9,7 +9,7 @@ const index = async ({ user }: { user: User }, event: H3Event) => {
   const { user: authed } = await requireUserSession(event)
   authorize(policies.index, { authed, user })
   return metapi().render(
-    await prisma.cartridge.findMany({
+    await usePrisma(event).cartridge.findMany({
       where: { userId: user.id },
       include,
       orderBy,
@@ -27,7 +27,7 @@ const create = async ({ user }: { user: User }, event: H3Event) => {
   })
   const parsed = schema.safeParse(await readBody(event))
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
-  return metapi().success('cartridge created', await prisma.cartridge.create({
+  return metapi().success('cartridge created', await usePrisma(event).cartridge.create({
     data: {
       content: parsed.data.content,
       ml: parsed.data.ml,
@@ -55,7 +55,7 @@ const update = async ({ user, cartridge }: { user: User, cartridge: Cartridge },
 
   const parsed = schema.safeParse(await readBody(event))
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
-  return metapi().success('cartridge updated', await prisma.cartridge.update({
+  return metapi().success('cartridge updated', await usePrisma(event).cartridge.update({
     where: {
       id: cartridge.id,
       userId: user.id,
@@ -68,7 +68,7 @@ const update = async ({ user, cartridge }: { user: User, cartridge: Cartridge },
 const remove = async ({ user, cartridge }: { user: User, cartridge: Cartridge }, event: H3Event) => {
   authorize(policies.remove, { user, cartridge })
 
-  await prisma.cartridge.delete({
+  await usePrisma(event).cartridge.delete({
     where: {
       id: cartridge.id,
       userId: user.id,

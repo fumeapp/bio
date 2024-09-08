@@ -1,5 +1,3 @@
-import { PrismaD1 } from '@prisma/adapter-d1'
-import { PrismaClient } from '@prisma/client'
 import { createRouter, useBase } from 'h3'
 import type { Cartridge, Pen, Shot, Token, User } from '~/types/models'
 import cartridge from '../controllers/cartridge'

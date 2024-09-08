@@ -1,7 +1,7 @@
 import { $fetch } from '@nuxt/test-utils/e2e'
+import { createUser } from '~~/server/utils/user'
 import type { MetapiResponse } from '~/types/metapi'
 import type { User, UserSession } from '~/types/models'
-import { createUser } from '~~/server/utils/user'
 
 const users = [
   {
@@ -67,7 +67,7 @@ async function actingAs(email: string) {
 }
 
 export {
-  users,
   actingAs,
   userFromEmail,
+  users,
 }

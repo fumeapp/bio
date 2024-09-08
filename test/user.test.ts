@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest'
 import { $fetch, setup } from '@nuxt/test-utils/e2e'
-import { actingAs } from './auth'
+import { describe, expect, it } from 'vitest'
 import type { User } from '~/types/models'
+import { actingAs } from './auth'
 
 describe('/api/me and /api/user', async () => {
   await setup({ host: 'http://localhost:3000' })

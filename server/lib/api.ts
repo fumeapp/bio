@@ -2,6 +2,7 @@ import type { H3Event, Router } from 'h3'
 import models from '../models/index'
 
 async function lookupModels<T extends Record<string, any>>(modelNames: (keyof T)[], event: H3Event): Promise<T> {
+  const prisma = usePrisma(event)
   const result = {} as T
 
   for (const key of modelNames) {

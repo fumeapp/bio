@@ -5,7 +5,7 @@ import type { Token } from '~/types/models'
 const index = async (_: any, event: H3Event) => {
   const { user: authed } = await requireUserSession(event)
   return metapi().render(
-    await prisma.$extends({
+    await usePrisma(event).$extends({
       result: {
         token: {
           isCurrent: {
@@ -31,7 +31,7 @@ const get = async ({ token }: { token: Token }, event: H3Event) => {
 const remove = async ({ token }: { token: Token }, event: H3Event) => {
   const { user: authed } = await requireUserSession(event)
   authorize(policies.remove, { authed, token })
-  await prisma.token.delete({
+  await usePrisma(event).token.delete({
     where: {
       id: token.id,
       userId: authed.id,
