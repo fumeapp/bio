@@ -7,5 +7,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  // url = "file:../../.wrangler/state/v3/d1/miniflare-D1DatabaseObject/98c08e86871b1d442f627eec0854121ad3e806089c45f9cbaea2e872c473658e.sqlite"
+  // url = env("DATABASE_URL")
+  url = "file:./dev.db"
 }

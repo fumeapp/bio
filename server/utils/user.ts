@@ -1,9 +1,9 @@
 import crypto from 'node:crypto'
 import type { Prisma } from '@prisma/client'
 import type { H3Event } from 'h3'
-import prisma from './prisma'
 import type { User, UserPayload } from '~/types/models'
 import type { TokenLocation, UserInfo } from '~/types/oauth'
+import prisma from './prisma'
 
 export const createUser = async (info: UserInfo, provider: string, oauthPayload: any, event?: H3Event): Promise<User> => {
   let user: User | null = null

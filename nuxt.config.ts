@@ -2,7 +2,26 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   extends: ['@nuxt/ui-pro'],
-  modules: ['@nuxt/ui', '@prisma/nuxt', '@nuxt/eslint', '@nuxt/content', '@nuxt/image', 'nuxt-auth-utils', '@nuxt/test-utils', 'nuxt-og-image', 'nitro-cloudflare-dev'],
+  modules: [
+    '@nuxt/ui',
+    '@prisma/nuxt',
+    '@nuxt/eslint',
+    '@nuxt/content',
+    '@nuxt/image',
+    'nuxt-auth-utils',
+    '@nuxt/test-utils',
+    'nuxt-og-image',
+    '@nuxthub/core',
+  ],
+  hub: {
+    database: true,
+  },
+  nitro: {
+    experimental: {
+      wasm: true,
+      asyncContext: true,
+    },
+  },
   eslint: {
     config: {
       standalone: false,
