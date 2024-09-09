@@ -51,9 +51,6 @@ importers:
       '@prisma/client':
         specifier: ^5.19.1
         version: 5.19.1(prisma@5.19.1)
-      '@prisma/nuxt':
-        specifier: ^0.0.35
-        version: 0.0.35(magicast@0.3.5)(prisma@5.19.1)(rollup@4.21.2)(vite@5.4.3(@types/node@22.5.4)(terser@5.31.6))
       '@types/ua-parser-js':
         specifier: ^0.7.39
         version: 0.7.39
@@ -1394,9 +1391,6 @@ packages:
 
   '@prisma/get-platform@5.19.1':
     resolution: {integrity: sha512-sCeoJ+7yt0UjnR+AXZL7vXlg5eNxaFOwC23h0KvW1YIXUoa7+W2ZcAUhoEQBmJTW4GrFqCuZ8YSP0mkDa4k3Zg==}
-
-  '@prisma/nuxt@0.0.35':
-    resolution: {integrity: sha512-p8AeISCMGDnMDRj7EOcvM/T61Qy7+RauzMR3zU7V5Jte2dexSg6OBxcsxJyss+qHJFi/Ego0NGuvitCkBXDwaw==}
 
   '@resvg/resvg-js-android-arm-eabi@2.6.2':
     resolution: {integrity: sha512-FrJibrAk6v29eabIPgcTUMPXiEz8ssrAk7TXxsiZzww9UTQ1Z5KAbFJs+Z0Ez+VZTYgnE5IQJqBcoSiMebtPHA==}
@@ -7606,23 +7600,6 @@ snapshots:
   '@prisma/get-platform@5.19.1':
     dependencies:
       '@prisma/debug': 5.19.1
-
-  '@prisma/nuxt@0.0.35(magicast@0.3.5)(prisma@5.19.1)(rollup@4.21.2)(vite@5.4.3(@types/node@22.5.4)(terser@5.31.6))':
-    dependencies:
-      '@nuxt/devtools-kit': 1.4.1(magicast@0.3.5)(rollup@4.21.2)(vite@5.4.3(@types/node@22.5.4)(terser@5.31.6))
-      '@nuxt/kit': 3.13.1(magicast@0.3.5)(rollup@4.21.2)
-      '@prisma/client': 5.19.1(prisma@5.19.1)
-      chalk: 5.3.0
-      defu: 6.1.4
-      execa: 8.0.1
-      prompts: 2.4.2
-    transitivePeerDependencies:
-      - magicast
-      - prisma
-      - rollup
-      - supports-color
-      - vite
-      - webpack-sources
 
   '@resvg/resvg-js-android-arm-eabi@2.6.2':
     optional: true
