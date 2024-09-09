@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   extends: ['@nuxt/ui-pro'],
   modules: [
     '@nuxt/ui',
-    '@prisma/nuxt',
+    // '@prisma/nuxt',
     '@nuxt/eslint',
     '@nuxt/content',
     '@nuxt/image',
@@ -16,6 +16,13 @@ export default defineNuxtConfig({
   hub: {
     database: true,
   },
+  /*
+  nitro: {
+    experimental: {
+      wasm: true,
+    },
+  },
+  */
   eslint: {
     config: {
       standalone: false,
@@ -24,6 +31,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['shiki'],
   },
+  /*
   prisma: {
     installCLI: false,
     installClient: false,
@@ -31,6 +39,7 @@ export default defineNuxtConfig({
     installStudio: true,
     autoSetupPrisma: true,
   },
+  */
   compatibilityDate: '2024-08-01',
   runtimeConfig: {
     appEnv: '',
