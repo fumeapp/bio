@@ -16,12 +16,6 @@ export default defineNuxtConfig({
   hub: {
     database: true,
   },
-  nitro: {
-    experimental: {
-      wasm: true,
-      asyncContext: true,
-    },
-  },
   eslint: {
     config: {
       standalone: false,
