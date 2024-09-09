@@ -59,9 +59,3 @@ jobs:
         with:
           json-summary-path: ./server/coverage/coverage-summary.json
           json-final-path: ./server/coverage/coverage-final.json
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: coverage
-          path: ./server/coverage/coverage-final.json
-          file-coverage-mode: all
