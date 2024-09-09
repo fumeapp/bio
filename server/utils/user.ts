@@ -1,7 +1,7 @@
 import crypto from 'node:crypto'
 import { usePrisma } from '~/../server/utils/prisma'
 import type { H3Event } from 'h3'
-import type { User, UserPayload } from '~/types/models'
+import type { User } from '~/types/models'
 import type { TokenLocation, UserInfo } from '~/types/oauth'
 
 export const createUser = async (info: UserInfo, provider: string, oauthPayload: any, event?: H3Event): Promise<User> => {
@@ -65,7 +65,7 @@ export const createUser = async (info: UserInfo, provider: string, oauthPayload:
   const token = await usePrisma(event).token.create({
     data: {
       userId: user.id,
-      hash: `${cfg.public.prefix}_${crypto.createHash('sha256').update(crypto.randomBytes(20).toString('hex')).digest('hex')}`,
+      hash: `${cfg.public.prefix}_${generateHash(64)}`,
       source: `oauth:${provider}`,
       ip: event?.node.req.headers['x-forwarded-for'] as string || '127.0.0.1',
       agent: event?.node.req.headers['user-agent'] as string || 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
@@ -76,4 +76,14 @@ export const createUser = async (info: UserInfo, provider: string, oauthPayload:
 
   user.hash = token.hash
   return user
+}
+
+function generateHash(length: number): string {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  let result = ''
+  const charactersLength = characters.length
+  for (let i = 0; i < length; i++)
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+
+  return result
 }
