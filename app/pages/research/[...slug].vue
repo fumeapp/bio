@@ -6,7 +6,6 @@ definePageMeta({
 })
 
 const route = useRoute()
-const { toc, seo } = useAppConfig()
 
 const { data: page } = await useAsyncData(route.path, () => queryContent(route.path).findOne())
 
