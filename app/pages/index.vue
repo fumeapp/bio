@@ -29,7 +29,7 @@ defineOgImageComponent('OgLogo')
         <logo-bio class="w-24 h-24 lg:w-52 lg:h-52" />
         <div class="flex flex-col space-y-3">
           <logo-text class="text-6xl lg:text-9xl" large />
-          <div class="text-center text-xs font-semibold uppercase lg:tracking-[0.46em]">weight loss research resources</div>
+          <div class="text-center text-xs lg:text-base font-semibold uppercase lg:tracking-[0.46em]">weight loss research resources</div>
         </div>
       </div>
     </div>

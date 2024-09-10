@@ -61,7 +61,9 @@ const headline = computed(() => findPageHeadline(page.value))
         title="Table of Contents"
         :links="page.body?.toc?.links"
         :ui="{ wrapper: 'bg-transparent backdrop-blur-none' }"
-      />
+      >
+        <template #bottom />
+      </ucontenttoc>
     </template>
   </UPage>
 </template>
