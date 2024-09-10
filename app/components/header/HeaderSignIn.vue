@@ -10,7 +10,11 @@ const loginModal = ref(false)
       color="white"
       @click="loginModal = !loginModal"
     />
-    <u-dashboard-modal v-model="loginModal" title="Sign In" description="Authenticate using one of the following providers ">
+    <u-dashboard-modal
+      v-model="loginModal"
+      title="Sign In"
+      description="Authenticate using one of the following providers"
+    >
       <layout-login />
     </u-dashboard-modal>
   </div>
