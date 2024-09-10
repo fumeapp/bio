@@ -61,6 +61,16 @@ provide('navigation', navigation)
 </template>
 
 <style>
+.top-\[--header-height\] {
+    top: var(--header-height);
+}
+
+@media (min-width: 1024px) {
+    .lg\:py-8 {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+}
 .gradient {
   position: absolute;
   inset: 0;
