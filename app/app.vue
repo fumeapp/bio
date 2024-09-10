@@ -61,10 +61,6 @@ provide('navigation', navigation)
 </template>
 
 <style>
-.top-\[--header-height\] {
-  top: var(--header-height);
-}
-
 .gradient {
   position: absolute;
   inset: 0;

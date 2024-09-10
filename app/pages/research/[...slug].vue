@@ -59,7 +59,13 @@ const headline = computed(() => findPageHeadline(page.value))
       <UContentToc
         title="Table of Contents"
         :links="page.body?.toc?.links"
-        :ui="{ wrapper: 'bg-transparent backdrop-blur-none' }"
+        :ui="{
+          wrapper: 'bg-transparent backdrop-blur-none',
+          container: {
+            base: 'py-3 lg:py-8 border-b border-dashed border-gray-200 dark:border-gray-800 lg:border-0 space-y-3',
+            empty: 'lg:py-8 space-y-3',
+          },
+        }"
       >
         <template #bottom />
       </ucontenttoc>
