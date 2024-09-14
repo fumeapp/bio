@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { Form } from '#ui/types/form'
 import type { Pen } from '@prisma/client'
 import type { MetapiResponse } from '~/types/metapi'
-import type { Form } from '#ui/types/form'
 import { penColors } from '~/utils/shared'
 
 const emit = defineEmits(['created', 'close'])

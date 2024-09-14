@@ -1,8 +1,8 @@
 import type { H3Event } from 'h3'
 import { z } from 'zod'
-import { shot as policies } from '../policies/shot'
-import { include, orderBy } from '../models/pen'
 import type { Shot, User } from '~/types/models'
+import { include, orderBy } from '../models/pen'
+import { shot as policies } from '../policies/shot'
 
 const index = async ({ user }: { user: User }, event: H3Event) => {
   const { user: authed } = await requireUserSession(event)

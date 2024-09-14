@@ -1,6 +1,5 @@
-import type { ZodIssue } from 'zod'
 import type { Form } from '#ui/types/form'
-import type { MetapiResponse } from '~/types/metapi'
+import type { ZodIssue } from 'zod'
 
 const silent = ref(false)
 

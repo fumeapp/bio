@@ -14,15 +14,24 @@ export interface Token extends PrismaToken {
   }
 }
 
+export interface UserCycle {
+  content: string // Tirzepatide
+  portions: number // 4
+  duration: string // weekly
+  date: string
+}
+
 export interface UserPayload {
   roles?: {
     admin?: boolean
   }
+  cycles?: UserCycle[]
 }
 
 export interface User extends PrismaUser {
   payload: UserPayload
   isAdmin: boolean
+  cycles: UserCycle[]
   hash: string
 }
 

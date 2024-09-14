@@ -17,6 +17,22 @@ const payload = {
   },
 }
 
+const cycles = {
+  name: 'user.cycles',
+  result: {
+    user: {
+      cycles: {
+        needs: {
+          payload: true,
+        },
+        compute({ payload }: { payload: Prisma.JsonObject }) {
+          return (payload as UserPayload).cycles ?? []
+        },
+      },
+    },
+  },
+}
+
 const admin = {
   name: 'user.admin',
   result: {
@@ -53,4 +69,5 @@ export const include = {
 export const extend = {
   payload,
   admin,
+  cycles,
 }

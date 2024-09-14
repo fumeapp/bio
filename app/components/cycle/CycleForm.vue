@@ -1,22 +1,25 @@
 <script setup lang="ts">
 import type { Form } from '#ui/types/form'
-import type { Cartridge } from '@prisma/client'
+import type { Pen } from '@prisma/client'
+import { format } from 'date-fns'
 import type { MetapiResponse } from '~/types/metapi'
-import { cartridgeContents, cartridgeMgs, cartridgeMls } from '~/utils/shared'
+import type { UserCycle } from '~/types/models'
 
 const emit = defineEmits(['created', 'close'])
+
 const route = useRoute()
+
 const form = ref<Form<any>>()
-const state = reactive({
-  user: route.params.user,
-  content: cartridgeContents[0],
-  ml: cartridgeMls[0],
-  mg: cartridgeMgs[1],
+const state = reactive<UserCycle>({
+  content: 'Tirzepatide',
+  portions: 4,
+  duration: 'weekly',
+  date: format(new Date(), 'yyyy-MM-dd'),
 })
 
 const create = async () => useApi()
   .setForm(form?.value)
-  .api<MetapiResponse<Cartridge>>(`/api/user/${route.params.user}/cartridge`, { method: 'POST', body: state })
+  .api<MetapiResponse<Pen>>(`/api/user/${route.params.user}/cycle`, { method: 'POST', body: { ...state, date: new Date(`${state.date}T00:00:)0`).toISOString() } })
   .then(() => emit('created'))
 </script>
 
@@ -28,17 +31,17 @@ const create = async () => useApi()
         :options="cartridgeContents"
       />
     </u-form-group>
-    <u-form-group label="ML" name="ml" autofocus>
-      <u-select-menu
-        v-model="state.ml"
-        :options="cartridgeMls"
+    <u-form-group label="Portions" name="portions">
+      <u-input v-model="state.portions" type="number" label="Portions" />
+    </u-form-group>
+    <u-form-group label="Duration" name="duration">
+      <u-input
+        v-model="state.duration"
+        type="string"
       />
     </u-form-group>
-    <u-form-group label="MG" name="mg" autofocus>
-      <u-select-menu
-        v-model="state.mg"
-        :options="cartridgeMgs"
-      />
+    <u-form-group label="Date" name="content">
+      <u-input v-model="state.date" type="date" label="Date" />
     </u-form-group>
     <div class="flex justify-end gap-3">
       <u-button label="Cancel" variant="soft" @click="emit('close')" />
@@ -46,5 +49,3 @@ const create = async () => useApi()
     </div>
   </u-form>
 </template>
-
-<style scoped></style>

@@ -55,8 +55,9 @@ const { data: users } = await useFetch<MetapiResponse<User>>('/api/all/user')
       </template>
       <template #actions-data="{ row }">
         <u-button-group>
-          <u-button icon="i-mdi-medical-bag" :to="`/users/${row.id}/equipment`" color="white" label="Equipment" />
+          <u-button icon="i-mdi-medical-bag" :to="`/users/${row.id}/equipment`" color="white" label="Pens" />
           <u-button icon="i-mdi-syringe" :to="`/users/${row.id}/history`" color="white" label="Shots" />
+          <u-button icon="i-mdi-calendar" :to="`/users/${row.id}/cycles`" color="white" label="Cycles" />
         </u-button-group>
       </template>
     </u-table>
