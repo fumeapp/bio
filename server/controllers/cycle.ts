@@ -5,6 +5,7 @@ import { cartridgeContents } from '~/utils/shared'
 import { cycle as policies } from '../policies/cycle'
 
 const create = async ({ user }: { user: User }, event: H3Event) => {
+  console.log('cycle.create')
   const { user: authed } = await requireUserSession(event)
   authorize(policies.create, { authed })
   const schema = z.object({
@@ -21,6 +22,7 @@ const create = async ({ user }: { user: User }, event: H3Event) => {
     payload.cycles = []
   payload.cycles?.push(parsed.data)
 
+  console.log('we got right before metapi().success')
   return metapi().success('cycle created', await usePrisma(event).user.update({
     data: {
       payload: JSON.stringify(payload),

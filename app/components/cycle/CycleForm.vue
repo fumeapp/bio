@@ -19,7 +19,10 @@ const state = reactive<UserCycle>({
 
 const create = async () => useApi()
   .setForm(form?.value)
-  .api<MetapiResponse<Pen>>(`/api/user/${route.params.user}/cycle`, { method: 'POST', body: { ...state, date: new Date(`${state.date}T00:00:)0`).toISOString() } })
+  .api<MetapiResponse<Pen>>(`/api/user/${route.params.user}/cycle`, {
+    method: 'POST',
+    body: { ...state, date: new Date(`${state.date}T00:00:00`).toISOString() },
+  })
   .then(() => emit('created'))
 </script>
 

@@ -47,13 +47,15 @@ const links = [
   </u-header>
   <div class="bg-gray-100 dark:bg-gray-950">
     <div class="py-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <div v-if="crumbs.length" class="flex items-center justify-between space-x-2 py-2">
-        <u-breadcrumb :links="crumbs" />
-        <u-button-group v-if="actions && actions[0]" :size="actions[0].size">
-          <u-button v-for="action in actions" :key="action.label" v-bind="action" @click="action.click" />
-        </u-button-group>
-      </div>
-      <div v-else class="h-10" />
+      <client-only>
+        <div v-if="crumbs.length" class="flex items-center justify-between space-x-2 py-2">
+          <u-breadcrumb :links="crumbs" />
+          <u-button-group v-if="actions && actions[0]" :size="actions[0].size">
+            <u-button v-for="action in actions" :key="action.label" v-bind="action" @click="action.click" />
+          </u-button-group>
+        </div>
+        <div v-else class="h-10" />
+      </client-only>
     </div>
   </div>
 </template>
