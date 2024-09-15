@@ -1,13 +1,8 @@
 import { Prisma } from '@prisma/client'
 
 export const include = {
-  cartridge: {
-    include: {
-      pen: true,
-    },
-  },
+  user: true,
 }
-
 export const orderBy = {
-  date: Prisma.SortOrder.asc,
+  updatedAt: Prisma.SortOrder.asc,
 }

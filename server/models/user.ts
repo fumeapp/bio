@@ -17,22 +17,6 @@ const payload = {
   },
 }
 
-const cycles = {
-  name: 'user.cycles',
-  result: {
-    user: {
-      cycles: {
-        needs: {
-          payload: true,
-        },
-        compute({ payload }: { payload: Prisma.JsonObject }) {
-          return (payload as UserPayload).cycles ?? []
-        },
-      },
-    },
-  },
-}
-
 const admin = {
   name: 'user.admin',
   result: {
@@ -51,23 +35,10 @@ const admin = {
 }
 
 export const include = {
-  pens: {
-    include: {
-      cartridge: {
-        include: {
-          shots: {
-            include: {
-              cartridge: true,
-            },
-          },
-        },
-      },
-    },
-  },
+  rounds: true,
 }
 
 export const extend = {
   payload,
   admin,
-  cycles,
 }

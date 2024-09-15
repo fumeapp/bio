@@ -1,13 +1,9 @@
-import * as user from './user'
+import * as round from './round'
 import * as token from './token'
-import * as pen from './pen'
-import * as cartridge from './cartridge'
-import * as shot from './shot'
+import * as user from './user'
 
 export default {
   user,
   token,
-  pen,
-  cartridge,
-  shot,
+  round,
 }

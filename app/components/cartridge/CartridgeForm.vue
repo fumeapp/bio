@@ -10,6 +10,7 @@ const form = ref<Form<any>>()
 const state = reactive({
   user: route.params.user,
   content: cartridgeContents[0],
+  color: penColors[0],
   ml: cartridgeMls[0],
   mg: cartridgeMgs[1],
 })

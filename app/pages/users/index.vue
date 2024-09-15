@@ -18,7 +18,7 @@ const columns = [
   { label: 'User', key: 'user' },
   { label: 'Created At', key: 'createdAt' },
   { label: 'Updated At', key: 'updatedAt' },
-  { label: 'Pens', key: 'pens' },
+  { label: 'Rounds', key: 'rounds' },
   { label: 'Actions', key: 'actions' },
 ]
 
@@ -54,11 +54,7 @@ const { data: users } = await useFetch<MetapiResponse<User>>('/api/all/user')
         </div>
       </template>
       <template #actions-data="{ row }">
-        <u-button-group>
-          <u-button icon="i-mdi-medical-bag" :to="`/users/${row.id}/equipment`" color="white" label="Pens" />
-          <u-button icon="i-mdi-syringe" :to="`/users/${row.id}/history`" color="white" label="Shots" />
-          <u-button icon="i-mdi-calendar" :to="`/users/${row.id}/cycles`" color="white" label="Cycles" />
-        </u-button-group>
+        <u-button icon="i-mdi-calendar" :to="`/users/${row.id}/rounds`" color="white" label="Rounds" />
       </template>
     </u-table>
   </div>

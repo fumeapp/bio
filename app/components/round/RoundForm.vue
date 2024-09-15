@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import type { Form } from '#ui/types/form'
-import type { Pen } from '@prisma/client'
+import type { Round } from '@prisma/client'
 import { format } from 'date-fns'
 import type { MetapiResponse } from '~/types/metapi'
-import type { UserCycle } from '~/types/models'
 
 const emit = defineEmits(['created', 'close'])
 
 const route = useRoute()
 
 const form = ref<Form<any>>()
-const state = reactive<UserCycle>({
-  content: 'Tirzepatide',
+const state = reactive<Round>({
+  content: cartridgeContents[0],
+  ml: cartridgeMls[0],
+  mg: cartridgeMgs[1],
   portions: 4,
   duration: 'weekly',
   date: format(new Date(), 'yyyy-MM-dd'),

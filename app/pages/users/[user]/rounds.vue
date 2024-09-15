@@ -2,7 +2,7 @@
 import type { MetapiResponse } from '~/types/metapi'
 import type { User } from '~/types/models'
 
-const cycleModal = ref(false)
+const roundModal = ref(false)
 
 const route = useRoute()
 const { data: user, refresh } = await useFetch<MetapiResponse<User>>(`/api/all/user/${route.params.user}`)
@@ -13,23 +13,23 @@ set(
   fromLink('Home'),
   fromLink('Users'),
   { label: user.value?.data.name as string, icon: 'i-mdi-account' },
-  { label: 'Cycles', icon: 'i-mdi-calendar' },
+  { label: 'Rounds', icon: 'i-mdi-calendar' },
 )
 action(
-  { label: 'Add a Cycle', click: () => cycleModal.value = true },
+  { label: 'Add a Round', click: () => roundModal.value = true },
 )
 </script>
 
 <template>
   <div>
     <u-dashboard-modal
-      v-model="cycleModal"
-      title="Add a Cycle"
-      description="Give this user a new cycle"
+      v-model="roundModal"
+      title="Add a round"
+      description="Give this user a new round"
       icon="i-mdi-calendar"
-      @close="cycleModal = false"
+      @close="roundModal = false"
     >
-      <cycle-form @creaed="refresh" @close="cycleModal = false" />
+      <round-form @creaed="refresh" @close="roundModal = false" />
     </u-dashboard-modal>
   </div>
 </template>
