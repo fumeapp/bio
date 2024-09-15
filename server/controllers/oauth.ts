@@ -58,7 +58,6 @@ export const githubHandler = oauthGitHubEventHandler({
 
 export const facebookHandler = oauthFacebookEventHandler({
   async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
-    console.log('facebook', user)
     const dbUser = await signIn(event, user, 'facebook')
     await setUserSession(event, { user: dbUser })
     return sendRedirect(event, '/')

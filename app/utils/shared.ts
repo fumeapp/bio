@@ -1,5 +1,5 @@
-import type { HeaderLink } from '@nuxt/ui-pro/types'
 import type { CookieOptions } from '#app'
+import type { HeaderLink } from '@nuxt/ui-pro/types'
 
 (BigInt.prototype as any).toJSON = function () {
   return this.toString()
@@ -46,7 +46,7 @@ export const cookieOptions: CookieOptions & { readonly?: false } = {
   maxAge: 60 * 60 * 24 * 365,
 }
 
-export const penColors = [
+const colors = [
   'cyan',
   'sky',
   'teal',
@@ -55,27 +55,34 @@ export const penColors = [
   'gray',
 ]
 
-export const cartridgeContents = [
+const contents = [
   'Tirzepatide',
   'Retatrutide',
   'Semaglutide',
 ]
 
-export const cartridgeMls = [
-  '2.0',
-  '3.0',
+const mls = [
+  2,
+  3,
 ]
 
-export const cartridgeMgs = [
-  '10',
-  '20',
-  '30',
-  '40',
+const mgs = [
+  10,
+  20,
+  30,
+  40,
 ]
 
-export const shotUnits = [
+const units = [
   25,
   50,
 ]
+export const range = {
+  colors,
+  contents,
+  mls,
+  mgs,
+  units,
+}
 
 export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))

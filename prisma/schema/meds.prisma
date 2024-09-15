@@ -3,12 +3,12 @@ model Round {
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
   content   String
-  ml        Decimal
-  mg        Decimal
+  ml        Int
+  mg        Int
   color       String
   frequency String
-  duration String
   portions Int
+  date DateTime 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

@@ -46,7 +46,6 @@ function modelBoundHandler<T extends Record<string, any>>(
   handler: (models: T, event: H3Event) => Promise<any>,
 ) {
   return defineEventHandler(async (event: H3Event) => {
-    console.log('modelNames', modelNames)
     const boundModels = await lookupModels<T>(modelNames, event)
     return handler(boundModels, event)
   })

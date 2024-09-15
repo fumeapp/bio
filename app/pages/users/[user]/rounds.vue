@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import type { Round } from '@prisma/client'
 import type { MetapiResponse } from '~/types/metapi'
 import type { User } from '~/types/models'
 
 const roundModal = ref(false)
 
 const route = useRoute()
-const { data: user, refresh } = await useFetch<MetapiResponse<User>>(`/api/all/user/${route.params.user}`)
+const { data: user } = await useFetch<MetapiResponse<User>>(`/api/all/user/${route.params.user}`)
 
 const { set, fromLink, action } = useCrumb()
 
@@ -18,6 +19,8 @@ set(
 action(
   { label: 'Add a Round', click: () => roundModal.value = true },
 )
+
+const { data: rounds, refresh } = await useFetch<MetapiResponse<Round[]>>(`/api/user/${route.params.user}/round`)
 </script>
 
 <template>
@@ -31,6 +34,9 @@ action(
     >
       <round-form @creaed="refresh" @close="roundModal = false" />
     </u-dashboard-modal>
+    <div>
+      {{ rounds }}
+    </div>
   </div>
 </template>
 

@@ -2,7 +2,7 @@ import type { Round } from '@prisma/client'
 import type { H3Event } from 'h3'
 import { z } from 'zod'
 import type { User } from '~/types/models'
-import { cartridgeContents, cartridgeMgs, cartridgeMls, penColors } from '~/utils/shared'
+import { range } from '~/utils/shared'
 import { include, orderBy } from '../models/round'
 import { round as policies } from '../policies/round'
 
@@ -22,13 +22,13 @@ const create = async ({ user }: { user: User }, event: H3Event) => {
   const { user: authed } = await requireUserSession(event)
   authorize(policies.create, { authed, user })
   const schema = z.object({
-    content: z.enum(cartridgeContents as [string, ...string[]]),
-    ml: z.enum(cartridgeMls as [string, ...string[]]),
-    mg: z.enum(cartridgeMgs as [string, ...string[]]),
-    color: z.enum(penColors as [string, ...string[]]),
+    content: z.enum(range.contents as [string, ...string[]]),
+    ml: z.number(),
+    mg: z.number(),
+    color: z.enum(range.colors as [string, ...string[]]),
     frequency: z.string(),
-    duration: z.string(),
     portions: z.number(),
+    date: z.string().datetime(),
   })
   const parsed = schema.safeParse(await readBody(event))
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
@@ -40,8 +40,8 @@ const create = async ({ user }: { user: User }, event: H3Event) => {
       mg: parsed.data.mg,
       color: parsed.data.color,
       frequency: parsed.data.frequency,
-      duration: parsed.data.duration,
       portions: parsed.data.portions,
+      date: parsed.data.date,
     },
     include,
   }))

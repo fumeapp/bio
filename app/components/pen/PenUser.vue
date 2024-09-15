@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Cartridge, Pen } from '@prisma/client'
 import type { MetapiResponse } from '~/types/metapi'
 
 const { user } = useUserSession()

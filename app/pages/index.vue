@@ -22,7 +22,9 @@ defineOgImageComponent('OgLogo')
 <template>
   <div>
     <div v-if="loggedIn">
+      <!--
       <pen-user />
+      -->
     </div>
     <div v-else class="mx-auto max-w-3xl my-12">
       <div class="flex items-center justify-center space-x-3 w-full">

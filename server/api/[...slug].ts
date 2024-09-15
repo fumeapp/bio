@@ -1,3 +1,4 @@
+import type { Round } from '@prisma/client'
 import { createRouter, useBase } from 'h3'
 import type { Token, User } from '~/types/models'
 import logout from '../controllers/logout'
@@ -16,7 +17,7 @@ router.get('/me', defineEventHandler(async (event) => {
   const dbUser = await usePrisma(event).user.update({ where: { id: user.id }, data: { updatedAt: new Date() } }) as unknown as User
   dbUser.hash = user.hash
   await replaceUserSession(event, { user: dbUser })
-  return metapi().render(user)
+  return metapi().render(dbUser)
 }))
 
 if (useRuntimeConfig().appEnv === 'test')
@@ -29,7 +30,7 @@ router.get('/oauth/microsoft', microsoftHandler)
 router.get('/logout', logout)
 
 router.apiResource<{ token: Token }>('/token', token)
-router.apiResource<{ user: User, round: Round }>('/user/{user}/pen', round)
+router.apiResource<{ user: User, round: Round }>('/user/{user}/round', round)
 router.apiResource<{ user: User }>('/all/user', user)
 
 export default useBase('/api', router.handler)
