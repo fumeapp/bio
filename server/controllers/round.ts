@@ -81,10 +81,23 @@ const remove = async ({ user, round }: { user: User, round: Round }, event: H3Ev
   return metapi().success('round deleted')
 }
 
+const all = defineEventHandler(async (event) => {
+  const { user: authed } = await requireUserSession(event)
+  authorize(policies.all, { authed })
+
+  return metapi().render(
+    await usePrisma(event).round.findMany({
+      include,
+      orderBy,
+    }),
+  )
+})
+
 export default {
   index,
   create,
   update,
   get,
   remove,
+  all,
 }

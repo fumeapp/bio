@@ -32,5 +32,6 @@ router.get('/logout', logout)
 router.apiResource<{ token: Token }>('/token', token)
 router.apiResource<{ user: User, round: Round }>('/user/{user}/round', round)
 router.apiResource<{ user: User }>('/all/user', user)
+router.get('/rounds', round.all)
 
 export default useBase('/api', router.handler)

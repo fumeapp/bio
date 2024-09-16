@@ -21,10 +21,15 @@ function remove({ authed, round }: { authed: User, round: Round }) {
   return authed.isAdmin || authed.id === round.userId
 }
 
+function all({ authed }: { authed: User }) {
+  return authed.isAdmin
+}
+
 export const round = {
   index,
   create,
   get,
   update,
   remove,
+  all,
 }

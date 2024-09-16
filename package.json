@@ -24,6 +24,8 @@
   "dependencies": {
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/list": "^6.1.15",
+    "@fullcalendar/timegrid": "^6.1.15",
     "@fullcalendar/vue3": "^6.1.15",
     "@nuxt/ui-pro": "^1.4.2",
     "@prisma/adapter-d1": "^5.19.1",

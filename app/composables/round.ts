@@ -1,5 +1,5 @@
-import type { Round } from '@prisma/client'
 import { addWeeks } from 'date-fns'
+import type { Round } from '~/types/models'
 
 export const useRound = (round: Round) => {
   const shotDays = (): Date[] => {
@@ -22,9 +22,12 @@ export const useRound = (round: Round) => {
 
   const nextRoundDay = () => addWeeks(lastShotDay(), 1)
 
+  const title = () => `${round.user.name} - ${round.content} ${round.mg}mg`
+
   return {
     shotDays,
     lastShotDay,
     nextRoundDay,
+    title,
   }
 }
