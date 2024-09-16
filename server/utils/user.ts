@@ -25,7 +25,8 @@ export const createUser = async (info: UserInfo, provider: string, oauthPayload:
         ],
       },
     },
-    update: {},
+    update: {
+    },
   }) as unknown as User
 
   await usePrisma(event).provider.upsert({

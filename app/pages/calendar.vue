@@ -44,10 +44,10 @@ const options: CalendarOptions = {
   eventClick(event: EventClickArg) {
     showRound(event.event.id)
   },
-  events: rounds.value.data.flatMap(round => [
+  events: rounds.value.data.flatMap((round: Round) => [
     {
       id: round.id,
-      title: `#${round.id} First shot`,
+      title: `#${round.id} first shot`,
       color: round.color,
       allday: true,
       start: round.date,
@@ -60,6 +60,14 @@ const options: CalendarOptions = {
       allday: true,
       start: useRound(round).lastShotDay(),
       end: useRound(round).lastShotDay(),
+    },
+    {
+      id: round.id,
+      title: `#${round.id} fullfill by`,
+      color: round.color,
+      allday: true,
+      start: useRound(round).nextRoundDay(),
+      end: useRound(round).nextRoundDay(),
     },
   ]),
   // add classes 'row' and 'col-lg-12' to .fc-toolbar.fc-header-toolbar
@@ -89,6 +97,7 @@ const options: CalendarOptions = {
       <div v-if="round">
         <div>first shot {{ format(round.date, 'M/d/yy') }}</div>
         <div>last shot {{ format(useRound(round).lastShotDay(), 'M/d/yy') }}</div>
+        <div>refill by {{ format(useRound(round).nextRoundDay(), 'M/d/yy') }}</div>
       </div>
     </u-dashboard-modal>
   </div>

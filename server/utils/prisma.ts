@@ -23,7 +23,7 @@ export function usePrisma(event?: H3Event<EventHandlerRequest>) {
     const adapter = new PrismaD1(useDB(event))
     prismaClient = new PrismaClient({
       adapter,
-      // log: ['query', 'info', 'warn', 'error'],
+      log: ['query', 'info', 'warn', 'error'],
     })
   }
   return prismaClient
