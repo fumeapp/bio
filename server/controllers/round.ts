@@ -18,31 +18,45 @@ const index = async ({ user }: { user: User }, event: H3Event) => {
   )
 }
 
+const roundSchema = z.object({
+  content: z.enum(range.contents as [string, ...string[]]),
+  ml: z.number(),
+  mg: z.number(),
+  color: z.enum(range.colors as [string, ...string[]]),
+  frequency: z.string(),
+  portions: z.number(),
+  date: z.string().datetime(),
+})
+
 const create = async ({ user }: { user: User }, event: H3Event) => {
   const { user: authed } = await requireUserSession(event)
   authorize(policies.create, { authed, user })
-  const schema = z.object({
-    content: z.enum(range.contents as [string, ...string[]]),
-    ml: z.number(),
-    mg: z.number(),
-    color: z.enum(range.colors as [string, ...string[]]),
-    frequency: z.string(),
-    portions: z.number(),
-    date: z.string().datetime(),
-  })
-  const parsed = schema.safeParse(await readBody(event))
+
+  const parsed = roundSchema.safeParse(await readBody(event))
   if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
+
   return metapi().success('round created', await usePrisma(event).round.create({
     data: {
       userId: user.id,
-      content: parsed.data.content,
-      ml: parsed.data.ml,
-      mg: parsed.data.mg,
-      color: parsed.data.color,
-      frequency: parsed.data.frequency,
-      portions: parsed.data.portions,
-      date: parsed.data.date,
+      ...parsed.data,
     },
+    include,
+  }))
+}
+
+const update = async ({ user, round }: { user: User, round: Round }, event: H3Event) => {
+  const { user: authed } = await requireUserSession(event)
+  authorize(policies.update, { authed, round })
+
+  const parsed = roundSchema.safeParse(await readBody(event))
+  if (!parsed.success) return metapi().error(event, parsed.error.issues, 400)
+
+  return metapi().success('round updated', await usePrisma(event).round.update({
+    where: {
+      id: round.id,
+      userId: user.id,
+    },
+    data: parsed.data,
     include,
   }))
 }
@@ -54,6 +68,7 @@ const get = async ({ user, round }: { user: User, round: Round }, event: H3Event
 }
 
 const remove = async ({ user, round }: { user: User, round: Round }, event: H3Event) => {
+  console.log('round.remove')
   const { user: authed } = await requireUserSession(event)
   authorize(policies.remove, { authed, round })
 
@@ -69,6 +84,7 @@ const remove = async ({ user, round }: { user: User, round: Round }, event: H3Ev
 export default {
   index,
   create,
+  update,
   get,
   remove,
 }

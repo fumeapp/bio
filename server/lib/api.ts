@@ -90,6 +90,7 @@ function apiResource<T extends Record<string, any>>(
 
   if (handlers.remove) {
     const { url: boundUrl, modelNames } = bindModel(`${route}/{${modelName}}`)
+    console.log('router.delete', boundUrl, modelNames)
     router.delete(boundUrl, modelBoundHandler<T>([...modelNames, modelName] as (keyof T)[], handlers.remove))
   }
 }

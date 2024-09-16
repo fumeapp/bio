@@ -5,32 +5,42 @@ import { format } from 'date-fns'
 import type { MetapiResponse } from '~/types/metapi'
 import { range } from '~/utils/shared'
 
-const emit = defineEmits(['created', 'close'])
-
+const props = defineProps<{ round?: Round }>()
+const emit = defineEmits(['complete'])
 const route = useRoute()
 
 const form = ref<Form<any>>()
-const state = reactive<Round>({
-  color: range.colors[0],
-  content: range.contents[0],
-  ml: range.mls[0],
-  mg: range.mgs[1],
-  portions: 4,
-  frequency: 'weekly',
-  date: format(new Date(), 'yyyy-MM-dd'),
+
+const state = reactive<Partial<Round>>({
+  color: props.round?.color ?? range.colors[0],
+  content: props.round?.content ?? range.contents[0],
+  ml: props.round?.ml ?? range.mls[0],
+  mg: props.round?.mg ?? range.mgs[1],
+  portions: props.round?.portions ?? 4,
+  frequency: props.round?.frequency ?? 'weekly',
+  date: props.round?.date
+    ? format(new Date(props.round.date), 'yyyy-MM-dd')
+    : format(new Date(), 'yyyy-MM-dd'),
 })
 
-const create = async () => useApi()
-  .setForm(form?.value)
-  .api<MetapiResponse<Round>>(`/api/user/${route.params.user}/round`, {
-    method: 'POST',
-    body: { ...state, date: new Date(`${state.date}T00:00:00`).toISOString() },
-  })
-  .then(() => emit('created'))
+const submit = async () => {
+  await useApi()
+    .setForm(form?.value)
+    .api<MetapiResponse<Round>>(
+      props.round
+        ? `/api/user/${route.params.user}/round/${props.round.id}`
+        : `/api/user/${route.params.user}/round`,
+      {
+        method: props.round ? 'PUT' : 'POST',
+        body: { ...state, date: new Date(`${state.date}T00:00:00`).toISOString() },
+      },
+    )
+    .then(() => emit('complete'))
+}
 </script>
 
 <template>
-  <u-form ref="form" :state="state" class="space-y-4" @submit="create">
+  <u-form ref="form" :state="state" class="space-y-4" @submit="submit">
     <u-form-group label="Color" name="color" autofocus>
       <div class="flex items-center space-x-4">
         <div
@@ -82,7 +92,7 @@ const create = async () => useApi()
       <u-input v-model="state.date" type="date" label="Date" />
     </u-form-group>
     <div class="flex justify-end gap-3">
-      <u-button label="Cancel" variant="soft" @click="emit('close')" />
+      <u-button label="Cancel" variant="soft" @click="emit('complete')" />
       <u-button type="submit" label="Submit" variant="solid" color="primary" />
     </div>
   </u-form>
