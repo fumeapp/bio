@@ -1,37 +1,18 @@
 <script lang="ts" setup>
-import type { Shot } from '@prisma/client'
 import { format } from 'date-fns'
+import type { Round } from '~/types/models'
 
-defineProps<{ shots?: Shot[] }>()
-const emit = defineEmits(['reload'])
-const route = useRoute()
-const { user } = useUserSession()
-
-const remove = async (id: number) =>
-  await useApi().api(
-    `/api/user/${route.params.user ? route.params.user : user.value.id}/shot/${id}`,
-    { method: 'DELETE' },
-  ).then(() => emit('reload'))
-
-const confirm = (shot: Shot) =>
-  useConfirm()
-    .confirm(
-      `Delete Shot on ${format(new Date(shot.date), 'eeee M/d/yy')}`,
-      `Are you sure you want to remove this shot?`,
-      'Delete Shot',
-      () => remove(shot.id),
-    )
+const props = defineProps<{ round: Round }>()
+const { shotDays } = useRound(props.round)
 </script>
 
 <template>
-  <div v-if="shots" class="border border-gray-300 dark:border-gray-800 rounded-lg flex flex-col divide-y divide-gray-300 dark:divide-gray-800">
-    <div v-for="shot in shots" :key="shot.id.toString()" class="py-1 px-4 flex items-center justify-between space-x-4 text-sm">
-      <span> {{ shot.units }} units {{ format(shot.date, 'eeee M/d/yy') }} </span>
-      <u-button icon="i-mdi-trash-can" size="2xs" color="red" variant="link" @click="confirm(shot)" />
+  <div class="border border-gray-300 dark:border-gray-800 rounded-lg flex flex-col divide-y divide-gray-300 dark:divide-gray-800">
+    <div v-for="shot in shotDays()" :key="shot.date.toString()" class="py-1 px-4 flex items-center justify-between space-x-4 text-sm">
+      <u-icon v-if="shot.taken" name="i-mdi-check-bold" class="text-emerald-400" />
+      <u-icon v-else name="i-mdi-clock" class="text-sky-400" />
+      <span> {{ format(shot.date, 'eeee M/d/yy') }} </span>
     </div>
-  </div>
-  <div v-else>
-    Cartridge is full
   </div>
 </template>
 

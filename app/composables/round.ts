@@ -1,8 +1,15 @@
-import { addWeeks } from 'date-fns'
+import { addWeeks, isAfter, isBefore, isSameDay } from 'date-fns'
 import type { Round } from '~/types/models'
 
+export interface ShotDay {
+  date: Date
+  units: number
+  taken: boolean
+  isToday: boolean
+}
+
 export const useRound = (round: Round) => {
-  const shotDays = (): Date[] => {
+  const shotDates = (): Date[] => {
     const portions = round.portions || 4
 
     const getNextDate = (index: number): Date => {
@@ -18,16 +25,41 @@ export const useRound = (round: Round) => {
     return Array.from({ length: portions }, (_, i) => getNextDate(i))
   }
 
-  const lastShotDay = () => shotDays().slice(-1)[0]
+  const shotDays = (): ShotDay[] => {
+    const today = new Date()
+    return shotDates().map(date => ({
+      date,
+      units: round.ml * 100 / round.portions,
+      taken: isBefore(date, today),
+      isToday: isSameDay(date, today),
+    }))
+  }
 
-  const nextRoundDay = () => addWeeks(lastShotDay(), 1)
+  const lastShotDate = () => shotDates().slice(-1)[0] as Date
+
+  const nextRoundDate = () => addWeeks(lastShotDate(), 1)
 
   const title = () => `${round.user.name} - ${round.content} ${round.mg}mg`
 
+  const shotDaysLeft = (): number => {
+    const today = new Date()
+    return shotDays().filter(day => isAfter(day.date, today) || isSameDay(day.date, today)).length
+  }
+
+  const unitsRemain = (): number => {
+    const today = new Date()
+    return shotDays()
+      .filter(day => isAfter(day.date, today) || isSameDay(day.date, today))
+      .reduce((total, day) => total + day.units, 0)
+  }
+
   return {
+    shotDates,
+    lastShotDate,
+    nextRoundDate,
     shotDays,
-    lastShotDay,
-    nextRoundDay,
+    shotDaysLeft,
+    unitsRemain,
     title,
   }
 }

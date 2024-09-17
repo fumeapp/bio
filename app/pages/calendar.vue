@@ -58,16 +58,16 @@ const options: CalendarOptions = {
       title: `#${round.id} last shot`,
       color: round.color,
       allday: true,
-      start: useRound(round).lastShotDay(),
-      end: useRound(round).lastShotDay(),
+      start: useRound(round).lastShotDate(),
+      end: useRound(round).lastShotDate(),
     },
     {
       id: round.id,
-      title: `#${round.id} fullfill by`,
+      title: `#${round.id} deadline`,
       color: round.color,
       allday: true,
-      start: useRound(round).nextRoundDay(),
-      end: useRound(round).nextRoundDay(),
+      start: useRound(round).nextRoundDate(),
+      end: useRound(round).nextRoundDate(),
     },
   ]),
   // add classes 'row' and 'col-lg-12' to .fc-toolbar.fc-header-toolbar
@@ -96,8 +96,8 @@ const options: CalendarOptions = {
       </template>
       <div v-if="round">
         <div>first shot {{ format(round.date, 'M/d/yy') }}</div>
-        <div>last shot {{ format(useRound(round).lastShotDay(), 'M/d/yy') }}</div>
-        <div>refill by {{ format(useRound(round).nextRoundDay(), 'M/d/yy') }}</div>
+        <div>last shot {{ format(useRound(round).lastShotDate(), 'M/d/yy') }}</div>
+        <div>refill by {{ format(useRound(round).nextRoundDate(), 'M/d/yy') }}</div>
       </div>
     </u-dashboard-modal>
   </div>
