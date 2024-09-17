@@ -3,7 +3,7 @@ import type { Round } from '@prisma/client'
 import { format } from 'date-fns'
 
 const props = defineProps<{ round: Round }>()
-const { lastShotDay, nextRoundDay } = useRound(props.round)
+const { nextRoundDate } = useRound(props.round)
 </script>
 
 <template>
@@ -11,7 +11,7 @@ const { lastShotDay, nextRoundDay } = useRound(props.round)
     <div> {{ round.content }} {{ round.mg }}mg</div>
     <div>
       Started {{ format(round.date, 'M/d/yy') }}
-      Refill by {{ format(nextRoundDay(), 'M/d/yy') }}
+      Refill by {{ format(nextRoundDate(), 'M/d/yy') }}
     </div>
   </div>
 </template>

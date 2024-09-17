@@ -45,7 +45,7 @@ const links = [
       <UNavigationTree :links="mapContentNavigation(navigation)" />
     </template>
   </u-header>
-  <div class="bg-gray-100 dark:bg-gray-950">
+  <div>
     <div class="py-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <client-only>
         <div v-if="crumbs.length" class="flex items-center justify-between space-x-2 py-2">
@@ -55,6 +55,9 @@ const links = [
           </u-button-group>
         </div>
         <div v-else class="h-10" />
+        <template #fallback>
+          <div class="h-10">&nbsp;</div>
+        </template>
       </client-only>
     </div>
   </div>
