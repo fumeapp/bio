@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { MetapiResponse } from '~/types/metapi'
+import type { Round } from '~/types/models'
 
 defineProps<{ round: Round }>()
 </script>

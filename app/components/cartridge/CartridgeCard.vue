@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import type { Cartridge } from '~/types/models'
+import type { Round } from '~/types/models'
 
-defineProps<{ cartridge: Cartridge }>()
+defineProps<{ round: Round }>()
 </script>
 
 <template>
   <div class="flex">
     <u-card>
       <div class="flex flex-col items-center justify-center space-y-8">
-        <cartridge-model :cartridge="cartridge" />
+        <cartridge-model :round="round" />
         <div>
-          {{ cartridge.content }}
-          {{ cartridge.ml }}ml
-          {{ cartridge.mg }}mg
+          {{ round.content }}
+          {{ round.ml }}ml
+          {{ round.mg }}mg
         </div>
-        <shot-log :shots="cartridge?.shots" />
+        <shot-log :round="round" />
       </div>
     </u-card>
   </div>
