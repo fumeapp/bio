@@ -31,7 +31,7 @@ app/coverage
 server/coverage
 
 # Test database sqlite file
-prisma/schema/test.db
+prisma/schema/test.db*
 
 
 # cloudflare

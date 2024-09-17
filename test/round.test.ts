@@ -1,7 +1,7 @@
 import type { Round } from '@prisma/client'
 import { setup } from '@nuxt/test-utils'
 import { describe, expect, it } from 'vitest'
-import { cartridgeContents, cartridgeMgs, cartridgeMls, penColors } from '~/utils/shared'
+import { range } from '~/utils/shared'
 import { actingAs } from './auth'
 
 describe('/api/user/{user}/round', async () => {
@@ -11,21 +11,20 @@ describe('/api/user/{user}/round', async () => {
   it('post /api/user/{user}/round - create a round', async () => {
     const { post, user } = await actingAs('test@test.com')
     const { data: round } = await post<Round>(`/api/user/${user.session.id}/round`, {
-      content: cartridgeContents[0],
-      ml: cartridgeMls[0],
-      mg: cartridgeMgs[0],
-      color: penColors[0],
-      frequency: 'daily',
-      duration: '1 week',
-      portions: 1,
+      date: new Date(),
+      content: range.contents[0],
+      ml: range.mls[0],
+      mg: range.mgs[0],
+      color: range.colors[0],
+      frequency: 'weekly',
+      portions: 4,
     })
-    expect(round.content).toBe(cartridgeContents[0])
-    expect(`${round.ml}.0`).toBe(cartridgeMls[0])
-    expect(round.mg).toBe(cartridgeMgs[0])
-    expect(round.color).toBe(penColors[0])
-    expect(round.frequency).toBe('daily')
-    expect(round.duration).toBe('1 week')
-    expect(round.portions).toBe(1)
+    expect(round.content).toBe(range.contents[0])
+    expect(round.ml).toBe(range.mls[0])
+    expect(round.mg).toBe(range.mgs[0])
+    expect(round.color).toBe(range.colors[0])
+    expect(round.frequency).toBe('weekly')
+    expect(round.portions).toBe(4)
     expect(round.userId).toBe(user.session.id)
     rounds.push(round)
   })
@@ -42,7 +41,28 @@ describe('/api/user/{user}/round', async () => {
     expect(response.data).toStrictEqual(rounds[0])
   })
 
-  // Remove the 'put' test as there's no 'update' method in the controller
+  it('put /api/user/{user}/round/{round} - update a round', async () => {
+    if (!rounds[0]) throw new Error('Round not found')
+    const { put, user } = await actingAs('test@test.com')
+    const updatedData = {
+      date: rounds[0].date,
+      content: range.contents[1],
+      ml: range.mls[1],
+      mg: range.mgs[1],
+      color: range.colors[1],
+      frequency: 'daily',
+      portions: 2,
+    }
+    const { data: updatedRound } = await put<Round>(`/api/user/${user.session.id}/round/${rounds[0].id}`, updatedData)
+
+    const { updatedAt: _1, ...roundWithoutUpdatedAt } = updatedRound
+    const { updatedAt: _2, ...originalWithoutUpdatedAt } = rounds[0]
+
+    expect(roundWithoutUpdatedAt).toStrictEqual({
+      ...originalWithoutUpdatedAt,
+      ...updatedData,
+    })
+  })
 
   it('delete /api/user/{user}/round/{round} - delete a round', async () => {
     if (!rounds[0]) throw new Error('Round not found')

@@ -68,7 +68,6 @@ const get = async ({ user, round }: { user: User, round: Round }, event: H3Event
 }
 
 const remove = async ({ user, round }: { user: User, round: Round }, event: H3Event) => {
-  console.log('round.remove')
   const { user: authed } = await requireUserSession(event)
   authorize(policies.remove, { authed, round })
 
