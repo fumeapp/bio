@@ -16,7 +16,6 @@
     "test:ui": "vitest --ui",
     "test:reset": "pnpm run db:test:reset; vitest run",
     "db:test:reset": "dotenv -e .env.test -- npx prisma migrate reset --force",
-    "db:test:push": "dotenv -e .env.test -- npx prisma db push --force",
     "test:coverage": "vitest run --coverage.enabled true",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
