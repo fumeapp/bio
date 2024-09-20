@@ -16,12 +16,8 @@ defineProps<{ round: Round }>()
         <div>
           {{ round.content }} {{ round.ml }}ml {{ round.mg }}mg
         </div>
-        <div>
-          <shot-summary :round="round" />
-        </div>
-        <div>
-          <shot-log :round="round" />
-        </div>
+        <shot-summary :round="round" />
+        <shot-log :round="round" />
       </div>
     </u-card>
   </div>

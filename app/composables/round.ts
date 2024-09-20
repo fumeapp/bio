@@ -35,6 +35,8 @@ export const useRound = (round: Round) => {
     }))
   }
 
+  const isShotDayToday = (): boolean => shotDays().some(day => isSameDay(day.date, new Date()))
+
   const lastShotDate = () => shotDates().slice(-1)[0] as Date
 
   const nextRoundDate = () => addWeeks(lastShotDate(), 1)
@@ -59,6 +61,7 @@ export const useRound = (round: Round) => {
     nextRoundDate,
     shotDays,
     shotDaysLeft,
+    isShotDayToday,
     unitsRemain,
     title,
   }

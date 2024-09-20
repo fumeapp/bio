@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { Round } from '~/types/models'
+
 defineProps<{ rounds: Round[] }>()
 const emit = defineEmits(['reload'])
 </script>

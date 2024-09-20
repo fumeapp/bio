@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import type { Round } from '~/types/models'
 
 const props = defineProps<{ round: Round }>()
-const { shotDays } = useRound(props.round)
+const { shotDays, isShotDayToday } = useRound(props.round)
 </script>
 
 <template>
@@ -14,6 +14,11 @@ const { shotDays } = useRound(props.round)
       <span> {{ format(shot.date, 'eeee M/d/yy') }} </span>
     </div>
   </div>
+  <u-alert
+    v-if="isShotDayToday()"
+    icon="i-mdi-alert"
+    title="Shot day is today"
+    description="Don't forget to take your shot!"
+    color="sky"
+  />
 </template>
-
-<style scoped></style>
