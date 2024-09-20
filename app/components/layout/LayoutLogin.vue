@@ -17,6 +17,7 @@ const providers = reactive<Provider[]>([
     color: 'white',
     click: async () => await navigateTo('/api/oauth/google', { external: true }),
   },
+  /*
   {
     name: 'facebook',
     label: 'Facebook',
@@ -24,7 +25,7 @@ const providers = reactive<Provider[]>([
     color: 'white',
     click: async () => await navigateTo('/api/oauth/facebook', { external: true }),
   },
-
+  */
   {
     name: 'microsoft',
     label: 'Microsoft',

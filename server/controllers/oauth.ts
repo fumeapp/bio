@@ -28,6 +28,9 @@ const signIn = async (event: H3Event<EventHandlerRequest>, oauthPayload: any, pr
     info.avatar = ''
   }
 
+  if (provider === 'facebook')
+    console.log('facebook payload', oauthPayload)
+
   const user = await createUser(info, provider, oauthPayload, event)
   return user
 }
