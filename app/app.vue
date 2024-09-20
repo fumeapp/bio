@@ -31,7 +31,7 @@ provide('navigation', navigation)
 </script>
 
 <template>
-  <div>
+  <div class="overlay bg-gray-100 dark:bg-gray-950">
     <NuxtLoadingIndicator />
     <header-main />
     <UMain>

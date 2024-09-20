@@ -1,12 +1,9 @@
 <script lang="ts" setup>
-import type { Cartridge } from '~/types/models'
+import type { Round } from '~/types/models'
 
-const props = defineProps<{ cartridge?: Cartridge, label?: boolean, shotDay?: string }>()
+const props = defineProps<{ round: Round, label?: boolean }>()
 
-const { remainingUnits } = useShot()
-const units = computed(() =>
-  props.cartridge ? remainingUnits(props.cartridge?.shots || [], props.cartridge) : 200,
-)
+const { unitsRemain } = useRound(props.round)
 </script>
 
 <template>
@@ -18,18 +15,12 @@ const units = computed(() =>
       <div class="absolute bg-white w-1 h-4 rounded-t bottom-0 left-[100px]" />
       <div class="absolute bg-white w-1 h-4 rounded-t bottom-0 left-[150px]" />
       <div class="absolute text-xs left-2 top-1 text-black">
-        <span v-if="cartridge && label" class="shadow">
-          {{ cartridge.content }} {{ cartridge.mg }}mg
+        <span v-if="label" class="shadow">
+          {{ round.content }} {{ round.mg }}mg
         </span>
       </div>
 
-      <div class="absolute text-xs right-2 top-1 text-black">
-        <span v-if="shotDay" class="shadow">
-          {{ weekdayToFull(shotDay) }}
-        </span>
-      </div>
-
-      <div :style="`width: ${units}px;`" class="h-full bg-gradient-to-b from-sky-600 to-sky-100 transition-all duration-1000" />
+      <div :style="`width: ${unitsRemain()}px;`" class="h-full bg-gradient-to-b from-sky-600 to-sky-100 transition-all duration-1000" />
 
       <div class="h-full w-3 bg-black/80 flex-shrink-0 border-black border-l border-r" />
       <div class="h-full w-3 bg-black/80 flex-shrink-0 border-black border-r" />

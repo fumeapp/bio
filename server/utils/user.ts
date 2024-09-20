@@ -1,6 +1,5 @@
-import crypto from 'node:crypto'
-import { usePrisma } from '~/../server/utils/prisma'
 import type { H3Event } from 'h3'
+import { usePrisma } from '~/../server/utils/prisma'
 import type { User } from '~/types/models'
 import type { TokenLocation, UserInfo } from '~/types/oauth'
 
@@ -26,7 +25,8 @@ export const createUser = async (info: UserInfo, provider: string, oauthPayload:
         ],
       },
     },
-    update: {},
+    update: {
+    },
   }) as unknown as User
 
   await usePrisma(event).provider.upsert({

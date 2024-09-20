@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Cartridge, Pen } from '@prisma/client'
+import type { Round } from '~/types/models'
 
-defineProps<{ pens: Pen[], cartridges: Cartridge[], readonly?: boolean }>()
+defineProps<{ rounds: Round[] }>()
 const emit = defineEmits(['reload'])
 </script>
 
@@ -9,10 +9,8 @@ const emit = defineEmits(['reload'])
   <div>
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <pen-card
-        v-for="pen in pens" :key="pen.id.toString()"
-        :pen="pen"
-        :cartridges="cartridges"
-        :readonly="readonly"
+        v-for="round in rounds" :key="round.id"
+        :round="round"
         @reload="emit('reload')"
       />
     </div>

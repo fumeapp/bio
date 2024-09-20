@@ -1,7 +1,7 @@
-import { PrismaD1 } from '@prisma/adapter-d1'
-import { PrismaClient } from '@prisma/client'
 import type { D1Database } from '@nuxthub/core'
 import type { EventHandlerRequest, H3Event } from 'h3'
+import { PrismaD1 } from '@prisma/adapter-d1'
+import { PrismaClient } from '@prisma/client'
 import models from '../models/index'
 
 export function useDB(event: H3Event<EventHandlerRequest>): D1Database {
@@ -21,7 +21,10 @@ export function usePrisma(event?: H3Event<EventHandlerRequest>) {
   }
   if (!prismaClient) {
     const adapter = new PrismaD1(useDB(event))
-    prismaClient = new PrismaClient({ adapter })
+    prismaClient = new PrismaClient({
+      adapter,
+      // log: ['query', 'info', 'warn', 'error'],
+    })
   }
   return prismaClient
     .$extends(models.user.extend.payload)

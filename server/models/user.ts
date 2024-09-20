@@ -35,19 +35,7 @@ const admin = {
 }
 
 export const include = {
-  pens: {
-    include: {
-      cartridge: {
-        include: {
-          shots: {
-            include: {
-              cartridge: true,
-            },
-          },
-        },
-      },
-    },
-  },
+  rounds: true,
 }
 
 export const extend = {

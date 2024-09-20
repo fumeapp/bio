@@ -18,7 +18,7 @@ const columns = [
   { label: 'User', key: 'user' },
   { label: 'Created At', key: 'createdAt' },
   { label: 'Updated At', key: 'updatedAt' },
-  { label: 'Pens', key: 'pens' },
+  { label: 'Rounds', key: 'rounds' },
   { label: 'Actions', key: 'actions' },
 ]
 
@@ -43,21 +43,13 @@ const { data: users } = await useFetch<MetapiResponse<User>>('/api/all/user')
       <template #updatedAt-data="{ row }">
         {{ formatDistance(new Date(row.updatedAt), new Date(), { addSuffix: true }) }}
       </template>
-      <template #pens-data="{ row }">
+      <template #rounds-data="{ row }">
         <div class="flex flex-col space-y-1">
-          <pen-model v-for="pen in row.pens" :key="pen.id" :color="pen.color">
-            <cartridge-model v-if="pen.cartridge" :cartridge="pen.cartridge" :shot-day="pen.shotDay" label />
-            <div v-else>
-              No Cartridge
-            </div>
-          </pen-model>
+          <round-summary v-for="round in row.rounds" :key="round.id" :round="round" />
         </div>
       </template>
       <template #actions-data="{ row }">
-        <u-button-group>
-          <u-button icon="i-mdi-medical-bag" :to="`/users/${row.id}/equipment`" color="white" label="Equipment" />
-          <u-button icon="i-mdi-syringe" :to="`/users/${row.id}/history`" color="white" label="Shots" />
-        </u-button-group>
+        <u-button icon="i-mdi-calendar" :to="`/users/${row.id}/rounds`" color="white" label="Rounds" />
       </template>
     </u-table>
   </div>

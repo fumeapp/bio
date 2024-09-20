@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import type { Form } from '#ui/types/form'
 import type { Shot } from '@prisma/client'
 import { format } from 'date-fns'
-import type { Pen } from '~/types/models'
-import type { Form } from '#ui/types/form'
 import type { MetapiResponse } from '~/types/metapi'
+import type { Pen } from '~/types/models'
 import { shotUnits } from '~/utils/shared'
 
 const props = defineProps<{ pen: Pen }>()

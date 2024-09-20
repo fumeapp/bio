@@ -5,9 +5,7 @@ model User {
   avatar     String?
   providers  Provider[]
   sessions   Token[]
-  pens       Pen[]
-  cartridges Cartridge[]
-  shots      Shot[]
+  rounds       Round[]
   payload    String
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
@@ -38,7 +36,6 @@ model Token {
   ip         String
   agent      String
   location   String
-  // coordinate Unsupported("Point")
   coordinate String   @default("30.2423 -97.7672")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt

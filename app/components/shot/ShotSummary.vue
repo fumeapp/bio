@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { Cartridge, Shot } from '~/types/models'
+import type { Round } from '~/types/models'
 
-defineProps<{ shots: Shot[], cartridge: Cartridge }>()
-const { remainingUnits } = useShot()
+const props = defineProps<{ round: Round }>()
+const { unitsRemain } = useRound(props.round)
 </script>
 
 <template>
   <div>
-    {{ remainingUnits(shots, cartridge) }} remaining units
+    {{ unitsRemain() }} remaining units
   </div>
 </template>

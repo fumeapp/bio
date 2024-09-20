@@ -1,39 +1,17 @@
 -- CreateTable
-CREATE TABLE "cartridges" (
+CREATE TABLE "rounds" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "userId" INTEGER NOT NULL,
     "content" TEXT NOT NULL,
-    "ml" DECIMAL NOT NULL,
-    "mg" DECIMAL NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
-    CONSTRAINT "cartridges_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
--- CreateTable
-CREATE TABLE "pens" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "userId" INTEGER NOT NULL,
-    "cartridgeId" INTEGER,
+    "ml" INTEGER NOT NULL,
+    "mg" INTEGER NOT NULL,
     "color" TEXT NOT NULL,
-    "shotDay" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
-    CONSTRAINT "pens_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "pens_cartridgeId_fkey" FOREIGN KEY ("cartridgeId") REFERENCES "cartridges" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
--- CreateTable
-CREATE TABLE "shots" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "userId" INTEGER NOT NULL,
-    "cartridgeId" INTEGER NOT NULL,
-    "units" INTEGER NOT NULL,
+    "frequency" TEXT NOT NULL,
+    "portions" INTEGER NOT NULL,
     "date" DATETIME NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    CONSTRAINT "shots_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "shots_cartridgeId_fkey" FOREIGN KEY ("cartridgeId") REFERENCES "cartridges" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT "rounds_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -73,9 +51,6 @@ CREATE TABLE "tokens" (
     "updatedAt" DATETIME NOT NULL,
     CONSTRAINT "tokens_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
-
--- CreateIndex
-CREATE UNIQUE INDEX "pens_cartridgeId_key" ON "pens"("cartridgeId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");

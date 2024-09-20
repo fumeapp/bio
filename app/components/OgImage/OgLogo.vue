@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full bg-black">
-    <div class="w-full h-full flex items-center justify-center bg-sky-950/30">
+    <div class="w-full h-full flex items-center pt-40 justify-center bg-sky-950/30">
       <svg
         class="absolute right-0 top-0"
         width="629"

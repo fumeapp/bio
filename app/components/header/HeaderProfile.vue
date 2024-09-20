@@ -30,6 +30,14 @@ const items = [
       shortcuts: ['U'],
       disabled: !user.value.isAdmin,
     },
+    {
+      label: 'Calendar',
+      icon: 'i-mdi-calendar',
+      click: async () => await navigateTo('/calendar'),
+      shortcuts: ['C'],
+      disabled: !user.value.isAdmin,
+    },
+
   ],
   [
     {

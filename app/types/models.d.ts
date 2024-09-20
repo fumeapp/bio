@@ -1,5 +1,5 @@
 import type { Token as PrismaToken, User as PrismaUser } from '@prisma/client'
-import type { Cartridge as PrismaCartridge, Pen as PrismaPen, Shot as PrismaShot } from '@prisma/client'
+import type { Round as PrismaRound } from '@prisma/client'
 import type { UserInfo } from '~/types/oauth'
 
 export interface Token extends PrismaToken {
@@ -23,6 +23,7 @@ export interface UserPayload {
 export interface User extends PrismaUser {
   payload: UserPayload
   isAdmin: boolean
+  cycles: UserCycle[]
   hash: string
 }
 
@@ -31,15 +32,6 @@ export interface UserSession extends UserInfo {
   cookie?: string
 }
 
-export interface Shot extends PrismaShot {
-  cartridge?: Cartridge
-}
-
-export interface Cartridge extends PrismaCartridge {
-  pen?: Pen
-  shots?: Shot[]
-}
-
-export interface Pen extends PrismaPen {
-  cartridge: Cartridge | null
+export interface Round extends PrismaRound {
+  user: User
 }
