@@ -47,24 +47,24 @@ const options: CalendarOptions = {
   events: rounds.value.data.flatMap((round: Round) => [
     {
       id: round.id,
-      title: `#${round.id} first shot`,
-      color: round.color,
+      title: round.user.name,
+      color: 'green',
       allday: true,
       start: round.date,
       end: round.date,
     },
     {
       id: round.id,
-      title: `#${round.id} last shot`,
-      color: round.color,
+      title: round.user.name,
+      color: 'blue',
       allday: true,
       start: useRound(round).lastShotDate(),
       end: useRound(round).lastShotDate(),
     },
     {
       id: round.id,
-      title: `#${round.id} deadline`,
-      color: round.color,
+      title: round.user.name,
+      color: 'red',
       allday: true,
       start: useRound(round).nextRoundDate(),
       end: useRound(round).nextRoundDate(),
@@ -79,9 +79,12 @@ const options: CalendarOptions = {
 <template>
   <div px-2 py-4 lg:p-8>
     <full-calendar :options="options" />
-    <u-dashboard-modal v-model="roundModal">
-      <template v-if="round" #header>
-        <div class="flex flex-1 items-center justify-between">
+    <u-dashboard-modal
+      v-model="roundModal"
+      :title="`${round?.content} ${round?.mg}mg`"
+    >
+      <div v-if="round">
+        <div class="flex flex-1 items-center justify-between mb-8">
           <div class="flex space-x-2 items-center">
             <u-avatar :src="round.user.avatar" />
             <div>
@@ -89,15 +92,8 @@ const options: CalendarOptions = {
               <div>{{ round.user.email }}</div>
             </div>
           </div>
-          <div>
-            {{ round.content }} {{ round.mg }}mg
-          </div>
+          <round-summary :round="round" />
         </div>
-      </template>
-      <div v-if="round">
-        <div>first shot {{ format(round.date, 'M/d/yy') }}</div>
-        <div>last shot {{ format(useRound(round).lastShotDate(), 'M/d/yy') }}</div>
-        <div>refill by {{ format(useRound(round).nextRoundDate(), 'M/d/yy') }}</div>
       </div>
     </u-dashboard-modal>
   </div>
