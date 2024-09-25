@@ -33,7 +33,6 @@ provide('navigation', navigation)
 <template>
   <div class="overlay bg-gray-100 dark:bg-gray-950">
     <NuxtLoadingIndicator />
-    <header-main />
     <UMain>
       <NuxtLayout>
         <NuxtPage />
