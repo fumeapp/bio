@@ -17,7 +17,7 @@ const { type, mg } = route.params
           <logo-text class="text-9xl" large />
           <div class="flex text-5xl font-extrabold">
             <span class="text-sky-900 flex-1 text-center bg-sky-200 py-2 px-6"> {{ type }} </span>
-            <span class="text-sky-200 bg-sky-900 py-2 px-6"> {{ mg }}mg </span>
+            <span v-if="mg !== 'none'" class="text-sky-200 bg-sky-900 py-2 px-6"> {{ mg }}mg </span>
           </div>
         </div>
       </div>
