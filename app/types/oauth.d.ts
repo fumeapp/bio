@@ -14,6 +14,31 @@ export interface GoogleUserInfo {
   email: string
   email_verified: boolean
 }
+/*
+
+apple user { iss: 'https://appleid.apple.com',
+  aud: 'fume.bio',
+  exp: 1727422907,
+  iat: 1727336507,
+  sub: '000563.30ae9239e35e4d2da5806a88600e772a.0716',
+  at_hash: 'PcyA1wqULsWWxgiiXSTGnQ',
+  email: 'acidjazz@gmail.com',
+  email_verified: true,
+  auth_time: 1727336507,
+  nonce_supported: true }
+  */
+export interface AppleUserInfo {
+  aud: string
+  exp: number
+  iat: number
+  sub: string
+  at_hash: string
+  email: string
+  email_verified: boolean
+  auth_time: number
+  nonce_supported: boolean
+}
+
 export interface GithubUserInfo {
   login: string
   id: number
@@ -48,6 +73,14 @@ export interface GithubUserInfo {
   following: number
   created_at: string
   updated_at: string
+}
+
+export interface AppleUserInfo {
+  name: {
+    firstName: string
+    lastName: string
+  }
+  email: string
 }
 
 export interface MicrosoftUserInfo {

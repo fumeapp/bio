@@ -1,9 +1,11 @@
 import type { EventHandlerRequest, H3Event } from 'h3'
+import appleSignin from 'apple-signin-auth'
 import type { User } from '~/types/models'
-import type { GithubUserInfo, GoogleUserInfo, MicrosoftUserInfo, TokenLocation, UserInfo } from '~/types/oauth'
+import type { AppleUserInfo, GithubUserInfo, GoogleUserInfo, MicrosoftUserInfo, TokenLocation, UserInfo } from '~/types/oauth'
+import { createSession, userFromEmail } from '../utils/user'
 
 const signIn = async (event: H3Event<EventHandlerRequest>, oauthPayload: any, provider: string): Promise<User> => {
-  let userPayload: GithubUserInfo | GoogleUserInfo | MicrosoftUserInfo | null = null
+  let userPayload: GithubUserInfo | GoogleUserInfo | MicrosoftUserInfo | AppleUserInfo | null = null
   userPayload = oauthPayload as GithubUserInfo
   const info: UserInfo = { email: '', name: '', avatar: '' }
 
@@ -25,6 +27,12 @@ const signIn = async (event: H3Event<EventHandlerRequest>, oauthPayload: any, pr
     userPayload = oauthPayload as MicrosoftUserInfo
     info.email = userPayload.mail
     info.name = userPayload.displayName
+    info.avatar = ''
+  }
+  if (provider === 'apple') {
+    userPayload = oauthPayload as AppleUserInfo
+    info.email = userPayload.email
+    info.name = `${userPayload.name.firstName} ${userPayload.name.lastName}`
     info.avatar = ''
   }
 
@@ -87,4 +95,44 @@ export const xHandler = oauthXEventHandler({
     await setUserSession(event, { user: dbUser })
     return sendRedirect(event, '/')
   },
+})
+
+export const appleRedirectHandler = defineEventHandler((event) => {
+  const options = {
+    clientID: 'fume.bio',
+    redirectUri: 'https://fume.bio/api/oauth/apple',
+    scope: 'email name',
+  }
+  const authorizationUrl = appleSignin.getAuthorizationUrl(options)
+  return sendRedirect(event, authorizationUrl)
+})
+
+export const appleHandler = defineEventHandler(async (event) => {
+  const body = await readBody(event)
+  const config = useRuntimeConfig(event)
+  const clientSecret = appleSignin.getClientSecret({
+    clientID: 'fume.bio',
+    teamID: config.apple.teamId,
+    privateKey: `-----BEGIN PRIVATE KEY-----
+${config.apple.privateKey.split(':BR:').join('\n')}
+-----END PRIVATE KEY-----`,
+    keyIdentifier: config.apple.keyIdentifier,
+  })
+
+  const options = {
+    clientID: 'fume.bio',
+    redirectUri: 'https://fume.bio/api/oauth/apple',
+    clientSecret,
+    scope: 'email name',
+  }
+  const tokenResponse = await appleSignin.getAuthorizationToken(body.code, options)
+  const user = await appleSignin.verifyIdToken(tokenResponse.id_token)
+  let dbUser
+  if (body.user)
+    dbUser = await signIn(event, JSON.parse(body.user), 'apple')
+  else
+    dbUser = await createSession('apple', await userFromEmail(user.email), event)
+
+  await setUserSession(event, { user: dbUser })
+  return sendRedirect(event, '/')
 })

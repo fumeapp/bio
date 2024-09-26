@@ -29,6 +29,7 @@
     "@fullcalendar/vue3": "^6.1.15",
     "@nuxt/ui-pro": "^1.4.3",
     "@prisma/adapter-d1": "^5.20.0",
+    "apple-signin-auth": "^1.7.6",
     "date-fns": "^4.1.0"
   },
   "devDependencies": {

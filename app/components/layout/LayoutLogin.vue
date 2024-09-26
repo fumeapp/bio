@@ -17,6 +17,14 @@ const providers = reactive<Provider[]>([
     color: 'white',
     click: async () => await navigateTo('/api/oauth/google', { external: true }),
   },
+  {
+    name: 'apple',
+    label: 'Apple',
+    icon: 'i-mdi-apple',
+    color: 'white',
+    click: async () => await navigateTo('/api/oauth/redirect/apple', { external: true }),
+  },
+
   /*
   {
     name: 'x',
@@ -56,6 +64,7 @@ const providers = reactive<Provider[]>([
     icon: 'i-mdi-github',
     click: async () => await navigateTo('/api/oauth/github', { external: true }),
   },
+
 ])
 </script>
 
