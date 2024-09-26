@@ -3,6 +3,43 @@ import { usePrisma } from '~/../server/utils/prisma'
 import type { User } from '~/types/models'
 import type { TokenLocation, UserInfo } from '~/types/oauth'
 
+export const userFromEmail = async (email: string): Promise<User> => await usePrisma().user.findUnique({
+  where: {
+    email,
+  },
+}) as User
+
+export const createSession = async (provider: string, user: User, event?: H3Event) => {
+  const coordinate = event
+    ? `${event.node.req.headers['Cloudfront-Viewer-Latitude']} ${event.node.req.headers['Cloudfront-Viewer-Longitude']}`
+    : '30.2423 -97.7672'
+
+  const location: TokenLocation = {
+    city: event?.node.req.headers['Cloudfront-Viewer-City'] as string || 'Austin',
+    region: event?.node.req.headers['Cloudfront-Viewer-Region-Name'] as string || 'TX',
+    country: event?.node.req.headers['Cloudfront-Viewer-Country'] as string || 'US',
+    timezone: event?.node.req.headers['Cloudfront-Viewer-Timezone'] as string || 'America/Chicago',
+    countryName: event?.node.req.headers['Cloudfront-Viewer-CountryName'] as string || 'United States',
+  }
+
+  const cfg = useRuntimeConfig(event)
+
+  const token = await usePrisma(event).token.create({
+    data: {
+      userId: user.id,
+      hash: `${cfg.public.prefix}_${generateHash(64)}`,
+      source: `oauth:${provider}`,
+      ip: event?.node.req.headers['x-forwarded-for'] as string || '127.0.0.1',
+      agent: event?.node.req.headers['user-agent'] as string || 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
+      location: JSON.stringify(location),
+      coordinate,
+    },
+  })
+
+  user.hash = token.hash
+  return user
+}
+
 export const createUser = async (info: UserInfo, provider: string, oauthPayload: any, event?: H3Event): Promise<User> => {
   let user: User | null = null
 
@@ -48,34 +85,7 @@ export const createUser = async (info: UserInfo, provider: string, oauthPayload:
     },
   })
 
-  const coordinate = event
-    ? `${event.node.req.headers['Cloudfront-Viewer-Latitude']} ${event.node.req.headers['Cloudfront-Viewer-Longitude']}`
-    : '30.2423 -97.7672'
-
-  const location: TokenLocation = {
-    city: event?.node.req.headers['Cloudfront-Viewer-City'] as string || 'Austin',
-    region: event?.node.req.headers['Cloudfront-Viewer-Region-Name'] as string || 'TX',
-    country: event?.node.req.headers['Cloudfront-Viewer-Country'] as string || 'US',
-    timezone: event?.node.req.headers['Cloudfront-Viewer-Timezone'] as string || 'America/Chicago',
-    countryName: event?.node.req.headers['Cloudfront-Viewer-CountryName'] as string || 'United States',
-  }
-
-  const cfg = useRuntimeConfig(event)
-
-  const token = await usePrisma(event).token.create({
-    data: {
-      userId: user.id,
-      hash: `${cfg.public.prefix}_${generateHash(64)}`,
-      source: `oauth:${provider}`,
-      ip: event?.node.req.headers['x-forwarded-for'] as string || '127.0.0.1',
-      agent: event?.node.req.headers['user-agent'] as string || 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36',
-      location: JSON.stringify(location),
-      coordinate,
-    },
-  })
-
-  user.hash = token.hash
-  return user
+  return createSession(provider, user, event)
 }
 
 function generateHash(length: number): string {

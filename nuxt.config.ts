@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+
   devtools: { enabled: true },
   extends: ['@nuxt/ui-pro'],
   modules: [
@@ -46,6 +47,11 @@ export default defineNuxtConfig({
     session: {
       maxAge: 60 * 60 * 24 * 365, // 1 year
       name: 'fumebio-session',
+    },
+    apple: {
+      teamId: '',
+      keyIdentifier: '',
+      privateKey: '',
     },
     oauth: {
       google: {
