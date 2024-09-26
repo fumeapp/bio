@@ -1,5 +1,14 @@
 <script setup lang="ts">
-const { user, clear } = await useUserSession()
+const { user, clear, loggedIn } = await useUserSession()
+
+const { init, setUser } = useCrisp()
+
+init(user.value)
+
+watch(loggedIn, () => {
+  if (loggedIn.value)
+    setUser(user.value)
+})
 
 const logout = async () => {
   clear()
