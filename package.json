@@ -29,7 +29,6 @@
     "@fullcalendar/vue3": "^6.1.15",
     "@nuxt/ui-pro": "^1.4.3",
     "@prisma/adapter-d1": "^5.20.0",
-    "apple-signin-auth": "^1.7.6",
     "date-fns": "^4.1.0"
   },
   "devDependencies": {
@@ -47,6 +46,7 @@
     "@types/ua-parser-js": "^0.7.39",
     "@vitest/coverage-v8": "^2.1.1",
     "@vitest/ui": "^2.1.1",
+    "apple-signin-auth": "^1.7.6",
     "dotenv-cli": "^7.4.2",
     "happy-dom": "^15.7.4",
     "nuxt": "^3.13.2",

@@ -29,9 +29,6 @@ importers:
       '@prisma/adapter-d1':
         specifier: ^5.20.0
         version: 5.20.0
-      apple-signin-auth:
-        specifier: ^1.7.6
-        version: 1.7.6
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
@@ -78,6 +75,9 @@ importers:
       '@vitest/ui':
         specifier: ^2.1.1
         version: 2.1.1(vitest@2.1.1)
+      apple-signin-auth:
+        specifier: ^1.7.6
+        version: 1.7.6
       dotenv-cli:
         specifier: ^7.4.2
         version: 7.4.2
