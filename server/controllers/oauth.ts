@@ -98,13 +98,7 @@ export const xHandler = oauthXEventHandler({
 })
 
 export const appleRedirectHandler = defineEventHandler((event) => {
-  const options = {
-    clientID: 'fume.bio',
-    redirectUri: 'https://fume.bio/api/oauth/apple',
-    scope: 'email name',
-  }
-  const authorizationUrl = appleSignin.getAuthorizationUrl(options)
-  return sendRedirect(event, authorizationUrl)
+  return sendRedirect(event, 'https://appleid.apple.com/auth/authorize?response_type=code&state=state&client_id=fume.bio&redirect_uri=https%3A%2F%2Ffume.bio%2Fapi%2Foauth%2Fapple&scope=openid+email+name&response_mode=form_post')
 })
 
 export const appleHandler = defineEventHandler(async (event) => {

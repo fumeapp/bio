@@ -22,7 +22,7 @@ const providers = reactive<Provider[]>([
     label: 'Apple',
     icon: 'i-mdi-apple',
     color: 'white',
-    click: async () => await navigateTo('/api/oauth/redirect/apple', { external: true }),
+    click: async () => await navigateTo('https://appleid.apple.com/auth/authorize?response_type=code&state=state&client_id=fume.bio&redirect_uri=https%3A%2F%2Ffume.bio%2Fapi%2Foauth%2Fapple&scope=openid+email+name&response_mode=form_post', { external: true }),
   },
 
   /*
