@@ -17,6 +17,23 @@ const providers = reactive<Provider[]>([
     color: 'white',
     click: async () => await navigateTo('/api/oauth/google', { external: true }),
   },
+  /*
+  {
+    name: 'x',
+    label: 'X',
+    icon: 'i-mdi-twitter',
+    color: 'white',
+    click: async () => await navigateTo('/api/oauth/x', { external: true }),
+  },
+
+  {
+    name: 'instagram',
+    label: 'Instagram',
+    icon: 'i-mdi-instagram',
+    color: 'white',
+    click: async () => await navigateTo('/api/oauth/instagram', { external: true }),
+  },
+
   {
     name: 'facebook',
     label: 'Facebook',
@@ -24,7 +41,6 @@ const providers = reactive<Provider[]>([
     color: 'white',
     click: async () => await navigateTo('/api/oauth/facebook', { external: true }),
   },
-  /*
   {
     name: 'microsoft',
     label: 'Microsoft',

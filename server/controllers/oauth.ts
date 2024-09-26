@@ -31,6 +31,12 @@ const signIn = async (event: H3Event<EventHandlerRequest>, oauthPayload: any, pr
   if (provider === 'facebook')
     console.log('facebook payload', oauthPayload)
 
+  if (provider === 'instagram')
+    console.log('instagarm payload', oauthPayload)
+
+  if (provider === 'x')
+    console.log('x payload', oauthPayload)
+
   const user = await createUser(info, provider, oauthPayload, event)
   return user
 }
@@ -62,6 +68,22 @@ export const githubHandler = oauthGitHubEventHandler({
 export const facebookHandler = oauthFacebookEventHandler({
   async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
     const dbUser = await signIn(event, user, 'facebook')
+    await setUserSession(event, { user: dbUser })
+    return sendRedirect(event, '/')
+  },
+})
+
+export const instagramHandler = oauthInstagramEventHandler({
+  async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
+    const dbUser = await signIn(event, user, 'instagram')
+    await setUserSession(event, { user: dbUser })
+    return sendRedirect(event, '/')
+  },
+})
+
+export const xHandler = oauthXEventHandler({
+  async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
+    const dbUser = await signIn(event, user, 'x')
     await setUserSession(event, { user: dbUser })
     return sendRedirect(event, '/')
   },

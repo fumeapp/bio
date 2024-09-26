@@ -2,7 +2,7 @@ import type { Round } from '@prisma/client'
 import { createRouter, useBase } from 'h3'
 import type { Token, User } from '~/types/models'
 import logout from '../controllers/logout'
-import { facebookHandler, githubHandler, googleHandler, microsoftHandler } from '../controllers/oauth'
+import { githubHandler, googleHandler } from '../controllers/oauth'
 import round from '../controllers/round'
 import test from '../controllers/test'
 import token from '../controllers/token'
@@ -24,9 +24,11 @@ if (useRuntimeConfig().appEnv === 'test')
   router.post('/test/session', test.create)
 
 router.get('/oauth/google', googleHandler)
-router.get('/oauth/facebook', facebookHandler)
+// router.get('/oauth/facebook', facebookHandler)
+// router.get('/oauth/instagram', instagramHandler)
+// router.get('/oauth/x', xHandler)
+// router.get('/oauth/microsoft', microsoftHandler)
 router.get('/oauth/github', githubHandler)
-router.get('/oauth/microsoft', microsoftHandler)
 router.get('/logout', logout)
 
 router.apiResource<{ token: Token }>('/token', token)
