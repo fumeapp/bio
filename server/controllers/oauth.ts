@@ -1,8 +1,6 @@
 import type { EventHandlerRequest, H3Event } from 'h3'
-import appleSignin from 'apple-signin-auth'
 import type { User } from '~/types/models'
 import type { AppleUserInfo, GithubUserInfo, GoogleUserInfo, MicrosoftUserInfo, TokenLocation, UserInfo } from '~/types/oauth'
-import { createSession, userFromEmail } from '../utils/user'
 
 const signIn = async (event: H3Event<EventHandlerRequest>, oauthPayload: any, provider: string): Promise<User> => {
   let userPayload: GithubUserInfo | GoogleUserInfo | MicrosoftUserInfo | AppleUserInfo | null = null
@@ -97,6 +95,7 @@ export const xHandler = oauthXEventHandler({
   },
 })
 
+/*
 export const appleRedirectHandler = defineEventHandler((event) => {
   return sendRedirect(event, 'https://appleid.apple.com/auth/authorize?response_type=code&state=state&client_id=fume.bio&redirect_uri=https%3A%2F%2Ffume.bio%2Fapi%2Foauth%2Fapple&scope=openid+email+name&response_mode=form_post')
 })
@@ -130,3 +129,4 @@ ${config.apple.privateKey.split(':BR:').join('\n')}
   await setUserSession(event, { user: dbUser })
   return sendRedirect(event, '/')
 })
+  */
