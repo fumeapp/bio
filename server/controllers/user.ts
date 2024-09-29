@@ -18,10 +18,18 @@ const get = async ({ user }: { user: User }, event: H3Event) => {
 
 const me = defineEventHandler(async (event) => {
   const { user } = await requireUserSession(event)
-  const dbUser = await usePrisma(event).user.update({ where: { id: user.id }, data: { updatedAt: new Date() } }) as unknown as User
-  dbUser.hash = user.hash
-  await replaceUserSession(event, { user: dbUser })
-  return metapi().render(dbUser)
+  try {
+    const dbUser = await usePrisma(event).user.update({ where: { id: user.id }, data: { updatedAt: new Date() } }) as unknown as User
+    dbUser.hash = user.hash
+    await usePrisma(event).token.update({ where: { hash: user.hash, userId: user.id }, data: { updatedAt: new Date() } })
+    await replaceUserSession(event, { user: dbUser })
+    return metapi().render(dbUser)
+  }
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  catch (e) {
+    console.log('why isnt this working')
+    await clearUserSession(event)
+  }
 })
 
 const logout = defineEventHandler(async (event) => {
