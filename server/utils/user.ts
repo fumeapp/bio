@@ -9,11 +9,18 @@ export const userFromEmail = async (email: string): Promise<User> => await usePr
   },
 }) as User
 
+const getCoordinate = (event?: H3Event): string => {
+  if (event?.node.req.headers['Cloudfront-Viewer-Latitude'] && event?.node.req.headers['Cloudfront-Viewer-Longitude'])
+    return `${event.node.req.headers['Cloudfront-Viewer-Latitude']} ${event.node.req.headers['Cloudfront-Viewer-Longitude']}`
+
+  if (event?.node.req.headers['cf-iplatitude'] && event?.node.req.headers['cf-iplongitude'])
+    return `${event.node.req.headers['cf-iplatitude']} ${event.node.req.headers['cf-iplongitude']}`
+
+  return '30.2423 -97.7672'
+}
+
 export const createSession = async (provider: string, user: User, event?: H3Event) => {
-  const coordinate
-    = `${event?.node.req.headers['Cloudfront-Viewer-Latitude']} ${event?.node.req.headers['Cloudfront-Viewer-Longitude']}`
-    || `${event?.node.req.headers['cf-iplatitude']} ${event?.node.req.headers['cf-iplongitude']}`
-    || '30.2423 -97.7672'
+  const coordinate = getCoordinate(event)
 
   const location: TokenLocation = {
     city: event?.node.req.headers['Cloudfront-Viewer-City'] as string
