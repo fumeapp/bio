@@ -10,16 +10,24 @@ export const userFromEmail = async (email: string): Promise<User> => await usePr
 }) as User
 
 export const createSession = async (provider: string, user: User, event?: H3Event) => {
-  const coordinate = event
-    ? `${event.node.req.headers['Cloudfront-Viewer-Latitude']} ${event.node.req.headers['Cloudfront-Viewer-Longitude']}`
-    : '30.2423 -97.7672'
+  const coordinate
+    = `${event?.node.req.headers['Cloudfront-Viewer-Latitude']} ${event?.node.req.headers['Cloudfront-Viewer-Longitude']}`
+    || `${event?.node.req.headers['cf-iplatitude']} ${event?.node.req.headers['cf-iplongitude']}`
+    || '30.2423 -97.7672'
 
   const location: TokenLocation = {
-    city: event?.node.req.headers['Cloudfront-Viewer-City'] as string || 'Austin',
-    region: event?.node.req.headers['Cloudfront-Viewer-Region-Name'] as string || 'TX',
-    country: event?.node.req.headers['Cloudfront-Viewer-Country'] as string || 'US',
-    timezone: event?.node.req.headers['Cloudfront-Viewer-Timezone'] as string || 'America/Chicago',
-    countryName: event?.node.req.headers['Cloudfront-Viewer-CountryName'] as string || 'United States',
+    city: event?.node.req.headers['Cloudfront-Viewer-City'] as string
+      || event?.node.req.headers['cf-ipcity'] as string
+      || 'Austin',
+    region: event?.node.req.headers['Cloudfront-Viewer-Region-Name'] as string
+      || event?.node.req.headers['cf-region-code'] as string
+      || 'TX',
+    country: event?.node.req.headers['Cloudfront-Viewer-Country'] as string
+      || event?.node.req.headers['cf-ipcountry'] as string
+      || 'US',
+    timezone: event?.node.req.headers['Cloudfront-Viewer-Timezone'] as string
+      || event?.node.req.headers['cf-timezone'] as string
+      || 'America/Chicago',
   }
 
   const cfg = useRuntimeConfig(event)

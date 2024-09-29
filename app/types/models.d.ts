@@ -10,7 +10,6 @@ export interface Token extends PrismaToken {
     region: string
     country: string
     timezone: string
-    countryName: string
   }
 }
 
