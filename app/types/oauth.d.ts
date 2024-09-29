@@ -102,5 +102,4 @@ export interface TokenLocation {
   region: string
   country: string
   timezone: string
-  countryName: string
 }
