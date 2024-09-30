@@ -103,7 +103,7 @@ export const appleHandler = defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event).apple
   const body = await readBody(event)
   const token = await apple.getAuthToken(config, body.code)
-  const verified = apple.verifyIdToken(token.id_token)
+  const verified = await apple.verifyIdToken(token.id_token)
 
   let dbUser
   if (body.user)

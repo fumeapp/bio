@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import * as jose from 'jose'
 
 import { FetchError } from 'ofetch'
 
@@ -54,7 +54,7 @@ const getAuthURL = (config: AppleConfig): string => {
   return url.toString()
 }
 
-const getSecret = (config: AppleConfig) => {
+const getSecret = async (config: AppleConfig) => {
   const timeNow = Math.floor(Date.now() / 1000)
 
   const claims = {
@@ -69,7 +69,13 @@ const getSecret = (config: AppleConfig) => {
 ${config.privateKey.split(':BR:').join('\n')}
 -----END PRIVATE KEY-----`
 
-  return jwt.sign(claims, key, { algorithm: 'ES256', header })
+  // return jwt.sign(claims, key, { algorithm: 'ES256', header })
+  const privateKey = await jose.importPKCS8(key, 'ES256')
+  return new jose.SignJWT(claims)
+    .setProtectedHeader(header)
+    .setIssuedAt()
+    .setExpirationTime('5m')
+    .sign(privateKey)
 }
 
 // taken from nuxt-auth-utils until we can figure out how to import it
@@ -99,18 +105,22 @@ export async function requestAccessToken(url: string, options: RequestAccessToke
 const getAuthToken = async (config: AppleConfig, code: string): Promise<AppleTokenResponse> => {
   return requestAccessToken('https://appleid.apple.com/auth/token', { params: {
     client_id: config.clientId,
-    client_secret: getSecret(config),
+    client_secret: await getSecret(config),
     code,
     grant_type: 'authorization_code',
     redirect_uri: config.redirectURL,
   } })
 }
 
-const verifyIdToken = (idToken: string): AppleVerifiedToken => {
-  return jwt.decode(idToken, {
-    algorithm: 'RS256',
+const verifyIdToken = async (idToken: string): Promise<AppleVerifiedToken> => {
+  const JWKS = jose.createRemoteJWKSet(new URL('https://appleid.apple.com/auth/keys'))
+
+  const { payload } = await jose.jwtVerify(idToken, JWKS, {
     issuer: 'https://appleid.apple.com',
-  }) as unknown as AppleVerifiedToken
+    audience: 'fume.bio',
+  })
+
+  return payload as unknown as AppleVerifiedToken
 }
 
 export const apple = {
