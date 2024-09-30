@@ -47,7 +47,7 @@ interface AppleVerifiedToken {
 const getAuthURL = (config: AppleConfig): string => {
   const url = new URL('https://appleid.apple.com/auth/authorize')
   url.searchParams.append('client_id', config.clientId)
-  url.searchParams.append('redirect_uri', config.redirectURL || 'https://25ef-2605-a601-a0ee-c700-c005-21af-aae4-cb22.ngrok-free.app/api/oauth/apple')
+  url.searchParams.append('redirect_uri', config.redirectURL)
   url.searchParams.append('scope', 'openid email name')
   url.searchParams.append('response_type', 'code')
   url.searchParams.append('response_mode', 'form_post')

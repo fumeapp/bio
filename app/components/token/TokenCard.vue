@@ -49,6 +49,11 @@ const remove = () => confirm('Delete Token', 'Are you sure you want to delete th
         <u-icon name="i-mdi-github" />
         <div> Verified through Github </div>
       </div>
+      <div v-if="token.source === 'oauth:apple'" class="flex items-center space-x-2">
+        <u-icon name="i-mdi-apple" />
+        <div> Verified through Apple </div>
+      </div>
+
       <div class="flex items-center space-x-2">
         <u-icon name="i-mdi-google-maps" />
         <div> {{ token.location.city }}, {{ token.location.region }} {{ token.location.country }} </div>
