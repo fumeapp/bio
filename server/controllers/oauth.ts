@@ -94,39 +94,23 @@ export const xHandler = oauthXEventHandler({
     return sendRedirect(event, '/')
   },
 })
-
-/*
 export const appleRedirectHandler = defineEventHandler((event) => {
-  return sendRedirect(event, 'https://appleid.apple.com/auth/authorize?response_type=code&state=state&client_id=fume.bio&redirect_uri=https%3A%2F%2Ffume.bio%2Fapi%2Foauth%2Fapple&scope=openid+email+name&response_mode=form_post')
+  const config = useRuntimeConfig(event).apple
+  return sendRedirect(event, apple.getAuthURL(config))
 })
 
 export const appleHandler = defineEventHandler(async (event) => {
+  const config = useRuntimeConfig(event).apple
   const body = await readBody(event)
-  const config = useRuntimeConfig(event)
-  const clientSecret = appleSignin.getClientSecret({
-    clientID: 'fume.bio',
-    teamID: config.apple.teamId,
-    privateKey: `-----BEGIN PRIVATE KEY-----
-${config.apple.privateKey.split(':BR:').join('\n')}
------END PRIVATE KEY-----`,
-    keyIdentifier: config.apple.keyIdentifier,
-  })
+  const token = await apple.getAuthToken(config, body.code)
+  const verified = apple.verifyIdToken(token.id_token)
 
-  const options = {
-    clientID: 'fume.bio',
-    redirectUri: 'https://fume.bio/api/oauth/apple',
-    clientSecret,
-    scope: 'email name',
-  }
-  const tokenResponse = await appleSignin.getAuthorizationToken(body.code, options)
-  const user = await appleSignin.verifyIdToken(tokenResponse.id_token)
   let dbUser
   if (body.user)
     dbUser = await signIn(event, JSON.parse(body.user), 'apple')
   else
-    dbUser = await createSession('apple', await userFromEmail(user.email), event)
+    dbUser = await createSession('apple', await userFromEmail(verified.email), event)
 
   await setUserSession(event, { user: dbUser })
   return sendRedirect(event, '/')
 })
-  */

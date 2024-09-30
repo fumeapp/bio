@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { User } from '~/types/models'
-
 interface Provider {
   name: string
   label: string
@@ -17,14 +15,17 @@ const providers = reactive<Provider[]>([
     color: 'white',
     click: async () => await navigateTo('/api/oauth/google', { external: true }),
   },
-  /*
   {
     name: 'apple',
     label: 'Apple',
     icon: 'i-mdi-apple',
     color: 'white',
-    click: async () => await navigateTo('https://appleid.apple.com/auth/authorize?response_type=code&state=state&client_id=fume.bio&redirect_uri=https%3A%2F%2Ffume.bio%2Fapi%2Foauth%2Fapple&scope=openid+email+name&response_mode=form_post', { external: true }),
+    click: async () => await navigateTo('/api/oauth/redirect/apple', { external: true }),
+    // https://appleid.apple.com/auth/authorize?response_type=code&state=state&client_id=fume.bio&redirect_uri=https%3A%2F%2Ffume.bio%2Fapi%2Foauth%2Fapple&scope=openid+email+name&response_mode=form_post', { external: true }),
+
+    // https://appleid.apple.com/auth/authorize?client_id=fume.bio&redirect_uri=https%253A%252F%252Ffume.bio%252Fapi%252Foauth%252Fapple&scope=openid%2520email%2520name
   },
+  /*
 
   {
     name: 'x',
