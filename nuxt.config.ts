@@ -49,9 +49,11 @@ export default defineNuxtConfig({
       name: 'fumebio-session',
     },
     apple: {
+      clientId: '',
       teamId: '',
       keyIdentifier: '',
       privateKey: '',
+      redirectURL: '',
     },
     oauth: {
       google: {
