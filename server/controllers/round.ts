@@ -24,7 +24,7 @@ const roundSchema = z.object({
   mg: z.number(),
   color: z.enum(range.colors as [string, ...string[]]),
   frequency: z.string(),
-  portions: z.number(),
+  units: z.number(),
   date: z.string().datetime(),
 })
 

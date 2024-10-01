@@ -34,7 +34,7 @@
     "jose": "^5.9.3"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^3.7.1",
+    "@antfu/eslint-config": "^3.7.3",
     "@cloudflare/workers-types": "^4.20240925.0",
     "@iconify-json/logos": "^1.2.0",
     "@iconify-json/mdi": "^1.2.0",
@@ -51,12 +51,12 @@
     "dotenv-cli": "^7.4.2",
     "happy-dom": "^15.7.4",
     "nuxt": "^3.13.2",
-    "nuxt-auth-utils": "^0.3.9",
-    "nuxt-og-image": "3.0.2",
+    "nuxt-auth-utils": "^0.4.1",
+    "nuxt-og-image": "3.0.4",
     "prisma": "^5.20.0",
     "ua-parser-js": "^1.0.39",
     "vitest": "^2.1.1",
-    "wrangler": "^3.78.9",
+    "wrangler": "^3.78.12",
     "zod": "^3.23.8"
   }
 }

@@ -1,4 +1,3 @@
-import type { CookieOptions } from '#app'
 import type { HeaderLink } from '@nuxt/ui-pro/types'
 
 (BigInt.prototype as any).toJSON = function () {
@@ -21,7 +20,7 @@ export type HeaderIconLink = HeaderLink & { icon: string }
 export const links: HeaderIconLink[] = [
   {
     label: 'Home',
-    icon: 'i-heroicons-home',
+    icon: 'i-mdi-home',
     to: '/',
   },
   {
@@ -34,17 +33,7 @@ export const links: HeaderIconLink[] = [
     icon: 'i-mdi-account-multiple',
     to: '/users',
   },
-  {
-    label: 'Shots',
-    icon: 'i-mdi-syringe',
-  },
 ]
-
-export const cookieOptions: CookieOptions & { readonly?: false } = {
-  path: '/',
-  sameSite: 'strict',
-  maxAge: 60 * 60 * 24 * 365,
-}
 
 const colors = [
   'cyan',
@@ -57,8 +46,7 @@ const colors = [
 
 const contents = [
   'Tirzepatide',
-  'Retatrutide',
-  'Semaglutide',
+  'Cagrilintide',
 ]
 
 const mls = [
@@ -67,6 +55,7 @@ const mls = [
 ]
 
 const mgs = [
+  5,
   10,
   20,
   30,
@@ -75,6 +64,7 @@ const mgs = [
 
 const units = [
   25,
+  40,
   50,
 ]
 export const range = {

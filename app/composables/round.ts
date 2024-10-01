@@ -10,7 +10,7 @@ export interface ShotDay {
 
 export const useRound = (round: Round) => {
   const shotDates = (): Date[] => {
-    const portions = round.portions || 4
+    const portions = round.ml * 100 / round.units
 
     const getNextDate = (index: number): Date => {
       switch (round.frequency) {
@@ -29,7 +29,7 @@ export const useRound = (round: Round) => {
     const today = new Date()
     return shotDates().map(date => ({
       date,
-      units: round.ml * 100 / round.portions,
+      units: round.units,
       taken: isBefore(date, today),
       isToday: isSameDay(date, today),
     }))
@@ -55,6 +55,9 @@ export const useRound = (round: Round) => {
       .reduce((total, day) => total + day.units, 0)
   }
 
+  // 200 units = 20mg so 50 units is 5mg
+  const mgPerUnits = (): number => round.mg * round.units / (round.ml * 100)
+
   return {
     shotDates,
     lastShotDate,
@@ -63,6 +66,7 @@ export const useRound = (round: Round) => {
     shotDaysLeft,
     isShotDayToday,
     unitsRemain,
+    mgPerUnits,
     title,
   }
 }

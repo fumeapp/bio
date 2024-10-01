@@ -7,7 +7,7 @@ model Round {
   mg        Int
   color       String
   frequency String
-  portions Int
+  units Int
   date DateTime 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -15,8 +15,8 @@ const state = reactive<Partial<Round>>({
   color: props.round?.color ?? range.colors[0],
   content: props.round?.content ?? range.contents[0],
   ml: props.round?.ml ?? range.mls[0],
-  mg: props.round?.mg ?? range.mgs[1],
-  portions: props.round?.portions ?? 4,
+  mg: props.round?.mg ?? range.mgs[2],
+  units: props.round?.portions ?? range.units[2],
   frequency: props.round?.frequency ?? 'weekly',
   date: props.round?.date
     ? format(new Date(props.round.date), 'yyyy-MM-dd')
@@ -79,8 +79,11 @@ const submit = async () => {
       />
     </u-form-group>
 
-    <u-form-group label="Portions" name="portions">
-      <u-input v-model="state.portions" type="number" label="Portions" />
+    <u-form-group label="Units per-shot" name="units">
+      <u-select-menu
+        v-model="state.units"
+        :options="range.units"
+      />
     </u-form-group>
     <u-form-group label="Frequency" name="frequency">
       <u-input
