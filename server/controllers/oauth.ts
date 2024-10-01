@@ -47,7 +47,7 @@ const signIn = async (event: H3Event<EventHandlerRequest>, oauthPayload: any, pr
   return user
 }
 
-export const googleHandler = oauthGoogleEventHandler({
+export const googleHandler = defineOAuthGoogleEventHandler({
   async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
     const dbUser = await signIn(event, user, 'google')
     await setUserSession(event, { user: dbUser })
@@ -55,7 +55,7 @@ export const googleHandler = oauthGoogleEventHandler({
   },
 })
 
-export const microsoftHandler = oauthMicrosoftEventHandler({
+export const microsoftHandler = defineOAuthMicrosoftEventHandler({
   async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
     const dbUser = await signIn(event, user, 'microsoft')
     await setUserSession(event, { user: dbUser })
@@ -63,7 +63,7 @@ export const microsoftHandler = oauthMicrosoftEventHandler({
   },
 })
 
-export const githubHandler = oauthGitHubEventHandler({
+export const githubHandler = defineOAuthGitHubEventHandler({
   async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
     const dbUser = await signIn(event, user, 'github')
     await setUserSession(event, { user: dbUser })
@@ -71,7 +71,7 @@ export const githubHandler = oauthGitHubEventHandler({
   },
 })
 
-export const facebookHandler = oauthFacebookEventHandler({
+export const facebookHandler = defineOAuthFacebookEventHandler({
   async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
     const dbUser = await signIn(event, user, 'facebook')
     await setUserSession(event, { user: dbUser })
@@ -79,7 +79,7 @@ export const facebookHandler = oauthFacebookEventHandler({
   },
 })
 
-export const instagramHandler = oauthInstagramEventHandler({
+export const instagramHandler = defineOAuthInstagramEventHandler({
   async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
     const dbUser = await signIn(event, user, 'instagram')
     await setUserSession(event, { user: dbUser })
@@ -87,7 +87,7 @@ export const instagramHandler = oauthInstagramEventHandler({
   },
 })
 
-export const xHandler = oauthXEventHandler({
+export const xHandler = defineOAuthXEventHandler({
   async onSuccess(event: H3Event<EventHandlerRequest>, { user }: { user: any }) {
     const dbUser = await signIn(event, user, 'x')
     await setUserSession(event, { user: dbUser })

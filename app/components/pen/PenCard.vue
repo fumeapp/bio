@@ -8,14 +8,12 @@ defineProps<{ round: Round }>()
   <div class="flex">
     <u-card class="w-full">
       <div class="flex flex-col items-center justify-center space-y-4">
+        <div> {{ round.mg }}mg of {{ round.content }} </div>
         <pen-model :color="round.color">
           <transition name="fade">
             <cartridge-model :round="round" />
           </transition>
         </pen-model>
-        <div>
-          {{ round.content }} {{ round.ml }}ml {{ round.mg }}mg
-        </div>
         <shot-summary :round="round" />
         <shot-log :round="round" />
       </div>

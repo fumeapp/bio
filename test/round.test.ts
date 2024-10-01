@@ -17,14 +17,14 @@ describe('/api/user/{user}/round', async () => {
       mg: range.mgs[0],
       color: range.colors[0],
       frequency: 'weekly',
-      portions: 4,
+      units: 50,
     })
     expect(round.content).toBe(range.contents[0])
     expect(round.ml).toBe(range.mls[0])
     expect(round.mg).toBe(range.mgs[0])
     expect(round.color).toBe(range.colors[0])
     expect(round.frequency).toBe('weekly')
-    expect(round.portions).toBe(4)
+    expect(round.units).toBe(50)
     expect(round.userId).toBe(user.session.id)
     rounds.push(round)
   })
@@ -51,7 +51,7 @@ describe('/api/user/{user}/round', async () => {
       mg: range.mgs[1],
       color: range.colors[1],
       frequency: 'daily',
-      portions: 2,
+      units: 50,
     }
     const { data: updatedRound } = await put<Round>(`/api/user/${user.session.id}/round/${rounds[0].id}`, updatedData)
 

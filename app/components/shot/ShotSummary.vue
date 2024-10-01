@@ -2,11 +2,12 @@
 import type { Round } from '~/types/models'
 
 const props = defineProps<{ round: Round }>()
-const { unitsRemain } = useRound(props.round)
+const { unitsRemain, mgPerUnits } = useRound(props.round)
 </script>
 
 <template>
   <div>
-    {{ unitsRemain() }} remaining units
+    <div> {{ unitsRemain() }} remaining units </div>
+    <div> {{ round.units }} units = {{ mgPerUnits() }}mg </div>
   </div>
 </template>

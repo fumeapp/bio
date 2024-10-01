@@ -51,6 +51,7 @@ const columns = [
   { label: 'Content', key: 'content' },
   { label: 'Mg', key: 'mg' },
   { label: 'Ml', key: 'ml' },
+  { label: 'Units', key: 'units' },
   { label: 'Timeline', key: 'date' },
   { label: 'Actions', key: 'actions' },
 ]
