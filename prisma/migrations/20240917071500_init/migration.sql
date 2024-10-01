@@ -7,7 +7,7 @@ CREATE TABLE "rounds" (
     "mg" INTEGER NOT NULL,
     "color" TEXT NOT NULL,
     "frequency" TEXT NOT NULL,
-    "portions" INTEGER NOT NULL,
+    "units" INTEGER NOT NULL,
     "date" DATETIME NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
